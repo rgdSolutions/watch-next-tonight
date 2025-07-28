@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Globe, Loader2, MapPin } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MapPin, Globe, Loader2 } from 'lucide-react';
 
 interface LocationStepProps {
   onComplete: (country: string) => void;
@@ -15,7 +16,7 @@ export function LocationStep({ onComplete }: LocationStepProps) {
 
   const detectLocation = async () => {
     setIsDetecting(true);
-    
+
     try {
       const position = await new Promise<GeolocationPosition>((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
@@ -55,21 +56,14 @@ export function LocationStep({ onComplete }: LocationStepProps) {
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
             <MapPin className="w-8 h-8 text-primary" />
           </div>
-          <CardTitle className="text-2xl">
-            Where are you watching from?
-          </CardTitle>
+          <CardTitle className="text-2xl">Where are you watching from?</CardTitle>
           <p className="text-muted-foreground">
             We need your location to show available content in your region
           </p>
         </CardHeader>
-        
+
         <CardContent className="space-y-4">
-          <Button
-            onClick={detectLocation}
-            disabled={isDetecting}
-            className="w-full h-12"
-            size="lg"
-          >
+          <Button onClick={detectLocation} disabled={isDetecting} className="w-full h-12" size="lg">
             {isDetecting ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -82,24 +76,17 @@ export function LocationStep({ onComplete }: LocationStepProps) {
               </>
             )}
           </Button>
-          
+
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Or
-              </span>
+              <span className="bg-background px-2 text-muted-foreground">Or</span>
             </div>
           </div>
-          
-          <Button
-            variant="outline"
-            onClick={useUSA}
-            className="w-full h-12"
-            size="lg"
-          >
+
+          <Button variant="outline" onClick={useUSA} className="w-full h-12" size="lg">
             <Globe className="w-4 h-4 mr-2" />
             Continue with USA
           </Button>

@@ -36,22 +36,26 @@ npm run start
 ## Architecture
 
 ### Key Directories
+
 - `app/`: Next.js App Router pages and layouts
 - `components/`: React components including UI library from Shadcn/ui
 - `lib/`: Utilities and mock data
 
 ### Application Flow
+
 1. **Location Step** (`components/location-step.tsx`): User selects viewing location
 2. **Genre Step** (`components/genre-step.tsx`): User selects preferred genres
 3. **Recency Step** (`components/recency-step.tsx`): User chooses content recency preference
 4. **Results** (`components/content-display.tsx`): Displays recommended content from mock data
 
 ### Data Handling
+
 - Currently uses mock data from `lib/mock-data.ts`
 - Content includes properties: title, year, rating, duration, genres, platforms, images, trailer URL
 - Supports filtering by genre and recency preferences
 
 ### Styling Approach
+
 - Tailwind CSS with configuration in `tailwind.config.ts`
 - CSS variables for theming defined in `app/globals.css`
 - Shadcn/ui components use cn() utility for className merging
@@ -59,7 +63,9 @@ npm run start
 ## Important Configuration
 
 ### Server-Side Features
+
 The app now supports full Next.js server-side capabilities:
+
 - API Routes can be added in `app/api/`
 - Server Components with async data fetching
 - Dynamic rendering and middleware support
@@ -67,10 +73,13 @@ The app now supports full Next.js server-side capabilities:
 - Requires Node.js hosting (Vercel, AWS, etc.)
 
 ### TypeScript
+
 Strict mode is enabled. Path aliases configured:
+
 - `@/*` maps to project root
 
 ## Current Limitations
+
 - No real API integration (uses mock data)
 - No tests implemented
 - No authentication system

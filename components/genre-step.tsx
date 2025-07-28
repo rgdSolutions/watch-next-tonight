@@ -1,10 +1,11 @@
 'use client';
 
+import { Check, Sparkles } from 'lucide-react';
 import { useState } from 'react';
+
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Check, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface GenreStepProps {

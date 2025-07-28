@@ -1,15 +1,22 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { LocationStep } from '@/components/location-step';
-import { GenreStep } from '@/components/genre-step';
-import { RecencyStep } from '@/components/recency-step';
-import { ContentDisplay } from '@/components/content-display';
-import { LoadingScreen } from '@/components/loading-screen';
-import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-export type RecencyOption = 'brand-new' | 'very-recent' | 'recent' | 'contemporary' | 'classic' | 'any';
+import { ContentDisplay } from '@/components/content-display';
+import { GenreStep } from '@/components/genre-step';
+import { LoadingScreen } from '@/components/loading-screen';
+import { LocationStep } from '@/components/location-step';
+import { RecencyStep } from '@/components/recency-step';
+import { Button } from '@/components/ui/button';
+
+export type RecencyOption =
+  | 'brand-new'
+  | 'very-recent'
+  | 'recent'
+  | 'contemporary'
+  | 'classic'
+  | 'any';
 
 interface UserPreferences {
   country: string;
@@ -25,22 +32,22 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLocationComplete = (country: string) => {
-    setPreferences(prev => ({ ...prev, country }));
+    setPreferences((prev) => ({ ...prev, country }));
     setCurrentStep('genres');
   };
 
   const handleGenresComplete = (genres: string[]) => {
-    setPreferences(prev => ({ ...prev, genres }));
+    setPreferences((prev) => ({ ...prev, genres }));
     setCurrentStep('recency');
   };
 
   const handleRecencyComplete = async (recency: RecencyOption) => {
-    setPreferences(prev => ({ ...prev, recency }));
+    setPreferences((prev) => ({ ...prev, recency }));
     setIsLoading(true);
-    
+
     // Simulate API loading time
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     setIsLoading(false);
     setCurrentStep('results');
   };
@@ -62,13 +69,15 @@ export default function Home() {
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold tracking-tight mb-2
+          <h1
+            className="text-4xl font-bold tracking-tight mb-2
                         md:text-5xl
                         lg:text-6xl"
           >
             Watch Next Tonight
           </h1>
-          <p className="text-muted-foreground text-lg
+          <p
+            className="text-muted-foreground text-lg
                        md:text-xl"
           >
             Find your perfect movie or show in just a few clicks
@@ -90,20 +99,14 @@ export default function Home() {
         )}
 
         {/* Step Components */}
-        {currentStep === 'location' && (
-          <LocationStep onComplete={handleLocationComplete} />
-        )}
-        
-        {currentStep === 'genres' && (
-          <GenreStep onComplete={handleGenresComplete} />
-        )}
-        
-        {currentStep === 'recency' && (
-          <RecencyStep onComplete={handleRecencyComplete} />
-        )}
-        
+        {currentStep === 'location' && <LocationStep onComplete={handleLocationComplete} />}
+
+        {currentStep === 'genres' && <GenreStep onComplete={handleGenresComplete} />}
+
+        {currentStep === 'recency' && <RecencyStep onComplete={handleRecencyComplete} />}
+
         {currentStep === 'results' && (
-          <ContentDisplay 
+          <ContentDisplay
             preferences={preferences as UserPreferences}
             onBackToPreferences={handleBackToRecency}
           />

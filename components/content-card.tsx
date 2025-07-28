@@ -1,11 +1,12 @@
 'use client';
 
+import { Play, RotateCcw, Star, X } from 'lucide-react';
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Play, Star, X, RotateCcw } from 'lucide-react';
-import { cn } from '@/lib/utils';
+
 import { ContentItem } from '@/components/content-display';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 interface ContentCardProps {
   item: ContentItem;
@@ -22,7 +23,7 @@ export function ContentCard({ item, onTrailerClick, onShuffle, isShuffling }: Co
   };
 
   return (
-    <div 
+    <div
       className="group relative overflow-hidden rounded-lg bg-card border transition-all duration-300 hover:shadow-lg hover:scale-[1.02]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -36,11 +37,7 @@ export function ContentCard({ item, onTrailerClick, onShuffle, isShuffling }: Co
                     flex items-center justify-center text-white hover:bg-black/80 transition-all duration-200
                     disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isShuffling ? (
-            <RotateCcw className="w-4 h-4 animate-spin" />
-          ) : (
-            <X className="w-4 h-4" />
-          )}
+          {isShuffling ? <RotateCcw className="w-4 h-4 animate-spin" /> : <X className="w-4 h-4" />}
         </button>
       )}
 
@@ -48,11 +45,7 @@ export function ContentCard({ item, onTrailerClick, onShuffle, isShuffling }: Co
         {/* Cover Art */}
         <div className="flex-shrink-0">
           <div className="w-24 h-36 rounded-md overflow-hidden bg-muted">
-            <img
-              src={item.coverArt}
-              alt={item.title}
-              className="w-full h-full object-cover"
-            />
+            <img src={item.coverArt} alt={item.title} className="w-full h-full object-cover" />
           </div>
         </div>
 
@@ -60,9 +53,7 @@ export function ContentCard({ item, onTrailerClick, onShuffle, isShuffling }: Co
         <div className="flex-1 min-w-0 space-y-3">
           {/* Title and Type */}
           <div>
-            <h4 className="font-semibold text-lg leading-tight mb-1 truncate">
-              {item.title}
-            </h4>
+            <h4 className="font-semibold text-lg leading-tight mb-1 truncate">{item.title}</h4>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Badge variant="outline" className="text-xs">
                 {item.type === 'movie' ? '🎬 Movie' : '📺 TV Show'}
@@ -81,7 +72,7 @@ export function ContentCard({ item, onTrailerClick, onShuffle, isShuffling }: Co
 
           {/* Genres */}
           <div className="flex flex-wrap gap-1">
-            {item.genre.slice(0, 2).map(genre => (
+            {item.genre.slice(0, 2).map((genre) => (
               <Badge key={genre} variant="secondary" className="text-xs">
                 {genre}
               </Badge>
@@ -94,16 +85,10 @@ export function ContentCard({ item, onTrailerClick, onShuffle, isShuffling }: Co
           </div>
 
           {/* Description */}
-          <p className="text-sm text-muted-foreground line-clamp-2">
-            {item.description}
-          </p>
+          <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
 
           {/* Watch Trailer Button */}
-          <Button
-            onClick={() => onTrailerClick(item)}
-            size="sm"
-            className="gap-2 w-full mt-2"
-          >
+          <Button onClick={() => onTrailerClick(item)} size="sm" className="gap-2 w-full mt-2">
             <Play className="w-4 h-4" />
             Watch Trailer
           </Button>
