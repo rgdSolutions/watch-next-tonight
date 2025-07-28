@@ -18,6 +18,8 @@ export default defineConfig({
         '**/*.config.*',
         '**/mockData/**',
         'build/',
+        '.next/',
+        'out/',
       ],
     },
   },

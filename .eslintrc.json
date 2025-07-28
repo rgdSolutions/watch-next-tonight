@@ -1,6 +1,7 @@
 {
   "extends": ["next/core-web-vitals", "plugin:prettier/recommended"],
   "plugins": ["perfectionist"],
+  "ignorePatterns": ["**/*.yml", "**/*.yaml"],
   "rules": {
     "prettier/prettier": [
       "error",
