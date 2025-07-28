@@ -1,13 +1,13 @@
-import { ImageResponse } from 'next/server'
+import { ImageResponse } from 'next/server';
 
-export const runtime = 'edge'
+export const runtime = 'edge';
 
 export const size = {
   width: 180,
   height: 180,
-}
+};
 
-export const contentType = 'image/png'
+export const contentType = 'image/png';
 
 export default function AppleIcon() {
   return new ImageResponse(
@@ -15,7 +15,7 @@ export default function AppleIcon() {
       <div
         style={{
           fontSize: 140,
-          background: '#09090b',
+          background: '#dddddd',
           width: '100%',
           height: '100%',
           display: 'flex',
@@ -30,5 +30,5 @@ export default function AppleIcon() {
     {
       ...size,
     }
-  )
+  );
 }

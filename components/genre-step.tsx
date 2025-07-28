@@ -38,11 +38,9 @@ export function GenreStep({ onComplete }: GenreStepProps) {
     if (isAnyGenre) {
       setIsAnyGenre(false);
     }
-    
-    setSelectedGenres(prev => 
-      prev.includes(genreId)
-        ? prev.filter(id => id !== genreId)
-        : [...prev, genreId]
+
+    setSelectedGenres((prev) =>
+      prev.includes(genreId) ? prev.filter((id) => id !== genreId) : [...prev, genreId]
     );
   };
 
@@ -68,23 +66,21 @@ export function GenreStep({ onComplete }: GenreStepProps) {
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
             <Sparkles className="w-8 h-8 text-primary" />
           </div>
-          <CardTitle className="text-2xl mb-2">
-            What genres are you in the mood for?
-          </CardTitle>
+          <CardTitle className="text-2xl mb-2">What genres are you in the mood for?</CardTitle>
           <p className="text-muted-foreground">
-            Select one or more genres, or choose "Any Genre" for surprise recommendations
+            Select one or more genres, or choose &quot;Any Genre&quot; for surprise recommendations
           </p>
         </CardHeader>
-        
+
         <CardContent className="space-y-6">
           {/* Any Genre Option */}
           <div className="text-center">
             <Button
-              variant={isAnyGenre ? "default" : "outline"}
+              variant={isAnyGenre ? 'default' : 'outline'}
               onClick={selectAnyGenre}
               className={cn(
-                "h-12 px-8 text-lg font-medium transition-all duration-200",
-                isAnyGenre && "shadow-lg scale-105"
+                'h-12 px-8 text-lg font-medium transition-all duration-200',
+                isAnyGenre && 'shadow-lg scale-105'
               )}
             >
               {isAnyGenre && <Check className="w-5 h-5 mr-2" />}
@@ -104,7 +100,8 @@ export function GenreStep({ onComplete }: GenreStepProps) {
           </div>
 
           {/* Genre Grid */}
-          <div className="grid grid-cols-2 gap-3
+          <div
+            className="grid grid-cols-2 gap-3
                          sm:grid-cols-3
                          md:grid-cols-4
                          lg:grid-cols-5"
@@ -116,13 +113,13 @@ export function GenreStep({ onComplete }: GenreStepProps) {
                   key={genre.id}
                   onClick={() => toggleGenre(genre.id)}
                   className={cn(
-                    "p-3 rounded-lg border-2 transition-all duration-200 text-left",
-                    "hover:scale-105 hover:shadow-md",
-                    "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+                    'p-3 rounded-lg border-2 transition-all duration-200 text-left',
+                    'hover:scale-105 hover:shadow-md',
+                    'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
                     isSelected
-                      ? "border-primary bg-primary text-primary-foreground shadow-lg scale-105"
-                      : "border-border bg-background hover:border-primary/50",
-                    isAnyGenre && "opacity-50 cursor-not-allowed"
+                      ? 'border-primary bg-primary text-primary-foreground shadow-lg scale-105'
+                      : 'border-border bg-background hover:border-primary/50',
+                    isAnyGenre && 'opacity-50 cursor-not-allowed'
                   )}
                   disabled={isAnyGenre}
                 >
@@ -131,9 +128,7 @@ export function GenreStep({ onComplete }: GenreStepProps) {
                       <div className="text-lg mb-1">{genre.emoji}</div>
                       <div className="text-sm font-medium">{genre.name}</div>
                     </div>
-                    {isSelected && !isAnyGenre && (
-                      <Check className="w-4 h-4 flex-shrink-0" />
-                    )}
+                    {isSelected && !isAnyGenre && <Check className="w-4 h-4 flex-shrink-0" />}
                   </div>
                 </button>
               );
@@ -159,9 +154,7 @@ export function GenreStep({ onComplete }: GenreStepProps) {
             >
               Continue
               {canContinue && (
-                <span className="ml-2">
-                  {isAnyGenre ? '🎲' : `(${selectedGenres.length})`}
-                </span>
+                <span className="ml-2">{isAnyGenre ? '🎲' : `(${selectedGenres.length})`}</span>
               )}
             </Button>
           </div>
