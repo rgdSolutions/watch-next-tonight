@@ -78,8 +78,24 @@ Strict mode is enabled. Path aliases configured:
 
 - `@/*` maps to project root
 
+## API Integration
+
+The app uses The Movie Database (TMDB) API for real content data:
+
+- API proxy route at `/app/api/tmdb/[...path]/route.ts`
+- Client library at `/lib/tmdb-client.ts`
+- React Query for caching and data fetching
+- Custom hooks in `/hooks/use-tmdb.ts`
+
+## Testing
+
+- Unit tests with Vitest and React Testing Library
+- Run tests: `npm run test`
+- Test coverage: `npm run test:coverage`
+- Tests include API routes, components, and React Query hooks
+
 ## Current Limitations
 
-- No real API integration (uses mock data)
-- No tests implemented
 - No authentication system
+- No user profiles or saved preferences
+- Watch provider data not yet integrated

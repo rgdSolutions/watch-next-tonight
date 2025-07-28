@@ -1,0 +1,255 @@
+'use client';
+
+import { ArrowLeft, Filter } from 'lucide-react';
+import { useState } from 'react';
+
+import { ContentCard } from '@/components/content-card';
+import { ContentItem } from '@/components/content-display';
+import { TrailerModal } from '@/components/trailer-modal';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
+import {
+  useDiscoverMovies,
+  useDiscoverTVShows,
+  useMovieGenres,
+  useTVGenres,
+} from '@/hooks/use-tmdb';
+import { MediaItem } from '@/types/tmdb';
+
+interface ContentDisplayWithQueryProps {
+  preferences: {
+    country: string;
+    genres: string[];
+    recency: string;
+  };
+  onBackToPreferences: () => void;
+}
+
+export function ContentDisplayWithQuery({
+  preferences,
+  onBackToPreferences,
+}: ContentDisplayWithQueryProps) {
+  const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
+  const [contentType, setContentType] = useState<'all' | 'movie' | 'tv'>('all');
+  const [selectedTrailer, setSelectedTrailer] = useState<ContentItem | null>(null);
+
+  // Get genre mappings
+  const { data: movieGenres } = useMovieGenres();
+  const { data: tvGenres } = useTVGenres();
+
+  // Convert genre names to IDs
+  const getGenreIds = (genreNames: string[], isMovie: boolean) => {
+    const genres = isMovie ? movieGenres?.genres : tvGenres?.genres;
+    if (!genres) return [];
+
+    if (genreNames.includes('any')) return [];
+
+    return genreNames
+      .map((name) => genres.find((g) => g.name.toLowerCase() === name.toLowerCase())?.id)
+      .filter(Boolean) as number[];
+  };
+
+  // Calculate date range based on recency preference
+  const getDateRange = () => {
+    const now = new Date();
+    const startDate = new Date();
+
+    switch (preferences.recency) {
+      case 'brand-new':
+        startDate.setMonth(now.getMonth() - 1);
+        break;
+      case 'very-recent':
+        startDate.setMonth(now.getMonth() - 3);
+        break;
+      case 'recent':
+        startDate.setMonth(now.getMonth() - 6);
+        break;
+      case 'contemporary':
+        startDate.setFullYear(now.getFullYear() - 2);
+        break;
+      case 'classic':
+        startDate.setFullYear(1900);
+        break;
+      default:
+        startDate.setFullYear(1900);
+    }
+
+    return {
+      gte: startDate.toISOString().split('T')[0],
+      lte: now.toISOString().split('T')[0],
+    };
+  };
+
+  const dateRange = getDateRange();
+  const movieGenreIds = getGenreIds(preferences.genres, true);
+  const tvGenreIds = getGenreIds(preferences.genres, false);
+
+  // Fetch movies and TV shows
+  const { data: moviesData, isLoading: moviesLoading } = useDiscoverMovies(
+    {
+      with_genres: movieGenreIds.join(','),
+      'primary_release_date.gte': dateRange.gte,
+      'primary_release_date.lte': dateRange.lte,
+      sort_by: 'popularity.desc',
+      watch_region: preferences.country,
+    },
+    {
+      enabled: contentType !== 'tv' && (movieGenres?.genres.length ?? 0) > 0,
+    } as any
+  );
+
+  const { data: tvData, isLoading: tvLoading } = useDiscoverTVShows(
+    {
+      with_genres: tvGenreIds.join(','),
+      'first_air_date.gte': dateRange.gte,
+      'first_air_date.lte': dateRange.lte,
+      sort_by: 'popularity.desc',
+      watch_region: preferences.country,
+    },
+    {
+      enabled: contentType !== 'movie' && (tvGenres?.genres.length ?? 0) > 0,
+    } as any
+  );
+
+  // Combine results based on content type filter
+  const allContent: MediaItem[] = [
+    ...(contentType !== 'tv' ? moviesData?.results || [] : []),
+    ...(contentType !== 'movie' ? tvData?.results || [] : []),
+  ];
+
+  const isLoading = moviesLoading || tvLoading;
+
+  const platforms = [
+    { id: 'all', name: 'All Platforms' },
+    { id: 'netflix', name: 'Netflix' },
+    { id: 'prime', name: 'Prime Video' },
+    { id: 'disney', name: 'Disney+' },
+    { id: 'appletv', name: 'Apple TV+' },
+    { id: 'max', name: 'MAX' },
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* Header with Back Button */}
+      <div className="flex items-center justify-between">
+        <Button variant="ghost" onClick={onBackToPreferences} className="gap-2">
+          <ArrowLeft className="w-4 h-4" />
+          Change Preferences
+        </Button>
+
+        <div className="flex items-center gap-4">
+          <Select value={contentType} onValueChange={(value: any) => setContentType(value)}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="Content type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Content</SelectItem>
+              <SelectItem value="movie">Movies Only</SelectItem>
+              <SelectItem value="tv">TV Shows Only</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={selectedPlatform} onValueChange={setSelectedPlatform}>
+            <SelectTrigger className="w-[160px]">
+              <Filter className="w-4 h-4 mr-2" />
+              <SelectValue placeholder="Filter by platform" />
+            </SelectTrigger>
+            <SelectContent>
+              {platforms.map((platform) => (
+                <SelectItem key={platform.id} value={platform.id}>
+                  {platform.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {/* Results Summary */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-2xl">Your Recommendations</CardTitle>
+          <div className="flex flex-wrap gap-2 mt-4">
+            <Badge variant="secondary">Country: {preferences.country}</Badge>
+            <Badge variant="secondary">Genres: {preferences.genres.join(', ')}</Badge>
+            <Badge variant="secondary">Recency: {preferences.recency}</Badge>
+            <Badge variant="outline">{allContent.length} results found</Badge>
+          </div>
+        </CardHeader>
+      </Card>
+
+      {/* Content Grid */}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {isLoading ? (
+          // Loading skeletons
+          Array.from({ length: 8 }).map((_, i) => (
+            <Card key={i} className="overflow-hidden">
+              <Skeleton className="h-[300px] w-full" />
+              <CardContent className="p-4 space-y-2">
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-full" />
+              </CardContent>
+            </Card>
+          ))
+        ) : allContent.length === 0 ? (
+          <div className="col-span-full">
+            <Card>
+              <CardContent className="p-8 text-center">
+                <p className="text-muted-foreground">
+                  No content found matching your preferences. Try adjusting your filters.
+                </p>
+                <Button variant="outline" onClick={onBackToPreferences} className="mt-4">
+                  Change Preferences
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        ) : (
+          allContent.map((item) => {
+            const contentItem: ContentItem = {
+              id: item.id,
+              title: item.title,
+              type: item.type,
+              platform: 'tmdb', // In real app, you'd fetch watch providers
+              coverArt: item.posterPath || '',
+              rating: item.rating,
+              year: parseInt(item.releaseDate?.split('-')[0] || '0'),
+              genre: [], // You'd map genreIds to names here
+              description: item.overview,
+              trailerUrl: '', // Would need to fetch videos endpoint
+            };
+            return (
+              <ContentCard
+                key={item.id}
+                item={contentItem}
+                onTrailerClick={(contentItem: ContentItem) => setSelectedTrailer(contentItem)}
+                onShuffle={() => {}}
+                isShuffling={false}
+              />
+            );
+          })
+        )}
+      </div>
+
+      {/* Trailer Modal */}
+      {selectedTrailer && (
+        <TrailerModal
+          item={selectedTrailer}
+          isOpen={!!selectedTrailer}
+          onClose={() => setSelectedTrailer(null)}
+        />
+      )}
+    </div>
+  );
+}

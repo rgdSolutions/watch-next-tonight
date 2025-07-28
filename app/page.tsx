@@ -1,14 +1,16 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { ContentDisplay } from '@/components/content-display';
+import { ContentDisplayWithQuery } from '@/components/content-display-with-query';
 import { GenreStep } from '@/components/genre-step';
 import { LoadingScreen } from '@/components/loading-screen';
 import { LocationStep } from '@/components/location-step';
 import { RecencyStep } from '@/components/recency-step';
 import { Button } from '@/components/ui/button';
+import { tmdbPrefetch } from '@/hooks/use-tmdb';
 
 export type RecencyOption =
   | 'brand-new'
@@ -30,6 +32,13 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<Step>('location');
   const [preferences, setPreferences] = useState<Partial<UserPreferences>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
+
+  // Prefetch genre data on mount
+  useEffect(() => {
+    tmdbPrefetch.movieGenres(queryClient);
+    tmdbPrefetch.tvGenres(queryClient);
+  }, [queryClient]);
 
   const handleLocationComplete = (country: string) => {
     setPreferences((prev) => ({ ...prev, country }));
@@ -45,8 +54,11 @@ export default function Home() {
     setPreferences((prev) => ({ ...prev, recency }));
     setIsLoading(true);
 
-    // Simulate API loading time
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    // Optional: Prefetch trending content while showing loading screen
+    await tmdbPrefetch.trending(queryClient);
+
+    // Short delay for smooth transition
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     setIsLoading(false);
     setCurrentStep('results');
@@ -106,7 +118,7 @@ export default function Home() {
         {currentStep === 'recency' && <RecencyStep onComplete={handleRecencyComplete} />}
 
         {currentStep === 'results' && (
-          <ContentDisplay
+          <ContentDisplayWithQuery
             preferences={preferences as UserPreferences}
             onBackToPreferences={handleBackToRecency}
           />
