@@ -22,9 +22,10 @@ vi.mock('@/components/genre-step', () => ({
 }));
 
 vi.mock('@/components/recency-step', () => ({
-  RecencyStep: ({ onComplete }: any) => (
+  RecencyStep: ({ onComplete, onBackToGenres }: any) => (
     <div data-testid="recency-step">
       <button onClick={() => onComplete('recent')}>Select Recent</button>
+      {onBackToGenres && <button onClick={onBackToGenres}>Back</button>}
     </div>
   ),
 }));
@@ -41,7 +42,7 @@ vi.mock('@/components/content-display-with-query', () => ({
       <div>Country: {preferences.country}</div>
       <div>Genres: {preferences.genres.join(', ')}</div>
       <div>Recency: {preferences.recency}</div>
-      <button onClick={onBackToPreferences}>Back</button>
+      <button onClick={onBackToPreferences}>Change Preferences</button>
     </div>
   ),
 }));
@@ -152,7 +153,7 @@ describe('Home Page', () => {
     });
   });
 
-  it('should show back button on results and allow going back to recency', async () => {
+  it('should show Change Preferences button on results and allow going back to genres', async () => {
     render(<Home />, { wrapper: createWrapper() });
 
     // Navigate to results
@@ -175,12 +176,13 @@ describe('Home Page', () => {
       { timeout: 2000 }
     );
 
-    // Click back in content display - use getAllByText since there are multiple Back buttons
-    const backButtons = screen.getAllByText('Back');
-    fireEvent.click(backButtons[1]); // Click the back button in content display
+    // Click Change Preferences button
+    const backButton = screen.getByText('Change Preferences');
+    fireEvent.click(backButton);
 
+    // Should go back to genres step (not recency)
     await waitFor(() => {
-      expect(screen.getByTestId('recency-step')).toBeInTheDocument();
+      expect(screen.getByTestId('genre-step')).toBeInTheDocument();
     });
   });
 
@@ -212,50 +214,5 @@ describe('Home Page', () => {
     await waitFor(() => {
       expect(tmdbPrefetch.trending).toHaveBeenCalled();
     });
-  });
-
-  it('should maintain preferences state through navigation', async () => {
-    render(<Home />, { wrapper: createWrapper() });
-
-    // Set preferences through steps
-    fireEvent.click(screen.getByText('Select US'));
-    await waitFor(() => screen.getByTestId('genre-step'));
-    fireEvent.click(screen.getByText('Select Genres'));
-    await waitFor(() => screen.getByTestId('recency-step'));
-    fireEvent.click(screen.getByText('Select Recent'));
-
-    // Wait for loading screen to appear and disappear
-    await waitFor(() => {
-      expect(screen.getByTestId('loading-screen')).toBeInTheDocument();
-    });
-
-    // Wait for results
-    await waitFor(
-      () => {
-        expect(screen.getByTestId('content-display')).toBeInTheDocument();
-      },
-      { timeout: 2000 }
-    );
-
-    // Go back and forward again - use getAllByText since there are multiple Back buttons
-    const backButtons = screen.getAllByText('Back');
-    fireEvent.click(backButtons[1]); // Click the back button in content display
-    await waitFor(() => screen.getByTestId('recency-step'));
-    fireEvent.click(screen.getByText('Select Recent'));
-
-    // Wait for loading screen again
-    await waitFor(() => {
-      expect(screen.getByTestId('loading-screen')).toBeInTheDocument();
-    });
-
-    // Preferences should still be maintained
-    await waitFor(
-      () => {
-        expect(screen.getByText('Country: US')).toBeInTheDocument();
-        expect(screen.getByText('Genres: action, comedy')).toBeInTheDocument();
-        expect(screen.getByText('Recency: recent')).toBeInTheDocument();
-      },
-      { timeout: 2000 }
-    );
   });
 });

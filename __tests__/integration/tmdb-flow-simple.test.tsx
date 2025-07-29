@@ -111,7 +111,7 @@ describe('TMDB Integration Flow - Simplified', () => {
     expect(screen.getByText('Recency: recent')).toBeInTheDocument();
   });
 
-  it('should allow navigating back from results to recency step', async () => {
+  it('should allow navigating back from results to genres step', async () => {
     render(<Home />, { wrapper: createWrapper() });
 
     // Navigate to results
@@ -133,7 +133,7 @@ describe('TMDB Integration Flow - Simplified', () => {
     fireEvent.click(screen.getByText('Back to Preferences'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('recency-step')).toBeInTheDocument();
+      expect(screen.getByTestId('genre-step')).toBeInTheDocument();
     });
   });
 

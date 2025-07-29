@@ -68,7 +68,7 @@ export function RecencyStep({ onComplete, onBackToGenres }: RecencyStepProps) {
   return (
     <div className="max-w-2xl mx-auto">
       <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-        <CardHeader className="text-center">
+        <CardHeader className="text-center relative">
           {/* Back Button */}
           <div className="absolute left-6">
             <Button variant="ghost" onClick={onBackToGenres} className="gap-2">

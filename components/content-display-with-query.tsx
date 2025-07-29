@@ -133,7 +133,7 @@ export function ContentDisplayWithQuery({
   ];
 
   return (
-    <div className="space-y-6">
+    <div data-testid="content-display" className="space-y-6">
       {/* Header with Back Button */}
       <div className="flex items-center justify-between">
         <Button variant="ghost" onClick={onBackToPreferences} className="gap-2">
