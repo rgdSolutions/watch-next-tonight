@@ -8,11 +8,8 @@ updates:
     ignore:
       - dependency-name: "postcss"
       - dependency-name: "@radix-ui/*"
-        versions: ["*"]
       - dependency-name: "tailwindcss"
-        versions: ["*"]
       - dependency-name: "autoprefixer"
-        versions: ["*"]
     
     # Optional: Configure how many PRs to open at once
     open-pull-requests-limit: 2
