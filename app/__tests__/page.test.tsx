@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import Home from '../page';
 
@@ -111,19 +111,23 @@ describe('Home Page', () => {
     });
     fireEvent.click(screen.getByText('Select Recent'));
 
-    // Loading screen
+    // Loading screen appears
     await waitFor(() => {
       expect(screen.getByTestId('loading-screen')).toBeInTheDocument();
       expect(screen.getByText('Loading for US...')).toBeInTheDocument();
     });
 
-    // Step 4: Results
-    await waitFor(() => {
-      expect(screen.getByTestId('content-display')).toBeInTheDocument();
-      expect(screen.getByText('Country: US')).toBeInTheDocument();
-      expect(screen.getByText('Genres: action, comedy')).toBeInTheDocument();
-      expect(screen.getByText('Recency: recent')).toBeInTheDocument();
-    });
+    // Step 4: Results - wait for loading to complete
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('content-display')).toBeInTheDocument();
+      },
+      { timeout: 2000 }
+    );
+
+    expect(screen.getByText('Country: US')).toBeInTheDocument();
+    expect(screen.getByText('Genres: action, comedy')).toBeInTheDocument();
+    expect(screen.getByText('Recency: recent')).toBeInTheDocument();
   });
 
   it('should show back button on recency step', async () => {
