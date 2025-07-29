@@ -23,6 +23,7 @@ import {
   useMovieGenres,
   useTVGenres,
 } from '@/hooks/use-tmdb';
+import { unifiedGenresToTMDBIds } from '@/lib/unified-genres';
 import { MediaItem } from '@/types/tmdb';
 
 interface ContentDisplayWithQueryProps {
@@ -42,21 +43,9 @@ export function ContentDisplayWithQuery({
   const [contentType, setContentType] = useState<'all' | 'movie' | 'tv'>('all');
   const [selectedTrailer, setSelectedTrailer] = useState<ContentItem | null>(null);
 
-  // Get genre mappings
+  // Get genre mappings (still needed for display)
   const { data: movieGenres } = useMovieGenres();
   const { data: tvGenres } = useTVGenres();
-
-  // Convert genre names to IDs
-  const getGenreIds = (genreNames: string[], isMovie: boolean) => {
-    const genres = isMovie ? movieGenres?.genres : tvGenres?.genres;
-    if (!genres) return [];
-
-    if (genreNames.includes('any')) return [];
-
-    return genreNames
-      .map((name) => genres.find((g) => g.name.toLowerCase() === name.toLowerCase())?.id)
-      .filter(Boolean) as number[];
-  };
 
   // Calculate date range based on recency preference
   const getDateRange = () => {
@@ -76,9 +65,6 @@ export function ContentDisplayWithQuery({
       case 'contemporary':
         startDate.setFullYear(now.getFullYear() - 2);
         break;
-      case 'classic':
-        startDate.setFullYear(1900);
-        break;
       default:
         startDate.setFullYear(1900);
     }
@@ -90,8 +76,11 @@ export function ContentDisplayWithQuery({
   };
 
   const dateRange = getDateRange();
-  const movieGenreIds = getGenreIds(preferences.genres, true);
-  const tvGenreIds = getGenreIds(preferences.genres, false);
+  // Convert unified genre IDs to TMDB IDs
+  const movieGenreIds =
+    preferences.genres.length === 0 ? [] : unifiedGenresToTMDBIds(preferences.genres, 'movie');
+  const tvGenreIds =
+    preferences.genres.length === 0 ? [] : unifiedGenresToTMDBIds(preferences.genres, 'tv');
 
   // Fetch movies and TV shows
   const { data: moviesData, isLoading: moviesLoading } = useDiscoverMovies(

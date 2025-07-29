@@ -42,13 +42,6 @@ const RECENCY_OPTIONS = [
     timeframe: '10 years',
   },
   {
-    id: 'classic' as RecencyOption,
-    name: 'Classic',
-    description: 'Published in the last 20 years',
-    emoji: '🏆',
-    timeframe: '20 years',
-  },
-  {
     id: 'any' as RecencyOption,
     name: 'Any Time Period',
     description: 'No restriction on publish date',
