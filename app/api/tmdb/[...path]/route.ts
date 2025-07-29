@@ -100,13 +100,19 @@ function transformResponse(path: string, data: any): any {
   return data;
 }
 
-export async function GET(request: NextRequest, { params }: { params: { path: string[] } }) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ path: string[] }> }
+) {
   if (!TMDB_TOKEN) {
     return NextResponse.json({ error: 'TMDB API configuration error' }, { status: 500 });
   }
 
+  // Await params before accessing its properties
+  const resolvedParams = await params;
+
   // Reconstruct the TMDB API path
-  const tmdbPath = params.path.join('/');
+  const tmdbPath = resolvedParams.path.join('/');
   const searchParams = request.nextUrl.searchParams;
   const queryString = searchParams.toString();
 
@@ -142,12 +148,17 @@ export async function GET(request: NextRequest, { params }: { params: { path: st
 }
 
 // Also support POST for endpoints that require it
-export async function POST(request: NextRequest, { params }: { params: { path: string[] } }) {
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ path: string[] }> }
+) {
   if (!TMDB_TOKEN) {
     return NextResponse.json({ error: 'TMDB API configuration error' }, { status: 500 });
   }
 
-  const tmdbPath = params.path.join('/');
+  // Await params before accessing its properties
+  const resolvedParams = await params;
+  const tmdbPath = resolvedParams.path.join('/');
   const body = await request.json();
 
   const tmdbUrl = `${TMDB_BASE_URL}/${tmdbPath}`;
