@@ -1,39 +1,21 @@
 'use client';
 
-import { Check, Sparkles } from 'lucide-react';
+import { Check, Loader2, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useUnifiedGenres } from '@/hooks/use-unified-genres';
 import { cn } from '@/lib/utils';
 
 interface GenreStepProps {
   onComplete: (genres: string[]) => void;
 }
 
-const POPULAR_GENRES = [
-  { id: 'action', name: 'Action', emoji: '🎬' },
-  { id: 'comedy', name: 'Comedy', emoji: '😂' },
-  { id: 'drama', name: 'Drama', emoji: '🎭' },
-  { id: 'horror', name: 'Horror', emoji: '👻' },
-  { id: 'thriller', name: 'Thriller', emoji: '🔪' },
-  { id: 'romance', name: 'Romance', emoji: '💕' },
-  { id: 'sci-fi', name: 'Sci-Fi', emoji: '🚀' },
-  { id: 'fantasy', name: 'Fantasy', emoji: '🧙‍♂️' },
-  { id: 'documentary', name: 'Documentary', emoji: '📹' },
-  { id: 'animation', name: 'Animation', emoji: '🎨' },
-  { id: 'mystery', name: 'Mystery', emoji: '🔍' },
-  { id: 'crime', name: 'Crime', emoji: '🕵️' },
-  { id: 'family', name: 'Family', emoji: '👨‍👩‍👧‍👦' },
-  { id: 'adventure', name: 'Adventure', emoji: '🗺️' },
-  { id: 'music', name: 'Music', emoji: '🎵' },
-  { id: 'war', name: 'War', emoji: '⚔️' },
-];
-
 export function GenreStep({ onComplete }: GenreStepProps) {
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [isAnyGenre, setIsAnyGenre] = useState(false);
+  const { genres, isLoading, error } = useUnifiedGenres();
 
   const toggleGenre = (genreId: string) => {
     if (isAnyGenre) {
@@ -52,13 +34,41 @@ export function GenreStep({ onComplete }: GenreStepProps) {
 
   const handleContinue = () => {
     if (isAnyGenre) {
-      onComplete(['any']);
+      onComplete([]);
     } else {
       onComplete(selectedGenres);
     }
   };
 
   const canContinue = isAnyGenre || selectedGenres.length > 0;
+
+  if (isLoading) {
+    return (
+      <div className="max-w-4xl mx-auto">
+        <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
+          <CardContent className="flex flex-col items-center justify-center py-16">
+            <Loader2 className="w-8 h-8 animate-spin text-primary mb-4" />
+            <p className="text-muted-foreground">Loading genres...</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (error || genres.length === 0) {
+    return (
+      <div className="max-w-4xl mx-auto">
+        <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
+          <CardContent className="text-center py-16">
+            <p className="text-destructive mb-4">Failed to load genres.</p>
+            <Button onClick={() => window.location.reload()} variant="outline">
+              Try again
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -75,7 +85,7 @@ export function GenreStep({ onComplete }: GenreStepProps) {
 
         <CardContent className="space-y-6">
           {/* Any Genre Option */}
-          <div className="text-center">
+          <div className="flex flex-row justify-center items-center">
             <Button
               variant={isAnyGenre ? 'default' : 'outline'}
               onClick={selectAnyGenre}
@@ -107,7 +117,7 @@ export function GenreStep({ onComplete }: GenreStepProps) {
                          md:grid-cols-4
                          lg:grid-cols-5"
           >
-            {POPULAR_GENRES.map((genre) => {
+            {genres.map((genre) => {
               const isSelected = selectedGenres.includes(genre.id);
               return (
                 <button
@@ -119,10 +129,8 @@ export function GenreStep({ onComplete }: GenreStepProps) {
                     'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
                     isSelected
                       ? 'border-primary bg-primary text-primary-foreground shadow-lg scale-105'
-                      : 'border-border bg-background hover:border-primary/50',
-                    isAnyGenre && 'opacity-50 cursor-not-allowed'
+                      : 'border-border bg-background hover:border-primary/50'
                   )}
-                  disabled={isAnyGenre}
                 >
                   <div className="flex items-center justify-between">
                     <div>
@@ -135,15 +143,6 @@ export function GenreStep({ onComplete }: GenreStepProps) {
               );
             })}
           </div>
-
-          {/* Selected Count */}
-          {selectedGenres.length > 0 && !isAnyGenre && (
-            <div className="text-center">
-              <Badge variant="secondary" className="px-4 py-2">
-                {selectedGenres.length} genre{selectedGenres.length === 1 ? '' : 's'} selected
-              </Badge>
-            </div>
-          )}
 
           {/* Continue Button */}
           <div className="text-center pt-4">

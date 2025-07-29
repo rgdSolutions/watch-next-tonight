@@ -4,11 +4,29 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { GenreStep } from '../genre-step';
 
+// Mock the unified genres hook
+const mockUseUnifiedGenres = vi.fn();
+
+vi.mock('@/hooks/use-unified-genres', () => ({
+  useUnifiedGenres: () => mockUseUnifiedGenres(),
+}));
+
 describe('GenreStep', () => {
   const mockOnComplete = vi.fn();
 
   beforeEach(() => {
     mockOnComplete.mockClear();
+    // Default mock implementation
+    mockUseUnifiedGenres.mockReturnValue({
+      genres: [
+        { id: 'action', name: 'Action', emoji: '🎬', movieIds: [28], tvIds: [10759] },
+        { id: 'comedy', name: 'Comedy', emoji: '😂', movieIds: [35], tvIds: [35] },
+        { id: 'drama', name: 'Drama', emoji: '🎭', movieIds: [18], tvIds: [18] },
+        { id: 'horror', name: 'Horror', emoji: '👻', movieIds: [27], tvIds: [] },
+      ],
+      isLoading: false,
+      error: null,
+    });
   });
 
   it('renders genre options', () => {
@@ -91,6 +109,35 @@ describe('GenreStep', () => {
     await user.click(anyGenreButton);
     await user.click(continueButton);
 
-    expect(mockOnComplete).toHaveBeenCalledWith(['any']);
+    expect(mockOnComplete).toHaveBeenCalledWith([]);
+  });
+});
+
+describe('GenreStep - Loading State', () => {
+  it('shows loading state when genres are being fetched', () => {
+    mockUseUnifiedGenres.mockReturnValue({
+      genres: [],
+      isLoading: true,
+      error: null,
+    });
+
+    render(<GenreStep onComplete={vi.fn()} />);
+
+    expect(screen.getByText('Loading genres...')).toBeInTheDocument();
+  });
+});
+
+describe('GenreStep - Error State', () => {
+  it('shows error state when genre fetch fails', () => {
+    mockUseUnifiedGenres.mockReturnValue({
+      genres: [],
+      isLoading: false,
+      error: new Error('Failed to fetch'),
+    });
+
+    render(<GenreStep onComplete={vi.fn()} />);
+
+    expect(screen.getByText('Failed to load genres.')).toBeInTheDocument();
+    expect(screen.getByText('Try again')).toBeInTheDocument();
   });
 });

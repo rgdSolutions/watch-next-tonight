@@ -3,14 +3,15 @@
 import { Play, RotateCcw, Star, X } from 'lucide-react';
 import { useState } from 'react';
 
-import { ContentItem } from '@/components/content-display';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { getTMDBImageUrl, getYearFromDate } from '@/lib/tmdb-utils';
 import { cn } from '@/lib/utils';
+import { MediaItem } from '@/types/tmdb';
 
 interface ContentCardProps {
-  item: ContentItem;
-  onTrailerClick: (item: ContentItem) => void;
+  item: MediaItem;
+  onTrailerClick: (item: MediaItem) => void;
   onShuffle: (itemId: string) => void;
   isShuffling: boolean;
 }
@@ -45,7 +46,11 @@ export function ContentCard({ item, onTrailerClick, onShuffle, isShuffling }: Co
         {/* Cover Art */}
         <div className="flex-shrink-0">
           <div className="w-24 h-36 rounded-md overflow-hidden bg-muted">
-            <img src={item.coverArt} alt={item.title} className="w-full h-full object-cover" />
+            <img
+              src={getTMDBImageUrl(item.posterPath, 'w500')}
+              alt={item.title}
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
 
@@ -59,7 +64,7 @@ export function ContentCard({ item, onTrailerClick, onShuffle, isShuffling }: Co
                 {item.type === 'movie' ? '🎬 Movie' : '📺 TV Show'}
               </Badge>
               <span>•</span>
-              <span>{item.year}</span>
+              <span>{getYearFromDate(item.releaseDate)}</span>
             </div>
           </div>
 
@@ -72,20 +77,14 @@ export function ContentCard({ item, onTrailerClick, onShuffle, isShuffling }: Co
 
           {/* Genres */}
           <div className="flex flex-wrap gap-1">
-            {item.genre.slice(0, 2).map((genre) => (
-              <Badge key={genre} variant="secondary" className="text-xs">
-                {genre}
-              </Badge>
-            ))}
-            {item.genre.length > 2 && (
-              <Badge variant="secondary" className="text-xs">
-                +{item.genre.length - 2}
-              </Badge>
-            )}
+            {/* TODO: Add genre names from genreIds */}
+            <Badge variant="secondary" className="text-xs">
+              {item.type === 'movie' ? 'Movie' : 'TV Show'}
+            </Badge>
           </div>
 
           {/* Description */}
-          <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
+          <p className="text-sm text-muted-foreground line-clamp-2">{item.overview}</p>
 
           {/* Watch Trailer Button */}
           <Button onClick={() => onTrailerClick(item)} size="sm" className="gap-2 w-full mt-2">

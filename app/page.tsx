@@ -12,13 +12,7 @@ import { RecencyStep } from '@/components/recency-step';
 import { Button } from '@/components/ui/button';
 import { tmdbPrefetch } from '@/hooks/use-tmdb';
 
-export type RecencyOption =
-  | 'brand-new'
-  | 'very-recent'
-  | 'recent'
-  | 'contemporary'
-  | 'classic'
-  | 'any';
+export type RecencyOption = 'brand-new' | 'very-recent' | 'recent' | 'contemporary' | 'any';
 
 interface UserPreferences {
   country: string;
@@ -41,7 +35,6 @@ export default function Home() {
   }, [queryClient]);
 
   const handleLocationComplete = (country: string) => {
-    console.log('\n~~~country', country);
     setPreferences((prev) => ({ ...prev, country }));
     setCurrentStep('genres');
   };
@@ -81,7 +74,7 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-4">
           <h1
             className="text-4xl font-bold tracking-tight mb-2
                         md:text-5xl

@@ -2,12 +2,13 @@
 
 import { Calendar, Clock, Star } from 'lucide-react';
 
-import { ContentItem } from '@/components/content-display';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { getTMDBImageUrl, getYearFromDate } from '@/lib/tmdb-utils';
+import { MediaItem } from '@/types/tmdb';
 
 interface TrailerModalProps {
-  item: ContentItem;
+  item: MediaItem;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -35,14 +36,15 @@ export function TrailerModal({ item, isOpen, onClose }: TrailerModalProps) {
           </div>
 
           {/* Content Details */}
-          <div
-            className="grid grid-cols-1 gap-6
-                         md:grid-cols-2"
-          >
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {/* Left Column - Cover and Basic Info */}
             <div className="space-y-4">
               <div className="w-48 h-72 mx-auto rounded-lg overflow-hidden bg-muted">
-                <img src={item.coverArt} alt={item.title} className="w-full h-full object-cover" />
+                <img
+                  src={getTMDBImageUrl(item.backdropPath || item.posterPath, 'original')}
+                  alt={item.title}
+                  className="w-full h-full object-cover"
+                />
               </div>
 
               <div className="text-center space-y-2">
@@ -55,7 +57,7 @@ export function TrailerModal({ item, isOpen, onClose }: TrailerModalProps) {
                 <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <Calendar className="w-4 h-4" />
-                    {item.year}
+                    {getYearFromDate(item.releaseDate)}
                   </div>
                   <div className="flex items-center gap-1">
                     <Clock className="w-4 h-4" />
@@ -75,31 +77,20 @@ export function TrailerModal({ item, isOpen, onClose }: TrailerModalProps) {
               <div>
                 <h3 className="font-semibold mb-2">Genres</h3>
                 <div className="flex flex-wrap gap-2">
-                  {item.genre.map((genre) => (
-                    <Badge key={genre} variant="secondary">
-                      {genre}
-                    </Badge>
-                  ))}
+                  {/* TODO: Add genre names from genreIds */}
+                  <Badge variant="secondary">{item.type === 'movie' ? 'Movie' : 'TV Show'}</Badge>
                 </div>
               </div>
 
               <div>
                 <h3 className="font-semibold mb-2">Description</h3>
-                <p className="text-muted-foreground leading-relaxed">{item.description}</p>
+                <p className="text-muted-foreground leading-relaxed">{item.overview}</p>
               </div>
 
               <div>
                 <h3 className="font-semibold mb-2">Available On</h3>
                 <Badge variant="outline" className="capitalize">
-                  {item.platform === 'appletv'
-                    ? 'Apple TV+'
-                    : item.platform === 'prime'
-                      ? 'Prime Video'
-                      : item.platform === 'disney'
-                        ? 'Disney+'
-                        : item.platform === 'max'
-                          ? 'MAX'
-                          : 'Netflix'}
+                  TMDB
                 </Badge>
               </div>
             </div>

@@ -4,7 +4,6 @@ import { ArrowLeft, Filter } from 'lucide-react';
 import { useState } from 'react';
 
 import { ContentCard } from '@/components/content-card';
-import { ContentItem } from '@/components/content-display';
 import { TrailerModal } from '@/components/trailer-modal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -23,6 +22,8 @@ import {
   useMovieGenres,
   useTVGenres,
 } from '@/hooks/use-tmdb';
+import { useUnifiedGenres } from '@/hooks/use-unified-genres';
+import { unifiedGenresToTMDBIds } from '@/lib/unified-genres';
 import { MediaItem } from '@/types/tmdb';
 
 interface ContentDisplayWithQueryProps {
@@ -40,23 +41,13 @@ export function ContentDisplayWithQuery({
 }: ContentDisplayWithQueryProps) {
   const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
   const [contentType, setContentType] = useState<'all' | 'movie' | 'tv'>('all');
-  const [selectedTrailer, setSelectedTrailer] = useState<ContentItem | null>(null);
+  const [selectedTrailer, setSelectedTrailer] = useState<MediaItem | null>(null);
 
-  // Get genre mappings
+  // Get unified genres
+  const { genres: unifiedGenres } = useUnifiedGenres();
+  // Get genre mappings (still needed for display)
   const { data: movieGenres } = useMovieGenres();
   const { data: tvGenres } = useTVGenres();
-
-  // Convert genre names to IDs
-  const getGenreIds = (genreNames: string[], isMovie: boolean) => {
-    const genres = isMovie ? movieGenres?.genres : tvGenres?.genres;
-    if (!genres) return [];
-
-    if (genreNames.includes('any')) return [];
-
-    return genreNames
-      .map((name) => genres.find((g) => g.name.toLowerCase() === name.toLowerCase())?.id)
-      .filter(Boolean) as number[];
-  };
 
   // Calculate date range based on recency preference
   const getDateRange = () => {
@@ -76,9 +67,6 @@ export function ContentDisplayWithQuery({
       case 'contemporary':
         startDate.setFullYear(now.getFullYear() - 2);
         break;
-      case 'classic':
-        startDate.setFullYear(1900);
-        break;
       default:
         startDate.setFullYear(1900);
     }
@@ -90,8 +78,15 @@ export function ContentDisplayWithQuery({
   };
 
   const dateRange = getDateRange();
-  const movieGenreIds = getGenreIds(preferences.genres, true);
-  const tvGenreIds = getGenreIds(preferences.genres, false);
+  // Convert unified genre IDs to TMDB IDs
+  const movieGenreIds =
+    preferences.genres.length === 0
+      ? []
+      : unifiedGenresToTMDBIds(preferences.genres, unifiedGenres, 'movie');
+  const tvGenreIds =
+    preferences.genres.length === 0
+      ? []
+      : unifiedGenresToTMDBIds(preferences.genres, unifiedGenres, 'tv');
 
   // Fetch movies and TV shows
   const { data: moviesData, isLoading: moviesLoading } = useDiscoverMovies(
@@ -216,29 +211,15 @@ export function ContentDisplayWithQuery({
             </Card>
           </div>
         ) : (
-          allContent.map((item) => {
-            const contentItem: ContentItem = {
-              id: item.id,
-              title: item.title,
-              type: item.type,
-              platform: 'tmdb', // In real app, you'd fetch watch providers
-              coverArt: item.posterPath || '',
-              rating: item.rating,
-              year: parseInt(item.releaseDate?.split('-')[0] || '0'),
-              genre: [], // You'd map genreIds to names here
-              description: item.overview,
-              trailerUrl: '', // Would need to fetch videos endpoint
-            };
-            return (
-              <ContentCard
-                key={item.id}
-                item={contentItem}
-                onTrailerClick={(contentItem: ContentItem) => setSelectedTrailer(contentItem)}
-                onShuffle={() => {}}
-                isShuffling={false}
-              />
-            );
-          })
+          allContent.map((item) => (
+            <ContentCard
+              key={item.id}
+              item={item}
+              onTrailerClick={() => setSelectedTrailer(item)}
+              onShuffle={() => {}}
+              isShuffling={false}
+            />
+          ))
         )}
       </div>
 
