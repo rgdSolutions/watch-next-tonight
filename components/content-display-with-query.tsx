@@ -22,6 +22,7 @@ import {
   useMovieGenres,
   useTVGenres,
 } from '@/hooks/use-tmdb';
+import { useUnifiedGenres } from '@/hooks/use-unified-genres';
 import { unifiedGenresToTMDBIds } from '@/lib/unified-genres';
 import { MediaItem } from '@/types/tmdb';
 
@@ -42,6 +43,8 @@ export function ContentDisplayWithQuery({
   const [contentType, setContentType] = useState<'all' | 'movie' | 'tv'>('all');
   const [selectedTrailer, setSelectedTrailer] = useState<MediaItem | null>(null);
 
+  // Get unified genres
+  const { genres: unifiedGenres } = useUnifiedGenres();
   // Get genre mappings (still needed for display)
   const { data: movieGenres } = useMovieGenres();
   const { data: tvGenres } = useTVGenres();
@@ -77,9 +80,13 @@ export function ContentDisplayWithQuery({
   const dateRange = getDateRange();
   // Convert unified genre IDs to TMDB IDs
   const movieGenreIds =
-    preferences.genres.length === 0 ? [] : unifiedGenresToTMDBIds(preferences.genres, 'movie');
+    preferences.genres.length === 0
+      ? []
+      : unifiedGenresToTMDBIds(preferences.genres, unifiedGenres, 'movie');
   const tvGenreIds =
-    preferences.genres.length === 0 ? [] : unifiedGenresToTMDBIds(preferences.genres, 'tv');
+    preferences.genres.length === 0
+      ? []
+      : unifiedGenresToTMDBIds(preferences.genres, unifiedGenres, 'tv');
 
   // Fetch movies and TV shows
   const { data: moviesData, isLoading: moviesLoading } = useDiscoverMovies(

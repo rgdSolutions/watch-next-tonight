@@ -66,11 +66,17 @@ describe('useUnifiedGenres', () => {
       expect(result.current.isLoading).toBe(false);
     });
 
-    expect(result.current.genres).toHaveLength(4); // action, adventure, comedy, drama
-    expect(result.current.genres.find((g) => g.id === 'action')).toBeTruthy();
-    expect(result.current.genres.find((g) => g.id === 'adventure')).toBeTruthy();
-    expect(result.current.genres.find((g) => g.id === 'comedy')).toBeTruthy();
-    expect(result.current.genres.find((g) => g.id === 'drama')).toBeTruthy();
+    expect(result.current.genres).toHaveLength(3); // action (merged with adventure), comedy, drama
+
+    // Action should exist and contain both movie and TV IDs
+    const action = result.current.genres.find((g) => g.name === 'Action');
+    expect(action).toBeTruthy();
+    expect(action?.movieIds).toContain(28);
+    expect(action?.tvIds).toContain(10759);
+
+    // Comedy and Drama should exist
+    expect(result.current.genres.find((g) => g.name === 'Comedy')).toBeTruthy();
+    expect(result.current.genres.find((g) => g.name === 'Drama')).toBeTruthy();
     expect(result.current.error).toBeNull();
   });
 
