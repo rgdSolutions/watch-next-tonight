@@ -41,6 +41,7 @@ export default function Home() {
   }, [queryClient]);
 
   const handleLocationComplete = (country: string) => {
+    console.log('\n~~~country', country);
     setPreferences((prev) => ({ ...prev, country }));
     setCurrentStep('genres');
   };
