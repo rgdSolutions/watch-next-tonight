@@ -4,7 +4,6 @@ import { ArrowLeft, Filter } from 'lucide-react';
 import { useState } from 'react';
 
 import { ContentCard } from '@/components/content-card';
-import { ContentItem } from '@/components/content-display';
 import { TrailerModal } from '@/components/trailer-modal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -41,7 +40,7 @@ export function ContentDisplayWithQuery({
 }: ContentDisplayWithQueryProps) {
   const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
   const [contentType, setContentType] = useState<'all' | 'movie' | 'tv'>('all');
-  const [selectedTrailer, setSelectedTrailer] = useState<ContentItem | null>(null);
+  const [selectedTrailer, setSelectedTrailer] = useState<MediaItem | null>(null);
 
   // Get genre mappings (still needed for display)
   const { data: movieGenres } = useMovieGenres();
@@ -205,29 +204,15 @@ export function ContentDisplayWithQuery({
             </Card>
           </div>
         ) : (
-          allContent.map((item) => {
-            const contentItem: ContentItem = {
-              id: item.id,
-              title: item.title,
-              type: item.type,
-              platform: 'tmdb', // In real app, you'd fetch watch providers
-              coverArt: item.posterPath || '',
-              rating: item.rating,
-              year: parseInt(item.releaseDate?.split('-')[0] || '0'),
-              genre: [], // You'd map genreIds to names here
-              description: item.overview,
-              trailerUrl: '', // Would need to fetch videos endpoint
-            };
-            return (
-              <ContentCard
-                key={item.id}
-                item={contentItem}
-                onTrailerClick={(contentItem: ContentItem) => setSelectedTrailer(contentItem)}
-                onShuffle={() => {}}
-                isShuffling={false}
-              />
-            );
-          })
+          allContent.map((item) => (
+            <ContentCard
+              key={item.id}
+              item={item}
+              onTrailerClick={() => setSelectedTrailer(item)}
+              onShuffle={() => {}}
+              isShuffling={false}
+            />
+          ))
         )}
       </div>
 
