@@ -1,6 +1,6 @@
 'use client';
 
-import { Calendar, Clock } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import { useState } from 'react';
 
 import { RecencyOption } from '@/app/page';
@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 
 interface RecencyStepProps {
   onComplete: (recency: RecencyOption) => void;
+  onBackToGenres: () => void;
 }
 
 const RECENCY_OPTIONS = [
@@ -50,7 +51,7 @@ const RECENCY_OPTIONS = [
   },
 ];
 
-export function RecencyStep({ onComplete }: RecencyStepProps) {
+export function RecencyStep({ onComplete, onBackToGenres }: RecencyStepProps) {
   const [selectedRecency, setSelectedRecency] = useState<RecencyOption | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -67,11 +68,19 @@ export function RecencyStep({ onComplete }: RecencyStepProps) {
   return (
     <div className="max-w-2xl mx-auto">
       <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-        <CardHeader className="text-center pb-6">
+        <CardHeader className="text-center relative">
+          {/* Back Button */}
+          <div className="absolute left-6">
+            <Button variant="ghost" onClick={onBackToGenres} className="gap-2">
+              <ArrowLeft className="w-4 h-4" />
+              Back
+            </Button>
+          </div>
+
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
             <Clock className="w-8 h-8 text-primary" />
           </div>
-          <CardTitle className="text-2xl mb-2">How recent should the content be?</CardTitle>
+          <CardTitle className="text-2xl mb-2 pt-4">How recent should the content be?</CardTitle>
           <p className="text-muted-foreground">
             Choose your preferred time period for movies and TV shows
           </p>

@@ -62,10 +62,6 @@ export default function Home() {
     setCurrentStep('genres');
   };
 
-  const handleBackToRecency = () => {
-    setCurrentStep('recency');
-  };
-
   if (isLoading) {
     return <LoadingScreen preferences={preferences as UserPreferences} />;
   }
@@ -90,31 +86,19 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Back Button */}
-        {(currentStep === 'recency' || currentStep === 'results') && (
-          <div className="mb-6">
-            <Button
-              variant="ghost"
-              onClick={currentStep === 'recency' ? handleBackToGenres : handleBackToRecency}
-              className="gap-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back
-            </Button>
-          </div>
-        )}
-
         {/* Step Components */}
         {currentStep === 'location' && <LocationStep onComplete={handleLocationComplete} />}
 
         {currentStep === 'genres' && <GenreStep onComplete={handleGenresComplete} />}
 
-        {currentStep === 'recency' && <RecencyStep onComplete={handleRecencyComplete} />}
+        {currentStep === 'recency' && (
+          <RecencyStep onComplete={handleRecencyComplete} onBackToGenres={handleBackToGenres} />
+        )}
 
         {currentStep === 'results' && (
           <ContentDisplayWithQuery
             preferences={preferences as UserPreferences}
-            onBackToPreferences={handleBackToRecency}
+            onBackToPreferences={handleBackToGenres}
           />
         )}
       </div>

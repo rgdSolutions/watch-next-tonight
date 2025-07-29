@@ -73,7 +73,7 @@ export function GenreStep({ onComplete }: GenreStepProps) {
   return (
     <div className="max-w-4xl mx-auto">
       <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-        <CardHeader className="text-center pb-6">
+        <CardHeader className="text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
             <Sparkles className="w-8 h-8 text-primary" />
           </div>
