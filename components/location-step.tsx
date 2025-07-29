@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getCountryCodeFromCoordinates } from '@/lib/country-codes';
 
 interface LocationStepProps {
   onComplete: (country: string) => void;
@@ -26,10 +27,11 @@ export function LocationStep({ onComplete }: LocationStepProps) {
         });
       });
 
-      // In a real app, you'd use a reverse geocoding API here
-      // For demo purposes, we'll just use USA
-      onComplete('US');
+      const { latitude, longitude } = position.coords;
+      const countryCode = await getCountryCodeFromCoordinates(latitude, longitude);
+      onComplete(countryCode);
     } catch (error) {
+      console.error('Location detection error:', error);
       // Permission denied or error - default to USA
       onComplete('US');
     } finally {
