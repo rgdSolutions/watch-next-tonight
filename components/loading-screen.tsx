@@ -61,9 +61,13 @@ export function LoadingScreen({ preferences }: LoadingScreenProps) {
             <div className="mt-6 p-4 rounded-lg bg-muted/30 text-sm text-left">
               <div className="font-medium mb-2">Your Preferences:</div>
               <div className="space-y-1 text-muted-foreground">
-                <div>📍 Country: {FLAG_EMOJIS[preferences.country]}</div>
+                <div>📍 Country: {FLAG_EMOJIS[preferences.country] || '🇺🇸'}</div>
                 <div>
-                  🎭 Genres: {preferences.genres.map((genre) => GENRE_EMOJIS[genre]).join(' ')}
+                  🎭 Genres:{' '}
+                  {preferences.genres
+                    .map((genre) => GENRE_EMOJIS[genre])
+                    .filter(Boolean)
+                    .join(' ')}
                 </div>
                 <div>
                   📅 Recency:{' '}
