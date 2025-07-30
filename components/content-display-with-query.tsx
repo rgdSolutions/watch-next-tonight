@@ -135,7 +135,7 @@ export function ContentDisplayWithQuery({
   return (
     <div data-testid="content-display" className="space-y-6">
       {/* Header with Back Button */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap">
         <Button variant="ghost" onClick={onBackToPreferences} className="gap-2">
           <ArrowLeft className="w-4 h-4" />
           Change Preferences

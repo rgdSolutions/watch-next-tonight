@@ -3,6 +3,11 @@
 import { Filter, Loader2, Search, Star } from 'lucide-react';
 
 import { Card, CardContent } from '@/components/ui/card';
+import { useUnifiedGenres } from '@/hooks/use-unified-genres';
+import { FLAG_EMOJIS } from '@/lib/country-codes';
+import { GENRE_EMOJIS } from '@/lib/unified-genres';
+
+import { RECENCY_OPTIONS } from './recency-step';
 
 interface UserPreferences {
   country: string;
@@ -15,14 +20,19 @@ interface LoadingScreenProps {
 }
 
 export function LoadingScreen({ preferences }: LoadingScreenProps) {
+  const { genres } = useUnifiedGenres();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center">
       <div className="max-w-md mx-auto px-4">
-        <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
+        <Card data-testid="loading-card" className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
           <CardContent className="p-8 text-center">
             {/* Loading Animation */}
             <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center">
-              <Loader2 className="w-10 h-10 text-primary animate-spin" />
+              <Loader2
+                data-testid="loading-spinner"
+                className="w-10 h-10 text-primary animate-spin"
+              />
             </div>
 
             {/* Loading Text */}
@@ -51,11 +61,18 @@ export function LoadingScreen({ preferences }: LoadingScreenProps) {
             <div className="mt-6 p-4 rounded-lg bg-muted/30 text-sm text-left">
               <div className="font-medium mb-2">Your Preferences:</div>
               <div className="space-y-1 text-muted-foreground">
+                <div>📍 Country: {FLAG_EMOJIS[preferences.country] || '🇺🇸'}</div>
                 <div>
-                  📍 Region: {preferences.country === 'US' ? 'United States' : preferences.country}
+                  🎭 Genres:{' '}
+                  {preferences.genres
+                    .map((genre) => GENRE_EMOJIS[genre])
+                    .filter(Boolean)
+                    .join(' ')}
                 </div>
-                <div>🎭 Genres: {preferences.genres.join(', ')}</div>
-                <div>📅 Recency: {preferences.recency}</div>
+                <div>
+                  📅 Recency:{' '}
+                  {RECENCY_OPTIONS.find((option) => option.id === preferences.recency)?.emoji}
+                </div>
               </div>
             </div>
           </CardContent>

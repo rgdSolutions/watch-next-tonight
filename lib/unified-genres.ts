@@ -9,7 +9,7 @@ export interface UnifiedGenre {
 }
 
 // Emoji mapping for common genre keywords
-const GENRE_EMOJIS: Record<string, string> = {
+export const GENRE_EMOJIS: Record<string, string> = {
   action: '💥',
   adventure: '🗺️',
   animation: '🎨',

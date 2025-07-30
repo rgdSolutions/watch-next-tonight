@@ -13,7 +13,7 @@ interface RecencyStepProps {
   onBackToGenres: () => void;
 }
 
-const RECENCY_OPTIONS = [
+export const RECENCY_OPTIONS = [
   {
     id: 'brand-new' as RecencyOption,
     name: 'Brand New',
