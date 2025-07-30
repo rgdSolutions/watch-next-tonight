@@ -25,11 +25,14 @@ export function LoadingScreen({ preferences }: LoadingScreenProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center">
       <div className="max-w-md mx-auto px-4">
-        <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
+        <Card data-testid="loading-card" className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
           <CardContent className="p-8 text-center">
             {/* Loading Animation */}
             <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center">
-              <Loader2 className="w-10 h-10 text-primary animate-spin" />
+              <Loader2
+                data-testid="loading-spinner"
+                className="w-10 h-10 text-primary animate-spin"
+              />
             </div>
 
             {/* Loading Text */}
