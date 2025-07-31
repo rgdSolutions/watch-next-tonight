@@ -190,6 +190,44 @@ describe('TMDB API Route', () => {
       });
     });
 
+    it('should pass through video endpoints without transformation', async () => {
+      const mockFetch = vi.mocked(fetch);
+      const mockVideoResponse = {
+        id: 550,
+        results: [
+          {
+            id: '1',
+            key: 'zSWdZVtXT7E',
+            name: 'Fight Club Trailer',
+            site: 'YouTube',
+            type: 'Trailer',
+          },
+        ],
+      };
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockVideoResponse,
+      } as Response);
+
+      const request = new NextRequest('http://localhost:3000/api/tmdb/movie/550/videos');
+      const response = await GET(request, {
+        params: Promise.resolve({ path: ['movie', '550', 'videos'] }),
+      });
+      const data = await response.json();
+
+      expect(mockFetch).toHaveBeenCalledWith(
+        'https://api.themoviedb.org/3/movie/550/videos',
+        expect.any(Object)
+      );
+
+      // Should return the raw video response, not transformed
+      expect(data).toEqual(mockVideoResponse);
+      expect(data.id).toBe(550);
+      expect(data.results).toHaveLength(1);
+      expect(data.results[0].key).toBe('zSWdZVtXT7E');
+    });
+
     it('should handle TMDB API errors', async () => {
       const mockFetch = vi.mocked(fetch);
       mockFetch.mockResolvedValueOnce({

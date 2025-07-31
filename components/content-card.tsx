@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useGenreLookup } from '@/hooks/use-genre-lookup';
 import { getTMDBImageUrl, getYearFromDate } from '@/lib/tmdb-utils';
 import { cn } from '@/lib/utils';
 import { MediaItem } from '@/types/tmdb';
@@ -18,6 +19,7 @@ interface ContentCardProps {
 
 export function ContentCard({ item, onTrailerClick, onShuffle, isShuffling }: ContentCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const { getGenreWithEmoji } = useGenreLookup(item.type);
 
   const handleShuffle = () => {
     onShuffle(item.id);
@@ -69,18 +71,24 @@ export function ContentCard({ item, onTrailerClick, onShuffle, isShuffling }: Co
           </div>
 
           {/* Rating */}
-          <div className="flex items-center gap-1">
-            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-            <span className="font-medium">{item.rating}</span>
-            <span className="text-muted-foreground text-sm">/10</span>
-          </div>
+          {item.rating && (
+            <div className="flex items-center gap-1">
+              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+              <span className="font-medium">{item.rating.toFixed(1)}</span>
+              <span className="text-muted-foreground text-sm">/10</span>
+            </div>
+          )}
 
           {/* Genres */}
           <div className="flex flex-wrap gap-1">
-            {/* TODO: Add genre names from genreIds */}
-            <Badge variant="secondary" className="text-xs">
-              {item.type === 'movie' ? 'Movie' : 'TV Show'}
-            </Badge>
+            {item.genreIds.slice(0, 3).map((genreId) => {
+              const genre = getGenreWithEmoji(genreId);
+              return genre ? (
+                <Badge variant="secondary" className="text-xs" key={genreId}>
+                  {genre.emoji}
+                </Badge>
+              ) : null;
+            })}
           </div>
 
           {/* Description */}

@@ -1,7 +1,7 @@
 import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 import { tmdbClient } from '@/lib/tmdb-client';
-import { GenreList, MediaItem, SearchResults } from '@/types/tmdb';
+import { GenreList, MediaItem, SearchResults, TMDBVideoResponse } from '@/types/tmdb';
 
 // Query key factory for consistent cache key generation
 export const tmdbKeys = {
@@ -23,6 +23,10 @@ export const tmdbKeys = {
 
   trending: (mediaType: string, timeWindow: string) =>
     [...tmdbKeys.all, 'trending', mediaType, timeWindow] as const,
+
+  videos: () => [...tmdbKeys.all, 'videos'] as const,
+  movieVideos: (id: number) => [...tmdbKeys.videos(), 'movie', id] as const,
+  tvVideos: (id: number) => [...tmdbKeys.videos(), 'tv', id] as const,
 };
 
 // Search for movies and TV shows
@@ -116,6 +120,28 @@ export function useTrending(
     queryKey: tmdbKeys.trending(mediaType, timeWindow),
     queryFn: () => tmdbClient.getTrending(mediaType, timeWindow),
     staleTime: 30 * 60 * 1000, // 30 minutes
+    ...options,
+  });
+}
+
+// Get movie videos/trailers
+export function useMovieVideos(movieId: number, options?: UseQueryOptions<TMDBVideoResponse>) {
+  return useQuery({
+    queryKey: tmdbKeys.movieVideos(movieId),
+    queryFn: () => tmdbClient.getMovieVideos(movieId),
+    enabled: !!movieId,
+    staleTime: 60 * 60 * 1000, // 1 hour
+    ...options,
+  });
+}
+
+// Get TV show videos/trailers
+export function useTVVideos(tvId: number, options?: UseQueryOptions<TMDBVideoResponse>) {
+  return useQuery({
+    queryKey: tmdbKeys.tvVideos(tvId),
+    queryFn: () => tmdbClient.getTVVideos(tvId),
+    enabled: !!tvId,
+    staleTime: 60 * 60 * 1000, // 1 hour
     ...options,
   });
 }

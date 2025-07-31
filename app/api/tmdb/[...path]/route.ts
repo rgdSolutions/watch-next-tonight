@@ -25,9 +25,13 @@ function transformMediaItem(item: any, mediaType: 'movie' | 'tv') {
     rating: item.vote_average,
     voteCount: item.vote_count,
     popularity: item.popularity,
-    genreIds: item.genre_ids,
+    genreIds: item.genre_ids || [],
     originalLanguage: item.original_language,
     adult: mediaType === 'movie' ? item.adult : undefined,
+    runtime: mediaType === 'movie' ? item.runtime : undefined,
+    episodeRunTime: mediaType === 'tv' ? item.episode_run_time : undefined,
+    numberOfEpisodes: mediaType === 'tv' ? item.number_of_episodes : undefined,
+    numberOfSeasons: mediaType === 'tv' ? item.number_of_seasons : undefined,
   };
 }
 
@@ -86,13 +90,13 @@ function transformResponse(path: string, data: any): any {
     return transformGenres(data);
   }
 
-  // Movie details
-  if (path.match(/movie\/\d+/) && !path.includes('discover/')) {
+  // Movie details (exact match only)
+  if (path.match(/^movie\/\d+$/)) {
     return transformMediaItem(data, 'movie');
   }
 
-  // TV details
-  if (path.match(/tv\/\d+/)) {
+  // TV details (exact match only)
+  if (path.match(/^tv\/\d+$/)) {
     return transformMediaItem(data, 'tv');
   }
 

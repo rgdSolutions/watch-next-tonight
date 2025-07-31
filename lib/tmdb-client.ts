@@ -1,4 +1,4 @@
-import { GenreList, MediaItem, SearchResults } from '@/types/tmdb';
+import { GenreList, MediaItem, SearchResults, TMDBVideoResponse } from '@/types/tmdb';
 
 // Client-side TMDB API wrapper
 export class TMDBClient {
@@ -86,6 +86,16 @@ export class TMDBClient {
     timeWindow: 'day' | 'week' = 'week'
   ): Promise<SearchResults> {
     return this.fetchFromAPI<SearchResults>(`/trending/${mediaType}/${timeWindow}`);
+  }
+
+  // Get movie videos/trailers
+  async getMovieVideos(movieId: number): Promise<TMDBVideoResponse> {
+    return this.fetchFromAPI<TMDBVideoResponse>(`/movie/${movieId}/videos`);
+  }
+
+  // Get TV show videos/trailers
+  async getTVVideos(tvId: number): Promise<TMDBVideoResponse> {
+    return this.fetchFromAPI<TMDBVideoResponse>(`/tv/${tvId}/videos`);
   }
 }
 
