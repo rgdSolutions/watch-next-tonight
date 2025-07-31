@@ -23,6 +23,7 @@ export default defineConfig({
         'app/',
         'components/ui/',
         'tests/',
+        '.lintstagedrc.js',
       ],
     },
   },
