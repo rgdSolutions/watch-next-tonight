@@ -146,7 +146,9 @@ describe('WatchProviders', () => {
     render(<WatchProviders mediaId={550} mediaType={MediaType.MOVIE} country="US" />);
 
     expect(
-      screen.getByText('Not available on streaming platforms in your region')
+      screen.getByText(
+        'Not available on streaming platforms in your region, but may be available for rent or purchase'
+      )
     ).toBeInTheDocument();
   });
 

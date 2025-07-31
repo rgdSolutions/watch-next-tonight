@@ -8,6 +8,7 @@ import { TrailerModal } from '@/components/trailer-modal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
   SelectContent,
@@ -23,6 +24,7 @@ import {
   useTVGenres,
 } from '@/hooks/use-tmdb';
 import { useUnifiedGenres } from '@/hooks/use-unified-genres';
+import { getProviderIdsForPlatform } from '@/lib/streaming-providers';
 import { unifiedGenresToTMDBIds } from '@/lib/unified-genres';
 import { MediaItem } from '@/types/tmdb';
 
@@ -42,6 +44,7 @@ export function ContentDisplayWithQuery({
   const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
   const [contentType, setContentType] = useState<'all' | 'movie' | 'tv'>('all');
   const [selectedTrailer, setSelectedTrailer] = useState<MediaItem | null>(null);
+  const [includeRentBuy, setIncludeRentBuy] = useState<boolean>(false);
 
   // Get unified genres
   const { genres: unifiedGenres } = useUnifiedGenres();
@@ -88,6 +91,9 @@ export function ContentDisplayWithQuery({
       ? []
       : unifiedGenresToTMDBIds(preferences.genres, unifiedGenres, 'tv');
 
+  // Get provider IDs for filtering
+  const watchProviderIds = includeRentBuy ? undefined : getProviderIdsForPlatform(selectedPlatform);
+
   // Fetch movies and TV shows
   const { data: moviesData, isLoading: moviesLoading } = useDiscoverMovies(
     {
@@ -96,6 +102,7 @@ export function ContentDisplayWithQuery({
       'primary_release_date.lte': dateRange.lte,
       sort_by: 'popularity.desc',
       watch_region: preferences.country,
+      ...(watchProviderIds && { with_watch_providers: watchProviderIds }),
     },
     {
       enabled: contentType !== 'tv' && (movieGenres?.genres.length ?? 0) > 0,
@@ -109,6 +116,7 @@ export function ContentDisplayWithQuery({
       'first_air_date.lte': dateRange.lte,
       sort_by: 'popularity.desc',
       watch_region: preferences.country,
+      ...(watchProviderIds && { with_watch_providers: watchProviderIds }),
     },
     {
       enabled: contentType !== 'movie' && (tvGenres?.genres.length ?? 0) > 0,
@@ -179,6 +187,24 @@ export function ContentDisplayWithQuery({
             <Badge variant="secondary">Recency: {preferences.recency}</Badge>
             <Badge variant="outline">{allContent.length} results found</Badge>
           </div>
+          <div className="mt-4 flex items-center space-x-2">
+            <Checkbox
+              id="include-rent-buy"
+              checked={includeRentBuy}
+              onCheckedChange={(checked) => setIncludeRentBuy(checked as boolean)}
+            />
+            <label
+              htmlFor="include-rent-buy"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Include content available for rent or purchase
+            </label>
+          </div>
+          {!includeRentBuy && (
+            <p className="text-sm text-muted-foreground mt-2">
+              Showing only content available on streaming platforms in {preferences.country}
+            </p>
+          )}
         </CardHeader>
       </Card>
 
@@ -200,13 +226,28 @@ export function ContentDisplayWithQuery({
         ) : allContent.length === 0 ? (
           <div className="col-span-full">
             <Card>
-              <CardContent className="p-8 text-center">
+              <CardContent className="p-8 text-center space-y-4">
                 <p className="text-muted-foreground">
-                  No content found matching your preferences. Try adjusting your filters.
+                  {!includeRentBuy
+                    ? `No content found that's available on streaming platforms in ${preferences.country} with your selected preferences.`
+                    : 'No content found matching your preferences.'}
                 </p>
-                <Button variant="outline" onClick={onBackToPreferences} className="mt-4">
-                  Change Preferences
-                </Button>
+                {!includeRentBuy && (
+                  <p className="text-sm text-muted-foreground">
+                    Try enabling &quot;Include content available for rent or purchase&quot; to see
+                    more options.
+                  </p>
+                )}
+                <div className="flex gap-2 justify-center">
+                  <Button variant="outline" onClick={onBackToPreferences}>
+                    Change Preferences
+                  </Button>
+                  {!includeRentBuy && (
+                    <Button variant="secondary" onClick={() => setIncludeRentBuy(true)}>
+                      Include Rent/Buy
+                    </Button>
+                  )}
+                </div>
               </CardContent>
             </Card>
           </div>

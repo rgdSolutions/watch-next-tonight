@@ -86,7 +86,8 @@ export function WatchProviders({ mediaId, mediaType, country }: WatchProvidersPr
   if (uniqueProviders.length === 0) {
     return (
       <div className="text-sm text-muted-foreground">
-        Not available on streaming platforms in your region
+        Not available on streaming platforms in your region, but may be available for rent or
+        purchase
       </div>
     );
   }
