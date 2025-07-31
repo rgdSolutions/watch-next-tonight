@@ -18,7 +18,18 @@ export function QueryProvider({ children }: QueryProviderProps) {
             // above 0 to avoid refetching immediately on the client
             staleTime: 60 * 1000, // 1 minute
             gcTime: 5 * 60 * 1000, // 5 minutes (formerly cacheTime)
-            retry: 3,
+            retry: (failureCount, error: any) => {
+              // Don't retry on 404s
+              if (error?.status === 404 || error?.message?.includes('404')) {
+                return false;
+              }
+              // Don't retry on client errors (4xx)
+              if (error?.status && error.status >= 400 && error.status < 500) {
+                return false;
+              }
+              // Only retry up to 3 times for other errors (network issues, 5xx, etc)
+              return failureCount < 3;
+            },
             retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
             refetchOnWindowFocus: false,
           },

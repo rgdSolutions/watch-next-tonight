@@ -1,4 +1,10 @@
-import { GenreList, MediaItem, SearchResults, TMDBVideoResponse } from '@/types/tmdb';
+import {
+  GenreList,
+  MediaItem,
+  SearchResults,
+  TMDBVideoResponse,
+  TMDBWatchProviderResponse,
+} from '@/types/tmdb';
 
 // Client-side TMDB API wrapper
 export class TMDBClient {
@@ -8,7 +14,12 @@ export class TMDBClient {
     const response = await fetch(`${this.baseUrl}${path}`, options);
 
     if (!response.ok) {
-      throw new Error(`TMDB API error: ${response.statusText}`);
+      const data = await response.json().catch(() => null);
+      const message = data?.message || data?.error || `TMDB API error: ${response.statusText}`;
+      const error = new Error(message);
+      // Add status to error for retry logic
+      (error as any).status = response.status;
+      throw error;
     }
 
     return response.json();
@@ -96,6 +107,16 @@ export class TMDBClient {
   // Get TV show videos/trailers
   async getTVVideos(tvId: number): Promise<TMDBVideoResponse> {
     return this.fetchFromAPI<TMDBVideoResponse>(`/tv/${tvId}/videos`);
+  }
+
+  // Get movie watch providers
+  async getMovieWatchProviders(movieId: number): Promise<TMDBWatchProviderResponse> {
+    return this.fetchFromAPI<TMDBWatchProviderResponse>(`/movie/${movieId}/watch/providers`);
+  }
+
+  // Get TV show watch providers
+  async getTVWatchProviders(tvId: number): Promise<TMDBWatchProviderResponse> {
+    return this.fetchFromAPI<TMDBWatchProviderResponse>(`/tv/${tvId}/watch/providers`);
   }
 }
 

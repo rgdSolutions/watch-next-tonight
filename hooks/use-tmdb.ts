@@ -1,7 +1,13 @@
 import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 import { tmdbClient } from '@/lib/tmdb-client';
-import { GenreList, MediaItem, SearchResults, TMDBVideoResponse } from '@/types/tmdb';
+import {
+  GenreList,
+  MediaItem,
+  SearchResults,
+  TMDBVideoResponse,
+  TMDBWatchProviderResponse,
+} from '@/types/tmdb';
 
 // Query key factory for consistent cache key generation
 export const tmdbKeys = {
@@ -27,6 +33,10 @@ export const tmdbKeys = {
   videos: () => [...tmdbKeys.all, 'videos'] as const,
   movieVideos: (id: number) => [...tmdbKeys.videos(), 'movie', id] as const,
   tvVideos: (id: number) => [...tmdbKeys.videos(), 'tv', id] as const,
+
+  watchProviders: () => [...tmdbKeys.all, 'watchProviders'] as const,
+  movieWatchProviders: (id: number) => [...tmdbKeys.watchProviders(), 'movie', id] as const,
+  tvWatchProviders: (id: number) => [...tmdbKeys.watchProviders(), 'tv', id] as const,
 };
 
 // Search for movies and TV shows
@@ -140,6 +150,34 @@ export function useTVVideos(tvId: number, options?: UseQueryOptions<TMDBVideoRes
   return useQuery({
     queryKey: tmdbKeys.tvVideos(tvId),
     queryFn: () => tmdbClient.getTVVideos(tvId),
+    enabled: !!tvId,
+    staleTime: 60 * 60 * 1000, // 1 hour
+    ...options,
+  });
+}
+
+// Get movie watch providers
+export function useMovieWatchProviders(
+  movieId: number,
+  options?: UseQueryOptions<TMDBWatchProviderResponse>
+) {
+  return useQuery({
+    queryKey: tmdbKeys.movieWatchProviders(movieId),
+    queryFn: () => tmdbClient.getMovieWatchProviders(movieId),
+    enabled: !!movieId,
+    staleTime: 60 * 60 * 1000, // 1 hour
+    ...options,
+  });
+}
+
+// Get TV show watch providers
+export function useTVWatchProviders(
+  tvId: number,
+  options?: UseQueryOptions<TMDBWatchProviderResponse>
+) {
+  return useQuery({
+    queryKey: tmdbKeys.tvWatchProviders(tvId),
+    queryFn: () => tmdbClient.getTVWatchProviders(tvId),
     enabled: !!tvId,
     staleTime: 60 * 60 * 1000, // 1 hour
     ...options,

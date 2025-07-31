@@ -18,16 +18,21 @@ export function VideoPlayer({ mediaId, mediaType, title }: VideoPlayerProps) {
   const [selectedVideo, setSelectedVideo] = useState<TMDBVideo | null>(null);
 
   // Fetch videos based on media type
-  const { data: movieVideos, isLoading: movieLoading } = useMovieVideos(
-    mediaType === MediaType.MOVIE ? mediaId : 0
-  );
+  const {
+    data: movieVideos,
+    isLoading: movieLoading,
+    isError: movieError,
+  } = useMovieVideos(mediaType === MediaType.MOVIE ? mediaId : 0);
 
-  const { data: tvVideos, isLoading: tvLoading } = useTVVideos(
-    mediaType === MediaType.TV ? mediaId : 0
-  );
+  const {
+    data: tvVideos,
+    isLoading: tvLoading,
+    isError: tvError,
+  } = useTVVideos(mediaType === MediaType.TV ? mediaId : 0);
 
   const videos = mediaType === MediaType.MOVIE ? movieVideos : tvVideos;
   const isLoading = mediaType === MediaType.MOVIE ? movieLoading : tvLoading;
+  const isError = mediaType === MediaType.MOVIE ? movieError : tvError;
 
   // Select the best video (prefer official trailers)
   useEffect(() => {
@@ -56,6 +61,18 @@ export function VideoPlayer({ mediaId, mediaType, title }: VideoPlayerProps) {
       <div className="aspect-video bg-muted rounded-lg overflow-hidden">
         <Skeleton className="w-full h-full" />
       </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Alert>
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Unable to load trailer</AlertTitle>
+        <AlertDescription>
+          We couldn&apos;t load the trailer for &quot;{title}&quot;. Please try again later.
+        </AlertDescription>
+      </Alert>
     );
   }
 

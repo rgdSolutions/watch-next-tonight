@@ -84,7 +84,7 @@ describe('QueryProvider', () => {
     const defaults = capturedClient.getDefaultOptions();
     expect(defaults.queries?.staleTime).toBe(60 * 1000); // 1 minute
     expect(defaults.queries?.gcTime).toBe(5 * 60 * 1000); // 5 minutes
-    expect(defaults.queries?.retry).toBe(3);
+    expect(typeof defaults.queries?.retry).toBe('function'); // retry is now a function
     expect(defaults.queries?.refetchOnWindowFocus).toBe(false);
   });
 

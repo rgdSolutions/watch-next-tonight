@@ -132,9 +132,61 @@ export async function GET(
     });
 
     if (!response.ok) {
-      const error = await response.text();
+      // Handle different error status codes
+      if (response.status === 404) {
+        // For 404 errors, return empty results instead of error
+        // This is common for movies/shows without videos or providers
+        if (tmdbPath.includes('/videos') || tmdbPath.includes('/watch/providers')) {
+          return NextResponse.json({
+            id: parseInt(tmdbPath.match(/\d+/)?.[0] || '0'),
+            results: tmdbPath.includes('/watch/providers') ? {} : [],
+          });
+        }
+        // For other 404s, return a user-friendly error
+        return NextResponse.json(
+          {
+            error: 'Content not found',
+            message: 'The requested content is not available.',
+            status: 404,
+          },
+          { status: 404 }
+        );
+      }
+
+      // Handle rate limiting
+      if (response.status === 429) {
+        return NextResponse.json(
+          {
+            error: 'Too many requests',
+            message: 'Please try again in a few moments.',
+            status: 429,
+          },
+          { status: 429 }
+        );
+      }
+
+      // Handle server errors
+      if (response.status >= 500) {
+        console.error(`TMDB API server error: ${response.status}`);
+        return NextResponse.json(
+          {
+            error: 'Service temporarily unavailable',
+            message: 'The movie database is experiencing issues. Please try again later.',
+            status: response.status,
+          },
+          { status: 503 } // Return 503 for all 5xx errors
+        );
+      }
+
+      // Default error response
+      const errorText = await response.text();
       return NextResponse.json(
-        { error: 'TMDB API error', details: error },
+        {
+          error: 'TMDB API error',
+          message: 'An error occurred while fetching data.',
+          details: errorText,
+          status: response.status,
+        },
         { status: response.status }
       );
     }
@@ -147,7 +199,16 @@ export async function GET(
     return NextResponse.json(transformedData);
   } catch (error) {
     console.error('TMDB API proxy error:', error);
-    return NextResponse.json({ error: 'Failed to fetch from TMDB API' }, { status: 500 });
+    // Network or other errors
+    return NextResponse.json(
+      {
+        error: 'Network error',
+        message:
+          'Unable to connect to the movie database. Please check your connection and try again.',
+        status: 500,
+      },
+      { status: 503 }
+    );
   }
 }
 
@@ -178,9 +239,38 @@ export async function POST(
     });
 
     if (!response.ok) {
-      const error = await response.text();
+      // Handle rate limiting
+      if (response.status === 429) {
+        return NextResponse.json(
+          {
+            error: 'Too many requests',
+            message: 'Please try again in a few moments.',
+            status: 429,
+          },
+          { status: 429 }
+        );
+      }
+
+      // Handle server errors
+      if (response.status >= 500) {
+        console.error(`TMDB API server error: ${response.status}`);
+        return NextResponse.json(
+          {
+            error: 'Service temporarily unavailable',
+            message: 'The movie database is experiencing issues. Please try again later.',
+            status: response.status,
+          },
+          { status: 503 }
+        );
+      }
+
+      const errorText = await response.text();
       return NextResponse.json(
-        { error: 'TMDB API error', details: error },
+        {
+          error: 'TMDB API error',
+          message: 'An error occurred while processing your request.',
+          details: errorText,
+        },
         { status: response.status }
       );
     }
@@ -189,6 +279,14 @@ export async function POST(
     return NextResponse.json(data);
   } catch (error) {
     console.error('TMDB API proxy error:', error);
-    return NextResponse.json({ error: 'Failed to fetch from TMDB API' }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Network error',
+        message:
+          'Unable to connect to the movie database. Please check your connection and try again.',
+        status: 500,
+      },
+      { status: 503 }
+    );
   }
 }

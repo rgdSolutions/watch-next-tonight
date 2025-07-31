@@ -5,6 +5,7 @@ import { Calendar, Clock, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { VideoPlayer } from '@/components/video-player';
+import { WatchProviders } from '@/components/watch-providers';
 import { useGenreLookup } from '@/hooks/use-genre-lookup';
 import { useMovieDetails, useTVShowDetails } from '@/hooks/use-tmdb';
 import { getTMDBImageUrl, getYearFromDate } from '@/lib/tmdb-utils';
@@ -14,9 +15,10 @@ interface TrailerModalProps {
   item: MediaItem;
   isOpen: boolean;
   onClose: () => void;
+  country?: string;
 }
 
-export function TrailerModal({ item, isOpen, onClose }: TrailerModalProps) {
+export function TrailerModal({ item, isOpen, onClose, country = 'US' }: TrailerModalProps) {
   const { getGenreWithEmoji } = useGenreLookup(item.type);
 
   // Fetch detailed info for runtime
@@ -123,9 +125,7 @@ export function TrailerModal({ item, isOpen, onClose }: TrailerModalProps) {
 
               <div>
                 <h3 className="font-semibold mb-2">Available On</h3>
-                <Badge variant="outline" className="capitalize">
-                  TMDB
-                </Badge>
+                <WatchProviders mediaId={item.tmdbId} mediaType={item.type} country={country} />
               </div>
             </div>
           </div>

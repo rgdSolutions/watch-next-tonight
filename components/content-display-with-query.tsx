@@ -229,6 +229,7 @@ export function ContentDisplayWithQuery({
           item={selectedTrailer}
           isOpen={!!selectedTrailer}
           onClose={() => setSelectedTrailer(null)}
+          country={preferences.country}
         />
       )}
     </div>

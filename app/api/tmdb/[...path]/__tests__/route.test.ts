@@ -241,8 +241,8 @@ describe('TMDB API Route', () => {
       const data = await response.json();
 
       expect(response.status).toBe(404);
-      expect(data.error).toBe('TMDB API error');
-      expect(data.details).toBe('Not found');
+      expect(data.error).toBe('Content not found');
+      expect(data.message).toBe('The requested content is not available.');
     });
 
     it('should handle fetch errors', async () => {
@@ -253,8 +253,47 @@ describe('TMDB API Route', () => {
       const response = await GET(request, { params: { path: ['search', 'multi'] } });
       const data = await response.json();
 
-      expect(response.status).toBe(500);
-      expect(data.error).toBe('Failed to fetch from TMDB API');
+      expect(response.status).toBe(503);
+      expect(data.error).toBe('Network error');
+      expect(data.message).toBe(
+        'Unable to connect to the movie database. Please check your connection and try again.'
+      );
+    });
+
+    it('should handle 404 for videos endpoint gracefully', async () => {
+      const mockFetch = vi.mocked(fetch);
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 404,
+        text: async () => 'Not found',
+      } as Response);
+
+      const request = new NextRequest('http://localhost:3000/api/tmdb/movie/550/videos');
+      const response = await GET(request, { params: { path: ['movie', '550', 'videos'] } });
+      const data = await response.json();
+
+      expect(response.status).toBe(200);
+      expect(data.id).toBe(550);
+      expect(data.results).toEqual([]);
+    });
+
+    it('should handle 404 for watch providers endpoint gracefully', async () => {
+      const mockFetch = vi.mocked(fetch);
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 404,
+        text: async () => 'Not found',
+      } as Response);
+
+      const request = new NextRequest('http://localhost:3000/api/tmdb/movie/550/watch/providers');
+      const response = await GET(request, {
+        params: { path: ['movie', '550', 'watch', 'providers'] },
+      });
+      const data = await response.json();
+
+      expect(response.status).toBe(200);
+      expect(data.id).toBe(550);
+      expect(data.results).toEqual({});
     });
 
     it('should handle missing API token', async () => {

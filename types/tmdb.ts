@@ -115,3 +115,26 @@ export interface TMDBVideoResponse {
   id: number;
   results: TMDBVideo[];
 }
+
+// Watch Provider types
+export interface TMDBProvider {
+  display_priority: number;
+  logo_path: string;
+  provider_id: number;
+  provider_name: string;
+}
+
+export interface TMDBWatchProviderResult {
+  link?: string;
+  rent?: TMDBProvider[];
+  buy?: TMDBProvider[];
+  flatrate?: TMDBProvider[];
+  free?: TMDBProvider[];
+}
+
+export interface TMDBWatchProviderResponse {
+  id: number;
+  results: {
+    [countryCode: string]: TMDBWatchProviderResult;
+  };
+}
