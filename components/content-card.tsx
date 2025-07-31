@@ -71,7 +71,7 @@ export function ContentCard({ item, onTrailerClick, onShuffle, isShuffling }: Co
           </div>
 
           {/* Rating */}
-          {item.rating && (
+          {typeof item.rating === 'number' && (
             <div className="flex items-center gap-1">
               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
               <span className="font-medium">{item.rating.toFixed(1)}</span>
