@@ -147,7 +147,7 @@ describe('WatchProviders', () => {
 
     expect(
       screen.getByText(
-        'Not available on streaming platforms in your region, but may be available for rent or purchase'
+        'Not available on streaming platforms in your region, but may be available for rent or purchase.'
       )
     ).toBeInTheDocument();
   });
