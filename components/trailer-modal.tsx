@@ -74,7 +74,7 @@ export function TrailerModal({ item, isOpen, onClose, country = 'US' }: TrailerM
               </div>
 
               <div className="text-center space-y-2">
-                {item.rating && (
+                {typeof item.rating === 'number' && (
                   <div className="flex items-center justify-center gap-2">
                     <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                     <span className="font-bold text-lg">{item.rating.toFixed(1)}</span>
