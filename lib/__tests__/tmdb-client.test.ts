@@ -217,10 +217,17 @@ describe('TMDBClient', () => {
       const mockFetch = vi.mocked(fetch);
       mockFetch.mockResolvedValueOnce({
         ok: false,
+        status: 404,
         statusText: 'Not Found',
+        json: async () => ({
+          error: 'Resource not found',
+          message: 'The requested resource was not found',
+        }),
       } as Response);
 
-      await expect(client.searchMulti('test')).rejects.toThrow('TMDB API error: Not Found');
+      await expect(client.searchMulti('test')).rejects.toThrow(
+        'The requested resource was not found'
+      );
     });
 
     it('should handle network errors', async () => {
