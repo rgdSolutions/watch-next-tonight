@@ -29,7 +29,12 @@ export function useGenreLookup(mediaType: MediaType) {
     if (!genreName) return null;
 
     const unifiedId = getUnifiedGenreId(genreName) || getUnifiedGenreId(genreName.split(' ')[0]);
-    const emoji = genreName.includes('Sci-Fi') ? '🚀' : unifiedId ? GENRE_EMOJIS[unifiedId] : '';
+    const emoji =
+      genreName.includes('Sci-Fi') || genreName.includes('Science Fiction')
+        ? '🚀'
+        : unifiedId
+          ? GENRE_EMOJIS[unifiedId]
+          : '';
 
     return {
       id: genreId,

@@ -23,8 +23,10 @@ import {
   useTVGenres,
 } from '@/hooks/use-tmdb';
 import { useUnifiedGenres } from '@/hooks/use-unified-genres';
+import { FLAG_EMOJIS } from '@/lib/country-codes';
 import { getProviderIdsForPlatform } from '@/lib/streaming-providers';
 import { unifiedGenresToTMDBIds } from '@/lib/unified-genres';
+import { capitalizeFirstLetter } from '@/lib/utils';
 import { MediaItem } from '@/types/tmdb';
 
 interface ContentDisplayWithQueryProps {
@@ -187,14 +189,16 @@ export function ContentDisplayWithQuery({
         <CardHeader>
           <CardTitle className="text-2xl">Your Recommendations</CardTitle>
           <div className="flex flex-wrap gap-2 mt-4">
-            <Badge variant="secondary">Country: {preferences.country}</Badge>
-            <Badge variant="secondary">Genres: {preferences.genres.join(', ')}</Badge>
-            <Badge variant="secondary">Recency: {preferences.recency}</Badge>
+            <Badge variant="secondary">Country: {FLAG_EMOJIS[preferences.country] ?? '🇺🇸'}</Badge>
+            <Badge variant="secondary">
+              Genres: {preferences.genres.length ? preferences.genres.join(', ') : 'All'}
+            </Badge>
+            <Badge variant="secondary">Recency: {capitalizeFirstLetter(preferences.recency)}</Badge>
             <Badge variant="outline">{allContent.length} results found</Badge>
           </div>
           {selectedPlatform === 'all' && (
             <p className="text-sm text-muted-foreground mt-2">
-              * Includes content that is only available on for rent or purchase
+              * Includes some content that is only available for rent or purchase
             </p>
           )}
         </CardHeader>

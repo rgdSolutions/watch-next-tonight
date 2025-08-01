@@ -64,10 +64,12 @@ export function LoadingScreen({ preferences }: LoadingScreenProps) {
                 <div>📍 Country: {FLAG_EMOJIS[preferences.country] || '🇺🇸'}</div>
                 <div>
                   🎭 Genres:{' '}
-                  {preferences.genres
-                    .map((genre) => GENRE_EMOJIS[genre])
-                    .filter(Boolean)
-                    .join(' ')}
+                  {preferences.genres.length
+                    ? preferences.genres
+                        .map((genre) => GENRE_EMOJIS[genre])
+                        .filter(Boolean)
+                        .join(' ')
+                    : 'All'}
                 </div>
                 <div>
                   📅 Recency:{' '}
