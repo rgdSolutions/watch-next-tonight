@@ -211,7 +211,7 @@ export function ContentDisplayWithQuery({
 
         <div className="flex items-center gap-4">
           <Select value={contentType} onValueChange={(value: any) => setContentType(value)}>
-            <SelectTrigger className="w-[140px]">
+            <SelectTrigger className="w-[156px]">
               <SelectValue placeholder="Content type" />
             </SelectTrigger>
             <SelectContent>
