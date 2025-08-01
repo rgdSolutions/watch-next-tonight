@@ -145,7 +145,7 @@ describe('ContentDisplayWithQuery', () => {
     );
 
     expect(screen.getByText('Country: 🇺🇸')).toBeInTheDocument();
-    expect(screen.getByText('Genres: action, comedy')).toBeInTheDocument();
+    expect(screen.getByText('Genres: Action, Comedy')).toBeInTheDocument();
     expect(screen.getByText('Recency: Recent')).toBeInTheDocument();
   });
 
