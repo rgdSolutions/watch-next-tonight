@@ -8,7 +8,6 @@ import { TrailerModal } from '@/components/trailer-modal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
   SelectContent,
@@ -24,8 +23,10 @@ import {
   useTVGenres,
 } from '@/hooks/use-tmdb';
 import { useUnifiedGenres } from '@/hooks/use-unified-genres';
+import { FLAG_EMOJIS } from '@/lib/country-codes';
 import { getProviderIdsForPlatform } from '@/lib/streaming-providers';
 import { unifiedGenresToTMDBIds } from '@/lib/unified-genres';
+import { capitalizeFirstLetter } from '@/lib/utils';
 import { MediaItem } from '@/types/tmdb';
 
 interface ContentDisplayWithQueryProps {
@@ -44,7 +45,9 @@ export function ContentDisplayWithQuery({
   const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
   const [contentType, setContentType] = useState<'all' | 'movie' | 'tv'>('all');
   const [selectedTrailer, setSelectedTrailer] = useState<MediaItem | null>(null);
-  const [includeRentBuy, setIncludeRentBuy] = useState<boolean>(false);
+  const [hiddenItems, setHiddenItems] = useState<string[]>([]);
+
+  const handleHide = (itemId: string) => setHiddenItems((prev) => [...prev, itemId]);
 
   // Get unified genres
   const { genres: unifiedGenres } = useUnifiedGenres();
@@ -92,17 +95,21 @@ export function ContentDisplayWithQuery({
       : unifiedGenresToTMDBIds(preferences.genres, unifiedGenres, 'tv');
 
   // Get provider IDs for filtering
-  const watchProviderIds = includeRentBuy ? undefined : getProviderIdsForPlatform(selectedPlatform);
+  const watchProviderIds =
+    selectedPlatform !== 'all' ? getProviderIdsForPlatform(selectedPlatform) : undefined;
 
   // Fetch movies and TV shows
   const { data: moviesData, isLoading: moviesLoading } = useDiscoverMovies(
     {
-      with_genres: movieGenreIds.join(','),
+      with_genres: movieGenreIds.join('|'),
       'primary_release_date.gte': dateRange.gte,
       'primary_release_date.lte': dateRange.lte,
       sort_by: 'popularity.desc',
       watch_region: preferences.country,
-      ...(watchProviderIds && { with_watch_providers: watchProviderIds }),
+      ...(watchProviderIds && {
+        with_watch_providers: watchProviderIds,
+        with_watch_monetization_types: 'flatrate|rent|buy',
+      }),
     },
     {
       enabled: contentType !== 'tv' && (movieGenres?.genres.length ?? 0) > 0,
@@ -111,12 +118,15 @@ export function ContentDisplayWithQuery({
 
   const { data: tvData, isLoading: tvLoading } = useDiscoverTVShows(
     {
-      with_genres: tvGenreIds.join(','),
+      with_genres: tvGenreIds.join('|'),
       'first_air_date.gte': dateRange.gte,
       'first_air_date.lte': dateRange.lte,
       sort_by: 'popularity.desc',
       watch_region: preferences.country,
-      ...(watchProviderIds && { with_watch_providers: watchProviderIds }),
+      ...(watchProviderIds && {
+        with_watch_providers: watchProviderIds,
+        with_watch_monetization_types: 'flatrate|rent|buy',
+      }),
     },
     {
       enabled: contentType !== 'movie' && (tvGenres?.genres.length ?? 0) > 0,
@@ -125,20 +135,34 @@ export function ContentDisplayWithQuery({
 
   // Combine results based on content type filter
   const allContent: MediaItem[] = [
-    ...(contentType !== 'tv' ? moviesData?.results || [] : []),
     ...(contentType !== 'movie' ? tvData?.results || [] : []),
+    ...(contentType !== 'tv' ? moviesData?.results || [] : []),
   ];
 
   const isLoading = moviesLoading || tvLoading;
 
-  const platforms = [
+  let platforms = [
     { id: 'all', name: 'All Platforms' },
     { id: 'netflix', name: 'Netflix' },
     { id: 'prime', name: 'Prime Video' },
     { id: 'disney', name: 'Disney+' },
-    { id: 'appletv', name: 'Apple TV+' },
     { id: 'max', name: 'MAX' },
+    { id: 'paramount', name: 'Paramount+' },
+    { id: 'appletv', name: 'Apple TV+' },
+    { id: 'crunchyroll', name: 'Crunchyroll' },
   ];
+
+  if (preferences.country === 'US') {
+    platforms = [
+      ...platforms,
+      { id: 'hulu', name: 'Hulu' },
+      { id: 'peacock', name: 'Peacock' },
+      { id: 'starz', name: 'Starz' },
+      { id: 'fubotv', name: 'FuboTV' },
+      { id: 'epix', name: 'Epix' },
+      { id: 'plutotv', name: 'Pluto TV' },
+    ];
+  }
 
   return (
     <div data-testid="content-display" className="space-y-6">
@@ -156,8 +180,8 @@ export function ContentDisplayWithQuery({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Content</SelectItem>
-              <SelectItem value="movie">Movies Only</SelectItem>
               <SelectItem value="tv">TV Shows Only</SelectItem>
+              <SelectItem value="movie">Movies Only</SelectItem>
             </SelectContent>
           </Select>
 
@@ -182,27 +206,19 @@ export function ContentDisplayWithQuery({
         <CardHeader>
           <CardTitle className="text-2xl">Your Recommendations</CardTitle>
           <div className="flex flex-wrap gap-2 mt-4">
-            <Badge variant="secondary">Country: {preferences.country}</Badge>
-            <Badge variant="secondary">Genres: {preferences.genres.join(', ')}</Badge>
-            <Badge variant="secondary">Recency: {preferences.recency}</Badge>
+            <Badge variant="secondary">Country: {FLAG_EMOJIS[preferences.country] ?? '🇺🇸'}</Badge>
+            <Badge variant="secondary">
+              Genres:{' '}
+              {preferences.genres.length
+                ? preferences.genres.map(capitalizeFirstLetter).join(', ')
+                : 'All'}
+            </Badge>
+            <Badge variant="secondary">Recency: {capitalizeFirstLetter(preferences.recency)}</Badge>
             <Badge variant="outline">{allContent.length} results found</Badge>
           </div>
-          <div className="mt-4 flex items-center space-x-2">
-            <Checkbox
-              id="include-rent-buy"
-              checked={includeRentBuy}
-              onCheckedChange={(checked) => setIncludeRentBuy(checked as boolean)}
-            />
-            <label
-              htmlFor="include-rent-buy"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              Include content available for rent or purchase
-            </label>
-          </div>
-          {!includeRentBuy && (
+          {selectedPlatform === 'all' && (
             <p className="text-sm text-muted-foreground mt-2">
-              Showing only content available on streaming platforms in {preferences.country}
+              * Includes some content that is only available for rent or purchase
             </p>
           )}
         </CardHeader>
@@ -210,6 +226,14 @@ export function ContentDisplayWithQuery({
 
       {/* Content Grid */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {hiddenItems.length > 0 && (
+          <Card
+            className="flex justify-center items-center cursor-pointer select-none transition-all duration-300 hover:shadow-lg hover:scale-[1.02]"
+            onClick={() => setHiddenItems([])}
+          >
+            {`Show ${hiddenItems.length} hidden item${hiddenItems.length === 1 ? '' : 's'}`}
+          </Card>
+        )}
         {isLoading ? (
           // Loading skeletons
           Array.from({ length: 8 }).map((_, i) => (
@@ -228,39 +252,27 @@ export function ContentDisplayWithQuery({
             <Card>
               <CardContent className="p-8 text-center space-y-4">
                 <p className="text-muted-foreground">
-                  {!includeRentBuy
-                    ? `No content found that's available on streaming platforms in ${preferences.country} with your selected preferences.`
-                    : 'No content found matching your preferences.'}
+                  No content found matching your preferences in your region.
                 </p>
-                {!includeRentBuy && (
-                  <p className="text-sm text-muted-foreground">
-                    Try enabling &quot;Include content available for rent or purchase&quot; to see
-                    more options.
-                  </p>
-                )}
                 <div className="flex gap-2 justify-center">
                   <Button variant="outline" onClick={onBackToPreferences}>
                     Change Preferences
                   </Button>
-                  {!includeRentBuy && (
-                    <Button variant="secondary" onClick={() => setIncludeRentBuy(true)}>
-                      Include Rent/Buy
-                    </Button>
-                  )}
                 </div>
               </CardContent>
             </Card>
           </div>
         ) : (
-          allContent.map((item) => (
-            <ContentCard
-              key={item.id}
-              item={item}
-              onTrailerClick={() => setSelectedTrailer(item)}
-              onShuffle={() => {}}
-              isShuffling={false}
-            />
-          ))
+          allContent
+            .filter((item) => !hiddenItems.includes(item.id))
+            .map((item) => (
+              <ContentCard
+                key={item.id}
+                item={item}
+                onTrailerClick={() => setSelectedTrailer(item)}
+                onHide={handleHide}
+              />
+            ))
         )}
       </div>
 

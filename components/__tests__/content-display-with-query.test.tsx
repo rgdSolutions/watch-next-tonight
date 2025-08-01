@@ -144,9 +144,9 @@ describe('ContentDisplayWithQuery', () => {
       { wrapper: createWrapper() }
     );
 
-    expect(screen.getByText('Country: US')).toBeInTheDocument();
-    expect(screen.getByText('Genres: action, comedy')).toBeInTheDocument();
-    expect(screen.getByText('Recency: recent')).toBeInTheDocument();
+    expect(screen.getByText('Country: 🇺🇸')).toBeInTheDocument();
+    expect(screen.getByText('Genres: Action, Comedy')).toBeInTheDocument();
+    expect(screen.getByText('Recency: Recent')).toBeInTheDocument();
   });
 
   it('should display content cards for movies and TV shows', () => {
@@ -231,7 +231,7 @@ describe('ContentDisplayWithQuery', () => {
     );
 
     expect(
-      screen.getByText(/No content found that's available on streaming platforms/)
+      screen.getByText(/No content found matching your preferences in your region/)
     ).toBeInTheDocument();
   });
 

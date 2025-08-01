@@ -3,17 +3,20 @@
 export const STREAMING_PROVIDER_IDS = {
   NETFLIX: 8,
   AMAZON_PRIME: 9,
+  AMAZON_PRIME_VIDEO: 119, // Alternative ID for Prime Video
   DISNEY_PLUS: 337,
   HULU: 15,
-  HBO_MAX: 384,
+  HBO_MAX: 384, // Old HBO Max ID
+  MAX: 1899, // New Max ID after rebrand
   PARAMOUNT_PLUS: 531,
   APPLE_TV_PLUS: 350,
   PEACOCK: 386,
   CRUNCHYROLL: 283,
-  SHOWTIME: 37,
+  SHOWTIME: 37, // Legacy Showtime ID (now part of Paramount+)
   STARZ: 43,
   EPIX: 34,
-  YOUTUBE_PREMIUM: 188,
+  YOUTUBE: 188, // YouTube Movies (rent/buy)
+  YOUTUBE_TV: 248, // YouTube TV subscription service
   FUBO_TV: 257,
   // Free streaming services
   TUBI: 273,
@@ -31,9 +34,11 @@ export function getStreamingProviderIds(): string {
 export const PROVIDER_NAMES: Record<number, string> = {
   [STREAMING_PROVIDER_IDS.NETFLIX]: 'Netflix',
   [STREAMING_PROVIDER_IDS.AMAZON_PRIME]: 'Amazon Prime Video',
+  [STREAMING_PROVIDER_IDS.AMAZON_PRIME_VIDEO]: 'Prime Video',
   [STREAMING_PROVIDER_IDS.DISNEY_PLUS]: 'Disney Plus',
   [STREAMING_PROVIDER_IDS.HULU]: 'Hulu',
   [STREAMING_PROVIDER_IDS.HBO_MAX]: 'HBO Max',
+  [STREAMING_PROVIDER_IDS.MAX]: 'Max',
   [STREAMING_PROVIDER_IDS.PARAMOUNT_PLUS]: 'Paramount Plus',
   [STREAMING_PROVIDER_IDS.APPLE_TV_PLUS]: 'Apple TV Plus',
   [STREAMING_PROVIDER_IDS.PEACOCK]: 'Peacock',
@@ -41,7 +46,8 @@ export const PROVIDER_NAMES: Record<number, string> = {
   [STREAMING_PROVIDER_IDS.SHOWTIME]: 'Showtime',
   [STREAMING_PROVIDER_IDS.STARZ]: 'Starz',
   [STREAMING_PROVIDER_IDS.EPIX]: 'Epix',
-  [STREAMING_PROVIDER_IDS.YOUTUBE_PREMIUM]: 'YouTube Premium',
+  [STREAMING_PROVIDER_IDS.YOUTUBE]: 'YouTube Movies',
+  [STREAMING_PROVIDER_IDS.YOUTUBE_TV]: 'YouTube TV',
   [STREAMING_PROVIDER_IDS.FUBO_TV]: 'FuboTV',
   [STREAMING_PROVIDER_IDS.TUBI]: 'Tubi',
   [STREAMING_PROVIDER_IDS.PLUTO_TV]: 'Pluto TV',
@@ -55,13 +61,39 @@ export function getProviderIdsForPlatform(platform: string): string {
     case 'netflix':
       return STREAMING_PROVIDER_IDS.NETFLIX.toString();
     case 'prime':
-      return STREAMING_PROVIDER_IDS.AMAZON_PRIME.toString();
+      // Use both Prime Video IDs with pipe separator
+      return `${STREAMING_PROVIDER_IDS.AMAZON_PRIME}|${STREAMING_PROVIDER_IDS.AMAZON_PRIME_VIDEO}`;
     case 'disney':
       return STREAMING_PROVIDER_IDS.DISNEY_PLUS.toString();
     case 'appletv':
       return STREAMING_PROVIDER_IDS.APPLE_TV_PLUS.toString();
     case 'max':
-      return STREAMING_PROVIDER_IDS.HBO_MAX.toString();
+      // Use both HBO Max and Max IDs to cover content from both
+      return `${STREAMING_PROVIDER_IDS.HBO_MAX}|${STREAMING_PROVIDER_IDS.MAX}`;
+    case 'hulu':
+      return STREAMING_PROVIDER_IDS.HULU.toString();
+    case 'paramount':
+      return STREAMING_PROVIDER_IDS.PARAMOUNT_PLUS.toString();
+    case 'peacock':
+      return STREAMING_PROVIDER_IDS.PEACOCK.toString();
+    case 'crunchyroll':
+      return STREAMING_PROVIDER_IDS.CRUNCHYROLL.toString();
+    case 'showtime':
+      return STREAMING_PROVIDER_IDS.SHOWTIME.toString();
+    case 'starz':
+      return STREAMING_PROVIDER_IDS.STARZ.toString();
+    case 'epix':
+      return STREAMING_PROVIDER_IDS.EPIX.toString();
+    case 'fubotv':
+      return STREAMING_PROVIDER_IDS.FUBO_TV.toString();
+    case 'tubi':
+      return STREAMING_PROVIDER_IDS.TUBI.toString();
+    case 'plutotv':
+      return STREAMING_PROVIDER_IDS.PLUTO_TV.toString();
+    case 'crackle':
+      return STREAMING_PROVIDER_IDS.CRACKLE.toString();
+    case 'vudu':
+      return STREAMING_PROVIDER_IDS.VUDU_FREE.toString();
     case 'all':
     default:
       return getStreamingProviderIds();

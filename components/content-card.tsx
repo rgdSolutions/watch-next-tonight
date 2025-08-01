@@ -1,6 +1,6 @@
 'use client';
 
-import { Play, RotateCcw, Star, X } from 'lucide-react';
+import { EyeOff, Play, Star } from 'lucide-react';
 import { useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
@@ -13,16 +13,15 @@ import { MediaItem } from '@/types/tmdb';
 interface ContentCardProps {
   item: MediaItem;
   onTrailerClick: (item: MediaItem) => void;
-  onShuffle: (itemId: string) => void;
-  isShuffling: boolean;
+  onHide: (itemId: string) => void;
 }
 
-export function ContentCard({ item, onTrailerClick, onShuffle, isShuffling }: ContentCardProps) {
+export function ContentCard({ item, onTrailerClick, onHide }: ContentCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const { getGenreWithEmoji } = useGenreLookup(item.type);
 
   const handleShuffle = () => {
-    onShuffle(item.id);
+    onHide(item.id);
   };
 
   return (
@@ -35,12 +34,12 @@ export function ContentCard({ item, onTrailerClick, onShuffle, isShuffling }: Co
       {isHovered && (
         <button
           onClick={handleShuffle}
-          disabled={isShuffling}
           className="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm 
                     flex items-center justify-center text-white hover:bg-black/80 transition-all duration-200
                     disabled:cursor-not-allowed disabled:opacity-50"
+          aria-label="Hide this content"
         >
-          {isShuffling ? <RotateCcw className="w-4 h-4 animate-spin" /> : <X className="w-4 h-4" />}
+          <EyeOff className="w-4 h-4" />
         </button>
       )}
 
