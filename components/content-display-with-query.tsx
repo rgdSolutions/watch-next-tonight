@@ -229,7 +229,6 @@ export function ContentDisplayWithQuery({
         {hiddenItems.length > 0 && (
           <Card
             className="flex justify-center items-center cursor-pointer select-none transition-all duration-300 hover:shadow-lg hover:scale-[1.02]"
-            // variant="outline"
             onClick={() => setHiddenItems([])}
           >
             {`Show ${hiddenItems.length} hidden item${hiddenItems.length === 1 ? '' : 's'}`}
