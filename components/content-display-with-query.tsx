@@ -98,7 +98,7 @@ export function ContentDisplayWithQuery({
   // Fetch movies and TV shows
   const { data: moviesData, isLoading: moviesLoading } = useDiscoverMovies(
     {
-      with_genres: movieGenreIds.join(','),
+      with_genres: movieGenreIds.join('|'),
       'primary_release_date.gte': dateRange.gte,
       'primary_release_date.lte': dateRange.lte,
       sort_by: 'popularity.desc',
@@ -115,7 +115,7 @@ export function ContentDisplayWithQuery({
 
   const { data: tvData, isLoading: tvLoading } = useDiscoverTVShows(
     {
-      with_genres: tvGenreIds.join(','),
+      with_genres: tvGenreIds.join('|'),
       'first_air_date.gte': dateRange.gte,
       'first_air_date.lte': dateRange.lte,
       sort_by: 'popularity.desc',
@@ -132,8 +132,8 @@ export function ContentDisplayWithQuery({
 
   // Combine results based on content type filter
   const allContent: MediaItem[] = [
-    ...(contentType !== 'tv' ? moviesData?.results || [] : []),
     ...(contentType !== 'movie' ? tvData?.results || [] : []),
+    ...(contentType !== 'tv' ? moviesData?.results || [] : []),
   ];
 
   const isLoading = moviesLoading || tvLoading;
@@ -163,8 +163,8 @@ export function ContentDisplayWithQuery({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Content</SelectItem>
-              <SelectItem value="movie">Movies Only</SelectItem>
               <SelectItem value="tv">TV Shows Only</SelectItem>
+              <SelectItem value="movie">Movies Only</SelectItem>
             </SelectContent>
           </Select>
 
