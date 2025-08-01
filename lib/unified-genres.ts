@@ -74,10 +74,7 @@ function areGenresSimilar(name1: string, name2: string): boolean {
   // Exact match after normalization
   if (norm1 === norm2) return true;
 
-  // Check if one contains the other (for cases like "Action" vs "Action & Adventure")
-  if (norm1.includes(norm2) || norm2.includes(norm1)) return true;
-
-  // Special cases
+  // Special cases BEFORE substring matching
   const specialMappings: Record<string, string[]> = {
     scifi: ['sciencefiction'],
     sciencefiction: ['scifi'],
@@ -86,17 +83,52 @@ function areGenresSimilar(name1: string, name2: string): boolean {
     actionadventure: ['action', 'adventure'],
     warmilitary: ['war'],
     sciencefantasy: ['scifi', 'fantasy'],
+    war: ['warpolitics'], // "War" -> "War & Politics"
+    warpolitics: ['war'], // "War & Politics" -> "War"
   };
 
   const mappings1 = specialMappings[norm1] || [];
   const mappings2 = specialMappings[norm2] || [];
 
-  return mappings1.includes(norm2) || mappings2.includes(norm1);
+  if (mappings1.includes(norm2) || mappings2.includes(norm1)) {
+    return true;
+  }
+
+  // Don't do substring matching for certain genres that would cause false positives
+  const noSubstringMatch = ['fantasy', 'action', 'adventure', 'war'];
+  if (noSubstringMatch.includes(norm1) || noSubstringMatch.includes(norm2)) {
+    return false;
+  }
+
+  // Check if one contains the other (for other cases)
+  return norm1.includes(norm2) || norm2.includes(norm1);
 }
+
+// Manual mappings for genres that don't have direct equivalents
+const GENRE_FALLBACK_MAPPINGS: Record<string, { movie?: number; tv?: number }> = {
+  // Movie-only genres and their closest TV equivalents
+  adventure: { tv: 10759 }, // Adventure -> Action & Adventure
+  fantasy: { tv: 10765 }, // Fantasy -> Sci-Fi & Fantasy
+  history: { tv: 10768 }, // History -> War & Politics
+  horror: { tv: 9648 }, // Horror -> Mystery (closest match)
+  music: { tv: 10767 }, // Music -> Talk (for music-related shows)
+  romance: { tv: 10766 }, // Romance -> Soap
+  tvmovie: { tv: 10759 }, // TV Movie -> Action & Adventure
+  // TV-only genres and their closest movie equivalents
+  kids: { movie: 16 }, // Kids -> Animation
+  news: { movie: 99 }, // News -> Documentary
+  reality: { movie: 99 }, // Reality -> Documentary
+  soap: { movie: 10749 }, // Soap -> Romance
+  talk: { movie: 99 }, // Talk -> Documentary
+};
 
 // Dynamically create unified genres from TMDB movie and TV genres
 export function getUnifiedGenres(movieGenres: TMDBGenre[], tvGenres: TMDBGenre[]): UnifiedGenre[] {
   const unifiedMap = new Map<string, UnifiedGenre>();
+
+  // Create lookup maps for easy access
+  const movieGenreMap = new Map(movieGenres.map((g) => [g.id, g]));
+  const tvGenreMap = new Map(tvGenres.map((g) => [g.id, g]));
 
   // Process movie genres
   movieGenres.forEach((movieGenre) => {
@@ -144,6 +176,10 @@ export function getUnifiedGenres(movieGenres: TMDBGenre[], tvGenres: TMDBGenre[]
       // Add TV ID to existing unified genre
       const existing = unifiedMap.get(existingKey)!;
       existing.tvIds.push(tvGenre.id);
+      // Update name if the TV version is preferred (e.g., "Sci-Fi & Fantasy" over "Fantasy")
+      if (tvGenre.name.includes('&') && !existing.name.includes('&')) {
+        existing.name = tvGenre.name;
+      }
     } else {
       // Create new unified genre
       unifiedMap.set(baseId, {
@@ -153,6 +189,31 @@ export function getUnifiedGenres(movieGenres: TMDBGenre[], tvGenres: TMDBGenre[]
         movieIds: [],
         tvIds: [tvGenre.id],
       });
+    }
+  });
+
+  // Fill in missing IDs using fallback mappings
+  unifiedMap.forEach((genre, key) => {
+    const fallback =
+      GENRE_FALLBACK_MAPPINGS[key] || GENRE_FALLBACK_MAPPINGS[genre.name.toLowerCase()];
+
+    if (genre.movieIds.length === 0 && fallback?.movie) {
+      genre.movieIds.push(fallback.movie);
+    }
+
+    if (genre.tvIds.length === 0 && fallback?.tv) {
+      genre.tvIds.push(fallback.tv);
+    }
+
+    // For genres still missing IDs, use the most general fallback
+    if (genre.movieIds.length === 0) {
+      // Default to Drama (18) for movies
+      genre.movieIds.push(18);
+    }
+
+    if (genre.tvIds.length === 0) {
+      // Default to Drama (18) for TV
+      genre.tvIds.push(18);
     }
   });
 

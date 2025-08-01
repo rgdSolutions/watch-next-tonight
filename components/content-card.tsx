@@ -24,6 +24,10 @@ export function ContentCard({ item, onTrailerClick, onHide }: ContentCardProps) 
     onHide(item.id);
   };
 
+  const handleOpenModal = () => {
+    onTrailerClick(item);
+  };
+
   return (
     <div
       className="group relative overflow-hidden rounded-lg bg-card border transition-all duration-300 hover:shadow-lg hover:scale-[1.02]"
@@ -45,7 +49,7 @@ export function ContentCard({ item, onTrailerClick, onHide }: ContentCardProps) 
 
       <div className="flex gap-4 p-4">
         {/* Cover Art */}
-        <div className="flex-shrink-0">
+        <div className="flex-shrink-0" onClick={handleOpenModal}>
           <div className="w-24 h-36 rounded-md overflow-hidden bg-muted">
             <img
               src={getTMDBImageUrl(item.posterPath, 'w500')}
@@ -94,7 +98,7 @@ export function ContentCard({ item, onTrailerClick, onHide }: ContentCardProps) 
           <p className="text-sm text-muted-foreground line-clamp-2">{item.overview}</p>
 
           {/* Watch Trailer Button */}
-          <Button onClick={() => onTrailerClick(item)} size="sm" className="gap-2 w-full mt-2">
+          <Button onClick={handleOpenModal} size="sm" className="gap-2 w-full mt-2">
             <Play className="w-4 h-4" />
             Watch Trailer
           </Button>
