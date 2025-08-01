@@ -29,6 +29,8 @@ import { unifiedGenresToTMDBIds } from '@/lib/unified-genres';
 import { capitalizeFirstLetter } from '@/lib/utils';
 import { MediaItem } from '@/types/tmdb';
 
+type ContentType = 'all' | 'movie' | 'tv';
+
 interface ContentDisplayWithQueryProps {
   preferences: {
     country: string;
@@ -38,12 +40,50 @@ interface ContentDisplayWithQueryProps {
   onBackToPreferences: () => void;
 }
 
+const chooseInitialContentType = (preferences: {
+  country: string;
+  genres: string[];
+  recency: string;
+}): ContentType => {
+  // massively popular show-only genres
+  if (preferences.genres.includes('kids') || preferences.genres.includes('reality')) {
+    return 'tv';
+  }
+
+  // highly popular movie-only genres
+  if (preferences.genres.includes('horror') || preferences.genres.includes('romance')) {
+    return 'movie';
+  }
+
+  // show-only genres
+  if (
+    preferences.genres.includes('news') ||
+    preferences.genres.includes('soap') ||
+    preferences.genres.includes('talk')
+  ) {
+    return 'tv';
+  }
+
+  // movie-only genres
+  if (
+    preferences.genres.includes('history') ||
+    preferences.genres.includes('music') ||
+    preferences.genres.includes('mystery')
+  ) {
+    return 'movie';
+  }
+
+  return 'all';
+};
+
 export function ContentDisplayWithQuery({
   preferences,
   onBackToPreferences,
 }: ContentDisplayWithQueryProps) {
   const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
-  const [contentType, setContentType] = useState<'all' | 'movie' | 'tv'>('all');
+  const [contentType, setContentType] = useState<ContentType>(
+    chooseInitialContentType(preferences)
+  );
   const [selectedTrailer, setSelectedTrailer] = useState<MediaItem | null>(null);
   const [hiddenItems, setHiddenItems] = useState<string[]>([]);
 
