@@ -169,4 +169,113 @@ describe('VideoPlayer', () => {
       expect(src).toContain('modestbranding=1');
     });
   });
+
+  it('should show error message when video fetch fails', async () => {
+    mockUseMovieVideos.mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isError: true,
+    });
+
+    render(<VideoPlayer mediaId={123} mediaType={MediaType.MOVIE} title="Test Movie" />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Unable to load trailer')).toBeInTheDocument();
+      expect(screen.getByText(/We couldn't load the trailer for "Test Movie"/)).toBeInTheDocument();
+    });
+  });
+
+  it('should show error message for TV shows when fetch fails', async () => {
+    mockUseTVVideos.mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isError: true,
+    });
+
+    render(<VideoPlayer mediaId={456} mediaType={MediaType.TV} title="Test TV Show" />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Unable to load trailer')).toBeInTheDocument();
+      expect(
+        screen.getByText(/We couldn't load the trailer for "Test TV Show"/)
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('should handle case when selectedVideo is null', async () => {
+    // Mock a scenario where setSelectedVideo remains null
+    mockUseMovieVideos.mockReturnValue({
+      data: { id: 123, results: null },
+      isLoading: false,
+      error: null,
+    });
+
+    render(<VideoPlayer mediaId={123} mediaType={MediaType.MOVIE} title="Test Movie" />);
+
+    await waitFor(() => {
+      expect(screen.getByText('No trailer available')).toBeInTheDocument();
+    });
+  });
+
+  it('should randomly select from multiple official trailers', async () => {
+    const trailer1 = { ...mockYouTubeVideo, key: 'trailer1', official: true };
+    const trailer2 = { ...mockYouTubeVideo, key: 'trailer2', official: true };
+    const trailer3 = { ...mockYouTubeVideo, key: 'trailer3', official: true };
+
+    mockUseMovieVideos.mockReturnValue({
+      data: { id: 123, results: [trailer1, trailer2, trailer3] },
+      isLoading: false,
+      error: null,
+    });
+
+    render(<VideoPlayer mediaId={123} mediaType={MediaType.MOVIE} title="Test Movie" />);
+
+    await waitFor(() => {
+      const iframe = screen.getByTitle('Official Trailer');
+      const src = iframe.getAttribute('src');
+      // Should select one of the trailers
+      expect(src).toMatch(/youtube\.com\/embed\/(trailer1|trailer2|trailer3)/);
+    });
+  });
+
+  it('should fallback to non-official trailers when no official ones exist', async () => {
+    const unofficialTrailer = { ...mockYouTubeVideo, official: false, key: 'unofficial' };
+    const teaser = { ...mockYouTubeVideo, type: 'Teaser', key: 'teaser' };
+
+    mockUseMovieVideos.mockReturnValue({
+      data: { id: 123, results: [teaser, unofficialTrailer] },
+      isLoading: false,
+      error: null,
+    });
+
+    render(<VideoPlayer mediaId={123} mediaType={MediaType.MOVIE} title="Test Movie" />);
+
+    await waitFor(() => {
+      const iframe = screen.getByTitle('Official Trailer');
+      expect(iframe).toHaveAttribute(
+        'src',
+        expect.stringContaining('youtube.com/embed/unofficial')
+      );
+    });
+  });
+
+  it('should fallback to any YouTube video when no trailers exist', async () => {
+    const featurette = { ...mockYouTubeVideo, type: 'Featurette', key: 'featurette' };
+
+    mockUseMovieVideos.mockReturnValue({
+      data: { id: 123, results: [featurette] },
+      isLoading: false,
+      error: null,
+    });
+
+    render(<VideoPlayer mediaId={123} mediaType={MediaType.MOVIE} title="Test Movie" />);
+
+    await waitFor(() => {
+      const iframe = screen.getByTitle('Official Trailer');
+      expect(iframe).toHaveAttribute(
+        'src',
+        expect.stringContaining('youtube.com/embed/featurette')
+      );
+    });
+  });
 });

@@ -319,4 +319,153 @@ describe('ContentDisplayWithQuery', () => {
       expect.any(Object)
     );
   });
+
+  it('should handle very-recent recency date calculation', () => {
+    render(
+      <ContentDisplayWithQuery
+        preferences={{ ...mockPreferences, recency: 'very-recent' }}
+        onBackToPreferences={mockOnBackToPreferences}
+      />,
+      { wrapper: createWrapper() }
+    );
+
+    const calls = vi.mocked(useDiscoverMovies).mock.calls[0];
+    const dateGte = new Date(calls[0]['primary_release_date.gte'] as string);
+    const dateLte = new Date(calls[0]['primary_release_date.lte'] as string);
+    const diffInDays = (dateLte.getTime() - dateGte.getTime()) / (1000 * 60 * 60 * 24);
+
+    // Should be approximately 90 days for very-recent (3 months)
+    expect(diffInDays).toBeGreaterThan(85);
+    expect(diffInDays).toBeLessThan(95);
+  });
+
+  it('should handle contemporary recency date calculation', () => {
+    render(
+      <ContentDisplayWithQuery
+        preferences={{ ...mockPreferences, recency: 'contemporary' }}
+        onBackToPreferences={mockOnBackToPreferences}
+      />,
+      { wrapper: createWrapper() }
+    );
+
+    const calls = vi.mocked(useDiscoverMovies).mock.calls[0];
+    const dateGte = new Date(calls[0]['primary_release_date.gte'] as string);
+    const dateLte = new Date(calls[0]['primary_release_date.lte'] as string);
+    const diffInDays = (dateLte.getTime() - dateGte.getTime()) / (1000 * 60 * 60 * 24);
+
+    // Should be approximately 730 days for contemporary (2 years)
+    expect(diffInDays).toBeGreaterThan(700);
+    expect(diffInDays).toBeLessThan(750);
+  });
+
+  it('should handle default recency date calculation', () => {
+    render(
+      <ContentDisplayWithQuery
+        preferences={{ ...mockPreferences, recency: 'any' }}
+        onBackToPreferences={mockOnBackToPreferences}
+      />,
+      { wrapper: createWrapper() }
+    );
+
+    const calls = vi.mocked(useDiscoverMovies).mock.calls[0];
+    const dateGte = new Date(calls[0]['primary_release_date.gte'] as string);
+
+    // Should start from 1900 for 'any' recency
+    expect(dateGte.getFullYear()).toBe(1900);
+  });
+
+  it('should show hidden items card', () => {
+    // Update the ContentCard mock to support onHide
+    const MockContentCard = ({ item, onHide }: any) => (
+      <div data-testid="content-card">
+        <h3>{item.title}</h3>
+        <button onClick={() => onHide(item.id)}>Hide</button>
+      </div>
+    );
+    MockContentCard.displayName = 'MockContentCard';
+
+    vi.doMock('@/components/content-card', () => ({
+      ContentCard: MockContentCard,
+    }));
+
+    const { rerender } = render(
+      <ContentDisplayWithQuery
+        preferences={mockPreferences}
+        onBackToPreferences={mockOnBackToPreferences}
+      />,
+      { wrapper: createWrapper() }
+    );
+
+    // Initially no hidden items card
+    expect(screen.queryByText(/Show \d+ hidden item/)).not.toBeInTheDocument();
+  });
+
+  it('should handle empty genres correctly', () => {
+    const emptyGenresPrefs = { ...mockPreferences, genres: [] };
+
+    render(
+      <ContentDisplayWithQuery
+        preferences={emptyGenresPrefs}
+        onBackToPreferences={mockOnBackToPreferences}
+      />,
+      { wrapper: createWrapper() }
+    );
+
+    expect(screen.getByText('Genres: All')).toBeInTheDocument();
+  });
+
+  it('should filter TV shows only', async () => {
+    render(
+      <ContentDisplayWithQuery
+        preferences={mockPreferences}
+        onBackToPreferences={mockOnBackToPreferences}
+      />,
+      { wrapper: createWrapper() }
+    );
+
+    // Filter to TV shows only
+    const contentTypeSelect = screen.getByText('All Content');
+    fireEvent.click(contentTypeSelect);
+    fireEvent.click(screen.getByText('TV Shows Only'));
+
+    await waitFor(() => {
+      expect(screen.queryByText('Test Movie 1')).not.toBeInTheDocument();
+      expect(screen.getByText('Test TV Show')).toBeInTheDocument();
+    });
+  });
+
+  it('should show platform disclaimer for all platforms', () => {
+    render(
+      <ContentDisplayWithQuery
+        preferences={mockPreferences}
+        onBackToPreferences={mockOnBackToPreferences}
+      />,
+      { wrapper: createWrapper() }
+    );
+
+    expect(
+      screen.getByText('* Includes some content that is only available for rent or purchase')
+    ).toBeInTheDocument();
+  });
+
+  it('should not show platform disclaimer when specific platform is selected', async () => {
+    render(
+      <ContentDisplayWithQuery
+        preferences={mockPreferences}
+        onBackToPreferences={mockOnBackToPreferences}
+      />,
+      { wrapper: createWrapper() }
+    );
+
+    // Select Netflix
+    const platformSelect = screen.getByText('All Platforms');
+    fireEvent.click(platformSelect);
+    fireEvent.click(screen.getByText('Netflix'));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByText('* Includes some content that is only available for rent or purchase')
+      ).not.toBeInTheDocument();
+    });
+  });
 });
