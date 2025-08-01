@@ -33,6 +33,8 @@ export const GENRE_EMOJIS: Record<string, string> = {
   talk: '🎤',
   politics: '🏛️',
   kids: '👶',
+  soap: '💔',
+  tvmovie: '🎬',
 };
 
 // Get emoji for a genre based on keywords in the name

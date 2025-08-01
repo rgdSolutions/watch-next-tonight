@@ -191,7 +191,10 @@ export function ContentDisplayWithQuery({
           <div className="flex flex-wrap gap-2 mt-4">
             <Badge variant="secondary">Country: {FLAG_EMOJIS[preferences.country] ?? '🇺🇸'}</Badge>
             <Badge variant="secondary">
-              Genres: {preferences.genres.length ? preferences.genres.join(', ') : 'All'}
+              Genres:{' '}
+              {preferences.genres.length
+                ? preferences.genres.map(capitalizeFirstLetter).join(', ')
+                : 'All'}
             </Badge>
             <Badge variant="secondary">Recency: {capitalizeFirstLetter(preferences.recency)}</Badge>
             <Badge variant="outline">{allContent.length} results found</Badge>
