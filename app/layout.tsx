@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 
 import { Inter } from 'next/font/google';
+import Script from 'next/script';
 
 import { QueryProvider } from '@/providers/query-provider';
 
@@ -42,6 +43,27 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        {/* Google tag (gtag.js) */}
+        {process.env.GA_MEASUREMENT_ID && (
+          <>
+            <Script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GA_MEASUREMENT_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                gtag('config', '${process.env.GA_MEASUREMENT_ID}');
+              `}
+            </Script>
+          </>
+        )}
+      </head>
       <body className={inter.className}>
         <QueryProvider>{children}</QueryProvider>
       </body>
