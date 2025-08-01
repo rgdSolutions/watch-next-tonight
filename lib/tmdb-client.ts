@@ -44,6 +44,7 @@ export class TMDBClient {
     'primary_release_date.lte'?: string;
     with_watch_providers?: string;
     watch_region?: string;
+    with_watch_monetization_types?: string;
   }): Promise<SearchResults> {
     const searchParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
@@ -62,6 +63,7 @@ export class TMDBClient {
     'first_air_date.lte'?: string;
     with_watch_providers?: string;
     watch_region?: string;
+    with_watch_monetization_types?: string;
   }): Promise<SearchResults> {
     const searchParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {

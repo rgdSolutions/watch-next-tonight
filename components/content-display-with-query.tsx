@@ -102,7 +102,10 @@ export function ContentDisplayWithQuery({
       'primary_release_date.lte': dateRange.lte,
       sort_by: 'popularity.desc',
       watch_region: preferences.country,
-      ...(watchProviderIds && { with_watch_providers: watchProviderIds }),
+      ...(watchProviderIds && {
+        with_watch_providers: watchProviderIds,
+        with_watch_monetization_types: 'flatrate',
+      }),
     },
     {
       enabled: contentType !== 'tv' && (movieGenres?.genres.length ?? 0) > 0,
@@ -116,7 +119,10 @@ export function ContentDisplayWithQuery({
       'first_air_date.lte': dateRange.lte,
       sort_by: 'popularity.desc',
       watch_region: preferences.country,
-      ...(watchProviderIds && { with_watch_providers: watchProviderIds }),
+      ...(watchProviderIds && {
+        with_watch_providers: watchProviderIds,
+        with_watch_monetization_types: 'flatrate',
+      }),
     },
     {
       enabled: contentType !== 'movie' && (tvGenres?.genres.length ?? 0) > 0,
