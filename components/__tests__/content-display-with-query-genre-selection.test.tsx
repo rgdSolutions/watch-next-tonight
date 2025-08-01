@@ -158,13 +158,6 @@ const mockUnifiedGenres = [
     tvIds: [],
   },
   {
-    id: 'mystery',
-    name: 'Mystery',
-    emoji: '🔍',
-    movieIds: [9648],
-    tvIds: [9648],
-  },
-  {
     id: 'comedy',
     name: 'Comedy',
     emoji: '😂',
@@ -534,30 +527,6 @@ describe('ContentDisplayWithQuery - chooseInitialContentType functionality', () 
 
       await waitFor(() => {
         // Get all comboboxes and find the one for content type (first one)
-        const comboboxes = screen.getAllByRole('combobox');
-        const contentTypeSelect = comboboxes[0];
-        expect(contentTypeSelect).toHaveTextContent('Movies Only');
-      });
-    });
-
-    it('should select movie tab for "mystery" genre when only movie-specific', async () => {
-      const onBackToPreferences = vi.fn();
-      const preferences = {
-        country: 'US',
-        genres: ['mystery'],
-        recency: 'all',
-      };
-
-      render(
-        <ContentDisplayWithQuery
-          preferences={preferences}
-          onBackToPreferences={onBackToPreferences}
-        />,
-        { wrapper: createWrapper() }
-      );
-
-      await waitFor(() => {
-        // Mystery is available for both, but in our priority check it's listed as movie-only
         const comboboxes = screen.getAllByRole('combobox');
         const contentTypeSelect = comboboxes[0];
         expect(contentTypeSelect).toHaveTextContent('Movies Only');

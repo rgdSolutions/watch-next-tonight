@@ -65,11 +65,7 @@ const chooseInitialContentType = (preferences: {
   }
 
   // movie-only genres
-  if (
-    preferences.genres.includes('history') ||
-    preferences.genres.includes('music') ||
-    preferences.genres.includes('mystery')
-  ) {
+  if (preferences.genres.includes('history') || preferences.genres.includes('music')) {
     return 'movie';
   }
 
