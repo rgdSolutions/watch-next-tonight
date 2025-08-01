@@ -45,6 +45,9 @@ export function ContentDisplayWithQuery({
   const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
   const [contentType, setContentType] = useState<'all' | 'movie' | 'tv'>('all');
   const [selectedTrailer, setSelectedTrailer] = useState<MediaItem | null>(null);
+  const [hiddenItems, setHiddenItems] = useState<string[]>([]);
+
+  const handleHide = (itemId: string) => setHiddenItems((prev) => [...prev, itemId]);
 
   // Get unified genres
   const { genres: unifiedGenres } = useUnifiedGenres();
@@ -209,6 +212,15 @@ export function ContentDisplayWithQuery({
 
       {/* Content Grid */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {hiddenItems.length > 0 && (
+          <Card
+            className="flex justify-center items-center cursor-pointer select-none transition-all duration-300 hover:shadow-lg hover:scale-[1.02]"
+            // variant="outline"
+            onClick={() => setHiddenItems([])}
+          >
+            {`Show ${hiddenItems.length} hidden item${hiddenItems.length === 1 ? '' : 's'}`}
+          </Card>
+        )}
         {isLoading ? (
           // Loading skeletons
           Array.from({ length: 8 }).map((_, i) => (
@@ -236,15 +248,16 @@ export function ContentDisplayWithQuery({
             </Card>
           </div>
         ) : (
-          allContent.map((item) => (
-            <ContentCard
-              key={item.id}
-              item={item}
-              onTrailerClick={() => setSelectedTrailer(item)}
-              onShuffle={() => {}}
-              isShuffling={false}
-            />
-          ))
+          allContent
+            .filter((item) => !hiddenItems.includes(item.id))
+            .map((item) => (
+              <ContentCard
+                key={item.id}
+                item={item}
+                onTrailerClick={() => setSelectedTrailer(item)}
+                onHide={handleHide}
+              />
+            ))
         )}
       </div>
 
