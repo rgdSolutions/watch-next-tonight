@@ -92,6 +92,8 @@ describe('ContentDisplayWithQuery - Streaming Filter', () => {
       { wrapper: createWrapper() }
     );
 
-    expect(screen.getByText(/no content found matching your preferences/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/no content found matching your preferences in your region/i)
+    ).toBeInTheDocument();
   });
 });

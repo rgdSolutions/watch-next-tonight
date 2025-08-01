@@ -230,7 +230,9 @@ describe('ContentDisplayWithQuery', () => {
       { wrapper: createWrapper() }
     );
 
-    expect(screen.getByText(/No content found matching your preferences/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/No content found matching your preferences in your region/)
+    ).toBeInTheDocument();
   });
 
   it('should handle trailer modal open and close', async () => {

@@ -141,14 +141,28 @@ export function ContentDisplayWithQuery({
 
   const isLoading = moviesLoading || tvLoading;
 
-  const platforms = [
+  let platforms = [
     { id: 'all', name: 'All Platforms' },
     { id: 'netflix', name: 'Netflix' },
     { id: 'prime', name: 'Prime Video' },
     { id: 'disney', name: 'Disney+' },
-    { id: 'appletv', name: 'Apple TV+' },
     { id: 'max', name: 'MAX' },
+    { id: 'paramount', name: 'Paramount+' },
+    { id: 'appletv', name: 'Apple TV+' },
+    { id: 'crunchyroll', name: 'Crunchyroll' },
   ];
+
+  if (preferences.country === 'US') {
+    platforms = [
+      ...platforms,
+      { id: 'hulu', name: 'Hulu' },
+      { id: 'peacock', name: 'Peacock' },
+      { id: 'starz', name: 'Starz' },
+      { id: 'fubotv', name: 'FuboTV' },
+      { id: 'epix', name: 'Epix' },
+      { id: 'plutotv', name: 'Pluto TV' },
+    ];
+  }
 
   return (
     <div data-testid="content-display" className="space-y-6">
@@ -238,7 +252,9 @@ export function ContentDisplayWithQuery({
           <div className="col-span-full">
             <Card>
               <CardContent className="p-8 text-center space-y-4">
-                <p className="text-muted-foreground">No content found matching your preferences.</p>
+                <p className="text-muted-foreground">
+                  No content found matching your preferences in your region.
+                </p>
                 <div className="flex gap-2 justify-center">
                   <Button variant="outline" onClick={onBackToPreferences}>
                     Change Preferences
