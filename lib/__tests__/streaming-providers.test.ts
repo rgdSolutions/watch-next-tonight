@@ -35,7 +35,7 @@ describe('streaming-providers', () => {
     });
 
     it('should return Amazon Prime ID for prime platform', () => {
-      expect(getProviderIdsForPlatform('prime')).toBe('9');
+      expect(getProviderIdsForPlatform('prime')).toBe('9|119');
     });
 
     it('should return Disney Plus ID for disney platform', () => {
@@ -47,7 +47,7 @@ describe('streaming-providers', () => {
     });
 
     it('should return HBO Max ID for max platform', () => {
-      expect(getProviderIdsForPlatform('max')).toBe('384');
+      expect(getProviderIdsForPlatform('max')).toBe('384|1899');
     });
 
     it('should return all providers for all platform', () => {
@@ -62,7 +62,7 @@ describe('streaming-providers', () => {
 
     it('should be case insensitive', () => {
       expect(getProviderIdsForPlatform('NETFLIX')).toBe('8');
-      expect(getProviderIdsForPlatform('Prime')).toBe('9');
+      expect(getProviderIdsForPlatform('Prime')).toBe('9|119');
     });
   });
 
