@@ -55,7 +55,7 @@ export interface MediaItem {
   releaseDate: string;
   posterPath: string | null;
   backdropPath: string | null;
-  rating: number;
+  rating?: number | null;
   voteCount: number;
   popularity: number;
   genreIds: number[];

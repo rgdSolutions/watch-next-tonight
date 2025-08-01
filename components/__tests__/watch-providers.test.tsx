@@ -245,4 +245,28 @@ describe('WatchProviders', () => {
     const netflixElements = screen.getAllByText('Netflix');
     expect(netflixElements).toHaveLength(1);
   });
+
+  it('should show error message when API call fails', () => {
+    mockUseMovieWatchProviders.mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isError: true,
+    });
+
+    render(<WatchProviders mediaId={550} mediaType={MediaType.MOVIE} country="US" />);
+
+    expect(screen.getByText('Unable to load streaming information')).toBeInTheDocument();
+  });
+
+  it('should show error message for TV shows when API call fails', () => {
+    mockUseTVWatchProviders.mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isError: true,
+    });
+
+    render(<WatchProviders mediaId={1396} mediaType={MediaType.TV} country="US" />);
+
+    expect(screen.getByText('Unable to load streaming information')).toBeInTheDocument();
+  });
 });
