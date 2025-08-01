@@ -81,6 +81,8 @@ function areGenresSimilar(name1: string, name2: string): boolean {
   const specialMappings: Record<string, string[]> = {
     scifi: ['sciencefiction'],
     sciencefiction: ['scifi'],
+    sciencefi: ['fifantasy'], // "Science Fiction" -> "Sci-Fi & Fantasy"
+    fifantasy: ['sciencefi'], // "Sci-Fi & Fantasy" -> "Science Fiction"
     actionadventure: ['action', 'adventure'],
     warmilitary: ['war'],
     sciencefantasy: ['scifi', 'fantasy'],

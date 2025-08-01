@@ -53,14 +53,16 @@ describe('getUnifiedGenres', () => {
   it('should merge similar genres', () => {
     const result = getUnifiedGenres(mockMovieGenres, mockTVGenres);
 
-    // "Science Fiction" and "Sci-Fi & Fantasy" should be separate
-    // (they're different enough to not merge automatically)
-    const sciFi = result.find((g) => g.name === 'Science Fiction');
-    const sciFiFantasy = result.find((g) => g.name === 'Sci-Fi & Fantasy');
+    // "Science Fiction" and "Sci-Fi & Fantasy" should be merged into one unified genre
+    // This provides better UX - users selecting sci-fi content should get both movies and TV shows
+    const sciFiGenre = result.find(
+      (g) => g.name === 'Science Fiction' || g.name === 'Sci-Fi & Fantasy'
+    );
 
-    expect(sciFi).toBeTruthy();
-    expect(sciFiFantasy).toBeTruthy();
-    expect(sciFi?.id).not.toBe(sciFiFantasy?.id);
+    expect(sciFiGenre).toBeTruthy();
+    // Should have both movie and TV IDs
+    expect(sciFiGenre?.movieIds).toContain(878); // Science Fiction movie ID
+    expect(sciFiGenre?.tvIds).toContain(10765); // Sci-Fi & Fantasy TV ID
   });
 
   it('should sort genres alphabetically', () => {
