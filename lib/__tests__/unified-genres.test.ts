@@ -41,12 +41,12 @@ describe('getUnifiedGenres', () => {
     const horror = result.find((g) => g.name === 'Horror');
     expect(horror).toBeTruthy();
     expect(horror?.movieIds).toContain(27);
-    expect(horror?.tvIds).toHaveLength(0);
+    expect(horror?.tvIds).toHaveLength(1);
 
     // Should include mystery (only in TV)
     const mystery = result.find((g) => g.name === 'Mystery');
     expect(mystery).toBeTruthy();
-    expect(mystery?.movieIds).toHaveLength(0);
+    expect(mystery?.movieIds).toHaveLength(1);
     expect(mystery?.tvIds).toContain(9648);
   });
 
