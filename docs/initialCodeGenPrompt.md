@@ -216,7 +216,7 @@ When adding third-party dependencies:
 ### Naming Conventions
 
 - **FolderNames and Filenames**: Use kebab-case (e.g., `user-profile.tsx`)
-- **Methods and Variables**: Use cammelCase (e.g., `userProfile`, `calculateTotal`)
+- **Methods and Variables**: Use camelCase (e.g., `userProfile`, `calculateTotal`)
 - **Classes, Components, Types, Interfaces and Modules**: Use PascalCase (e.g., `UserProfile`, `PaymentProcessor`)
 - **Constants**: Use UPPER_SNAKE_CASE (e.g., `MAX_RETRY_COUNT`)
 
