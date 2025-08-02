@@ -35,7 +35,7 @@ Inside this current folder ("\_AIAppInADay") I want you to create a subfolder ca
 
 # Authentication
 
-This app will use any authentication.
+This app will not use any authentication.
 
 # APIs to use for data
 
