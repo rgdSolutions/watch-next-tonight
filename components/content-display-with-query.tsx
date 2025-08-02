@@ -18,6 +18,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
 import {
+  tmdbKeys,
   useDiscoverMovies,
   useDiscoverTVShows,
   useMovieGenres,
@@ -86,7 +87,6 @@ export function ContentDisplayWithQuery({
   preferences,
   onBackToPreferences,
 }: ContentDisplayWithQueryProps) {
-  const isSurpriseMe = preferences.genres.length === 0;
   const [tab, setTab] = useState<'search' | 'trending'>('search');
   const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
   const [contentType, setContentType] = useState<ContentType>(
@@ -97,9 +97,9 @@ export function ContentDisplayWithQuery({
 
   const handleHide = (itemId: string) => setHiddenItems((prev) => [...prev, itemId]);
 
-  const { data: trendingData } = useTrending('all', 'week', {
-    enabled: isSurpriseMe,
-    queryKey: ['trending', 'all', 'week'],
+  const { data: trendingData } = useTrending(contentType, 'week', {
+    enabled: tab === 'trending',
+    queryKey: tmdbKeys.trending(contentType, 'week'),
   });
 
   // Get unified genres
@@ -165,7 +165,7 @@ export function ContentDisplayWithQuery({
       }),
     },
     {
-      enabled: contentType !== 'tv' && (isSurpriseMe || (movieGenres?.genres.length ?? 0) > 0),
+      enabled: tab === 'search' && contentType !== 'tv' && (movieGenres?.genres.length ?? 0) > 0,
     } as any
   );
 
@@ -182,7 +182,7 @@ export function ContentDisplayWithQuery({
       }),
     },
     {
-      enabled: contentType !== 'movie' && (isSurpriseMe || (tvGenres?.genres.length ?? 0) > 0),
+      enabled: tab === 'search' && contentType !== 'movie' && (tvGenres?.genres.length ?? 0) > 0,
     } as any
   );
 
@@ -197,10 +197,9 @@ export function ContentDisplayWithQuery({
     return item.type === contentType;
   });
 
-  const allContent = isSurpriseMe && tab === 'trending' ? trendingContent : searchContent;
+  const allContent = tab === 'trending' ? trendingContent : searchContent;
 
-  const isLoading =
-    isSurpriseMe && tab === 'trending' ? !trendingData && isSurpriseMe : moviesLoading || tvLoading;
+  const isLoading = tab === 'trending' ? !trendingData : moviesLoading || tvLoading;
 
   let platforms = [
     { id: 'all', name: 'All Platforms' },
@@ -234,30 +233,24 @@ export function ContentDisplayWithQuery({
             <ArrowLeft className="w-4 h-4" />
             Start Over
           </Button>
-          {isSurpriseMe && (
-            <div className="flex items-center gap-2 py-4">
-              <span className={tab === 'search' ? 'font-semibold' : 'text-muted-foreground'}>
-                🔍 Search
-              </span>
-              <Switch
-                checked={tab === 'trending'}
-                onCheckedChange={(checked) => setTab(checked ? 'trending' : 'search')}
-                aria-label="Toggle between search and trending results"
-              />
-              <span className={tab === 'trending' ? 'font-semibold' : 'text-muted-foreground'}>
-                Trending 🔥
-              </span>
-            </div>
-          )}
+          <div className="flex items-center gap-2 py-4">
+            <span className={tab === 'search' ? 'font-semibold' : 'text-muted-foreground'}>
+              🔍 Search
+            </span>
+            <Switch
+              checked={tab === 'trending'}
+              onCheckedChange={(checked) => setTab(checked ? 'trending' : 'search')}
+              aria-label="Toggle between search and trending results"
+            />
+            <span className={tab === 'trending' ? 'font-semibold' : 'text-muted-foreground'}>
+              Trending 🔥
+            </span>
+          </div>
         </div>
 
         <div className="flex items-center gap-4">
-          <Select
-            value={contentType}
-            onValueChange={(value: any) => setContentType(value)}
-            disabled={isSurpriseMe && tab === 'trending'}
-          >
-            <SelectTrigger className="w-[156px]" disabled={isSurpriseMe && tab === 'trending'}>
+          <Select value={contentType} onValueChange={(value: any) => setContentType(value)}>
+            <SelectTrigger className="w-[156px]">
               <SelectValue placeholder="Content type" />
             </SelectTrigger>
             <SelectContent>
@@ -270,9 +263,9 @@ export function ContentDisplayWithQuery({
           <Select
             value={selectedPlatform}
             onValueChange={setSelectedPlatform}
-            disabled={isSurpriseMe && tab === 'trending'}
+            disabled={tab === 'trending'}
           >
-            <SelectTrigger className="w-[160px]" disabled={isSurpriseMe && tab === 'trending'}>
+            <SelectTrigger className="w-[160px]" disabled={tab === 'trending'}>
               <Filter className="w-4 h-4 mr-2" />
               <SelectValue placeholder="Filter by platform" />
             </SelectTrigger>
@@ -291,9 +284,7 @@ export function ContentDisplayWithQuery({
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">
-            {isSurpriseMe && tab === 'trending'
-              ? 'Globally Trending Results'
-              : 'Your Search Results'}
+            {tab === 'trending' ? 'Globally Trending Results' : 'Your Search Results'}
           </CardTitle>
           <div className="flex flex-wrap gap-2 mt-4">
             {tab === 'search' && (
