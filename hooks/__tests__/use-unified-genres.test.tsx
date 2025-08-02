@@ -40,6 +40,9 @@ describe('useUnifiedGenres', () => {
           { id: 28, name: 'Action' },
           { id: 35, name: 'Comedy' },
           { id: 18, name: 'Drama' },
+          { id: 878, name: 'Science Fiction' },
+          { id: 10752, name: 'War' },
+          { id: 27, name: 'Horror' },
         ],
       },
       isLoading: false,
@@ -52,6 +55,9 @@ describe('useUnifiedGenres', () => {
           { id: 10759, name: 'Action & Adventure' },
           { id: 35, name: 'Comedy' },
           { id: 18, name: 'Drama' },
+          { id: 10765, name: 'Sci-Fi & Fantasy' },
+          { id: 10768, name: 'War & Politics' },
+          { id: 10762, name: 'Kids' },
         ],
       },
       isLoading: false,
@@ -66,17 +72,48 @@ describe('useUnifiedGenres', () => {
       expect(result.current.isLoading).toBe(false);
     });
 
-    expect(result.current.genres).toHaveLength(3); // action (merged with adventure), comedy, drama
+    // Check the total number of genres (some are unified)
+    expect(result.current.genres.length).toBeGreaterThan(0);
 
-    // Action should exist and contain both movie and TV IDs
+    // Every genre should have both movie and TV IDs
+    result.current.genres.forEach((genre) => {
+      expect(genre.movieIds.length).toBeGreaterThan(0);
+      expect(genre.tvIds.length).toBeGreaterThan(0);
+    });
+
+    // Check Science Fiction is unified with Sci-Fi & Fantasy
+    const sciFi = result.current.genres.find((g) => g.id === 'sciencefi');
+    expect(sciFi).toBeTruthy();
+    expect(sciFi?.name).toBe('Sci-Fi & Fantasy');
+    expect(sciFi?.movieIds).toContain(878);
+    expect(sciFi?.tvIds).toContain(10765);
+
+    // Check War is unified with War & Politics
+    const war = result.current.genres.find((g) => g.id === 'war');
+    expect(war).toBeTruthy();
+    expect(war?.name).toBe('War & Politics');
+    expect(war?.movieIds).toContain(10752);
+    expect(war?.tvIds).toContain(10768);
+
+    // Check Action and Action & Adventure are separate
     const action = result.current.genres.find((g) => g.name === 'Action');
+    const actionAdventure = result.current.genres.find((g) => g.name === 'Action & Adventure');
     expect(action).toBeTruthy();
-    expect(action?.movieIds).toContain(28);
-    expect(action?.tvIds).toContain(10759);
+    expect(actionAdventure).toBeTruthy();
+    expect(action?.id).not.toBe(actionAdventure?.id);
 
-    // Comedy and Drama should exist
-    expect(result.current.genres.find((g) => g.name === 'Comedy')).toBeTruthy();
-    expect(result.current.genres.find((g) => g.name === 'Drama')).toBeTruthy();
+    // Check Horror has fallback TV mapping
+    const horror = result.current.genres.find((g) => g.name === 'Horror');
+    expect(horror).toBeTruthy();
+    expect(horror?.movieIds).toContain(27);
+    expect(horror?.tvIds.length).toBeGreaterThan(0); // Has fallback
+
+    // Check Kids has fallback movie mapping
+    const kids = result.current.genres.find((g) => g.name === 'Kids');
+    expect(kids).toBeTruthy();
+    expect(kids?.tvIds).toContain(10762);
+    expect(kids?.movieIds.length).toBeGreaterThan(0); // Has fallback
+
     expect(result.current.error).toBeNull();
   });
 

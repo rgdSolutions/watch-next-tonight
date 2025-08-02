@@ -58,7 +58,7 @@ function getGenreEmoji(genreName: string): string {
 }
 
 // Normalize genre names for comparison
-function normalizeGenreName(name: string): string {
+export function normalizeGenreName(name: string): string {
   return name
     .toLowerCase()
     .replace(/[&\s-]+/g, '') // Remove spaces, hyphens, and ampersands
@@ -67,7 +67,7 @@ function normalizeGenreName(name: string): string {
 }
 
 // Check if two genre names are similar enough to be considered the same
-function areGenresSimilar(name1: string, name2: string): boolean {
+export function areGenresSimilar(name1: string, name2: string): boolean {
   const norm1 = normalizeGenreName(name1);
   const norm2 = normalizeGenreName(name2);
 
@@ -80,7 +80,6 @@ function areGenresSimilar(name1: string, name2: string): boolean {
     sciencefiction: ['scifi'],
     sciencefi: ['fifantasy'], // "Science Fiction" -> "Sci-Fi & Fantasy"
     fifantasy: ['sciencefi'], // "Sci-Fi & Fantasy" -> "Science Fiction"
-    actionadventure: ['action', 'adventure'],
     warmilitary: ['war'],
     sciencefantasy: ['scifi', 'fantasy'],
     war: ['warpolitics'], // "War" -> "War & Politics"
@@ -107,6 +106,7 @@ function areGenresSimilar(name1: string, name2: string): boolean {
 // Manual mappings for genres that don't have direct equivalents
 const GENRE_FALLBACK_MAPPINGS: Record<string, { movie?: number; tv?: number }> = {
   // Movie-only genres and their closest TV equivalents
+  action: { tv: 10759 }, // Action -> Action & Adventure
   adventure: { tv: 10759 }, // Adventure -> Action & Adventure
   fantasy: { tv: 10765 }, // Fantasy -> Sci-Fi & Fantasy
   history: { tv: 10768 }, // History -> War & Politics
@@ -115,6 +115,7 @@ const GENRE_FALLBACK_MAPPINGS: Record<string, { movie?: number; tv?: number }> =
   romance: { tv: 10766 }, // Romance -> Soap
   tvmovie: { tv: 10759 }, // TV Movie -> Action & Adventure
   // TV-only genres and their closest movie equivalents
+  actionadventure: { movie: 28 }, // Action & Adventure -> Action
   kids: { movie: 16 }, // Kids -> Animation
   news: { movie: 99 }, // News -> Documentary
   reality: { movie: 99 }, // Reality -> Documentary

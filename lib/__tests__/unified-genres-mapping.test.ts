@@ -66,7 +66,7 @@ describe('Unified Genres Mapping', () => {
     const history = unifiedGenres.find((g) => g.name === 'History');
     expect(history).toBeDefined();
     expect(history!.movieIds).toContain(36);
-    expect(history!.tvIds).toContain(36); // War & Politics
+    expect(history!.tvIds).toContain(10768); // War & Politics
 
     // Check Horror -> Mystery
     const horror = unifiedGenres.find((g) => g.name === 'Horror');
@@ -74,11 +74,11 @@ describe('Unified Genres Mapping', () => {
     expect(horror!.movieIds).toContain(27);
     expect(horror!.tvIds).toContain(9648); // Mystery
 
-    // Check Romance -> Drama
+    // Check Romance -> Soap
     const romance = unifiedGenres.find((g) => g.name === 'Romance');
     expect(romance).toBeDefined();
     expect(romance!.movieIds).toContain(10749);
-    expect(romance!.tvIds).toContain(18); // Drama
+    expect(romance!.tvIds).toContain(10766); // Soap
   });
 
   it('should map TV-only genres to appropriate movie genres', () => {

@@ -40,7 +40,7 @@ interface ContentDisplayWithQueryProps {
   onBackToPreferences: () => void;
 }
 
-const chooseInitialContentType = (preferences: {
+export const chooseInitialContentType = (preferences: {
   country: string;
   genres: string[];
   recency: string;
