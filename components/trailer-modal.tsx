@@ -116,7 +116,7 @@ export function TrailerModal({ item, isOpen, onClose, country = 'US' }: TrailerM
               <div>
                 <h3 className="font-semibold mb-2">Genres</h3>
                 <div className="flex flex-wrap gap-2">
-                  {item.genreIds.map((genreId) => {
+                  {item.genreIds?.map((genreId) => {
                     const genre = getGenreWithEmoji(genreId);
                     return genre ? (
                       <Badge variant="secondary" key={genreId}>

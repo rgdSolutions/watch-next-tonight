@@ -11,12 +11,16 @@ import { ContentDisplayWithQuery } from '../content-display-with-query';
 const mockUseDiscoverMovies = vi.fn();
 const mockUseDiscoverTVShows = vi.fn();
 
-vi.mock('@/hooks/use-tmdb', () => ({
-  useDiscoverMovies: (...args: any[]) => mockUseDiscoverMovies(...args),
-  useDiscoverTVShows: (...args: any[]) => mockUseDiscoverTVShows(...args),
-  useMovieGenres: vi.fn(() => ({ data: { genres: [{ id: 28, name: 'Action' }] } })),
-  useTVGenres: vi.fn(() => ({ data: { genres: [{ id: 10759, name: 'Action & Adventure' }] } })),
-}));
+vi.mock('@/hooks/use-tmdb', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...(actual as Record<string, any>),
+    useDiscoverMovies: (...args: any[]) => mockUseDiscoverMovies(...args),
+    useDiscoverTVShows: (...args: any[]) => mockUseDiscoverTVShows(...args),
+    useMovieGenres: vi.fn(() => ({ data: { genres: [{ id: 28, name: 'Action' }] } })),
+    useTVGenres: vi.fn(() => ({ data: { genres: [{ id: 10759, name: 'Action & Adventure' }] } })),
+  };
+});
 
 vi.mock('@/hooks/use-unified-genres', () => ({
   useUnifiedGenres: () => ({

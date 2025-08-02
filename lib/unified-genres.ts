@@ -12,6 +12,7 @@ export interface UnifiedGenre {
 export const GENRE_EMOJIS: Record<string, string> = {
   action: '💥',
   adventure: '🗺️',
+  actionadventure: '💥',
   animation: '🎨',
   comedy: '😂',
   crime: '🕵️',

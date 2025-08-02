@@ -70,11 +70,31 @@ function transformGenres(data: any) {
   };
 }
 
+// Transform trending results
+function transformTrendingResults(data: any) {
+  const results = (data.results || []).map((item: any) => {
+    const mediaType = item.media_type === 'movie' ? 'movie' : 'tv';
+    return transformMediaItem(item, mediaType);
+  });
+
+  return {
+    results,
+    page: data.page,
+    totalPages: data.total_pages,
+    totalResults: data.total_results,
+  };
+}
+
 // Determine response transformation based on path
 function transformResponse(path: string, data: any): any {
   // Multi-search endpoint
   if (path.includes('search/multi')) {
     return transformSearchResults(data);
+  }
+
+  // Trending endpoints
+  if (path.includes('trending/')) {
+    return transformTrendingResults(data);
   }
 
   // Discover endpoints

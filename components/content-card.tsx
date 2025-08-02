@@ -84,7 +84,7 @@ export function ContentCard({ item, onTrailerClick, onHide }: ContentCardProps) 
 
           {/* Genres */}
           <div className="flex flex-wrap gap-1">
-            {item.genreIds.slice(0, 3).map((genreId) => {
+            {item.genreIds?.slice(0, 3).map((genreId) => {
               const genre = getGenreWithEmoji(genreId);
               return genre ? (
                 <Badge variant="secondary" className="text-xs" key={genreId}>
