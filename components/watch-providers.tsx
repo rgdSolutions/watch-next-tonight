@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useMovieWatchProviders, useTVWatchProviders } from '@/hooks/use-tmdb';
 import { getTMDBImageUrl } from '@/lib/tmdb-utils';
+import { returnFirstWord } from '@/lib/utils';
 import { MediaType, TMDBProvider } from '@/types/tmdb';
 
 interface WatchProvidersProps {
@@ -14,45 +15,30 @@ interface WatchProvidersProps {
 
 // Map of known streaming services to their brand colors
 const PROVIDER_COLORS: Record<string, string> = {
-  Netflix: 'bg-red-600 hover:bg-red-700',
-  'Netflix Standard with Ads': 'bg-red-600 hover:bg-red-700',
-  'Disney Plus': 'bg-blue-600 hover:bg-blue-700',
-  'Apple TV+': 'bg-gray-800 hover:bg-gray-900',
-  Plex: 'bg-gray-800 hover:bg-gray-900',
-  'Plex Channel': 'bg-gray-800 hover:bg-gray-900',
-  'Amazon Prime Video': 'bg-blue-500 hover:bg-blue-600',
-  'Amazon Prime Video with Ads': 'bg-blue-500 hover:bg-blue-600',
-  'Spectrum On Demand': 'bg-blue-500 hover:bg-blue-600',
-  Hulu: 'bg-green-500 hover:bg-green-600',
-  'HBO Max': 'bg-purple-600 hover:bg-purple-700',
-  'Paramount Plus': 'bg-blue-700 hover:bg-blue-800',
-  'MGM Plus': 'bg-yellow-600 hover:bg-yellow-700',
-  'MGM Plus Roku Premium Channel': 'bg-yellow-600 hover:bg-yellow-700',
-  'MGM+ Amazon Channel': 'bg-yellow-600 hover:bg-yellow-700',
-  Peacock: 'bg-yellow-600 hover:bg-yellow-700',
-  'Peacock Premium': 'bg-yellow-600 hover:bg-yellow-700',
-  'Peacock Premium Plus': 'bg-yellow-600 hover:bg-yellow-700',
-  Crunchyroll: 'bg-orange-500 hover:bg-orange-600',
-  Showtime: 'bg-red-800 hover:bg-red-900',
-  Starz: 'bg-gray-700 hover:bg-gray-800',
-  'Starz Amazon Channel': 'bg-gray-700 hover:bg-gray-800',
-  'Starz Roku Premium Channel': 'bg-gray-700 hover:bg-gray-800',
-  'Starz Apple TV Channel': 'bg-gray-700 hover:bg-gray-800',
-  Epix: 'bg-yellow-500 hover:bg-yellow-600',
-  'YouTube Premium': 'bg-red-500 hover:bg-red-600',
-  'Youtube TV': 'bg-red-500 hover:bg-red-600',
-  fuboTV: 'bg-orange-600 hover:bg-orange-700',
-  Tubi: 'bg-orange-400 hover:bg-orange-500',
-  'Pluto TV': 'bg-cyan-600 hover:bg-cyan-700',
-  Crackle: 'bg-black hover:bg-gray-900',
-  'Vudu (Free)': 'bg-blue-800 hover:bg-blue-900',
-  Philo: 'bg-gray-800 hover:bg-gray-900',
-  'Paramount Plus Apple TV Channel': 'bg-gray-800 hover:bg-gray-900',
-  'Paramount Plus Apple TV Channel ': 'bg-gray-800 hover:bg-gray-900',
-  'Paramount+ Amazon Channel': 'bg-blue-700 hover:bg-blue-800',
-  'Paramount+ Roku Premium Channel': 'bg-blue-700 hover:bg-blue-800',
-  'Paramount+ Originals Amazon Channel': 'bg-blue-700 hover:bg-blue-800',
-  NBC: 'bg-blue-700 hover:bg-blue-800',
+  netflix: 'bg-red-600 hover:bg-red-700',
+  disney: 'bg-blue-600 hover:bg-blue-700',
+  apple: 'bg-gray-800 hover:bg-gray-900',
+  plex: 'bg-gray-800 hover:bg-gray-900',
+  amazon: 'bg-blue-500 hover:bg-blue-600',
+  spectrum: 'bg-blue-500 hover:bg-blue-600',
+  hulu: 'bg-green-500 hover:bg-green-600',
+  hbo: 'bg-purple-600 hover:bg-purple-700',
+  max: 'bg-purple-600 hover:bg-purple-700',
+  paramount: 'bg-blue-700 hover:bg-blue-800',
+  mgm: 'bg-yellow-600 hover:bg-yellow-700',
+  peacock: 'bg-yellow-600 hover:bg-yellow-700',
+  crunchyroll: 'bg-orange-500 hover:bg-orange-600',
+  showtime: 'bg-red-800 hover:bg-red-900',
+  starz: 'bg-gray-700 hover:bg-gray-800',
+  epix: 'bg-yellow-500 hover:bg-yellow-600',
+  youtube: 'bg-red-500 hover:bg-red-600',
+  fubotv: 'bg-orange-600 hover:bg-orange-700',
+  tubi: 'bg-orange-400 hover:bg-orange-500',
+  pluto: 'bg-cyan-600 hover:bg-cyan-700',
+  crackle: 'bg-black hover:bg-gray-900',
+  vudu: 'bg-blue-800 hover:bg-blue-900',
+  philo: 'bg-gray-800 hover:bg-gray-900',
+  nbc: 'bg-blue-700 hover:bg-blue-800',
 };
 
 export function WatchProviders({ mediaId, mediaType, country }: WatchProvidersProps) {
@@ -126,7 +112,8 @@ export function WatchProviders({ mediaId, mediaType, country }: WatchProvidersPr
     <div className="flex flex-wrap gap-2">
       {uniqueProviders.map((provider) => {
         const colorClass =
-          PROVIDER_COLORS[provider.provider_name] || 'bg-secondary hover:bg-secondary/80';
+          PROVIDER_COLORS[returnFirstWord(provider.provider_name)] ||
+          'bg-gray-800 hover:bg-gray-900';
 
         return (
           <Badge
