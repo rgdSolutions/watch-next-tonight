@@ -40,7 +40,7 @@ interface ContentDisplayWithQueryProps {
   onBackToPreferences: () => void;
 }
 
-const chooseInitialContentType = (preferences: {
+export const chooseInitialContentType = (preferences: {
   country: string;
   genres: string[];
   recency: string;
@@ -51,7 +51,11 @@ const chooseInitialContentType = (preferences: {
   }
 
   // highly popular movie-only genres
-  if (preferences.genres.includes('horror') || preferences.genres.includes('romance')) {
+  if (
+    preferences.genres.includes('horror') ||
+    preferences.genres.includes('romance') ||
+    preferences.genres.includes('thriller')
+  ) {
     return 'movie';
   }
 
@@ -65,7 +69,11 @@ const chooseInitialContentType = (preferences: {
   }
 
   // movie-only genres
-  if (preferences.genres.includes('history') || preferences.genres.includes('music')) {
+  if (
+    preferences.genres.includes('history') ||
+    preferences.genres.includes('music') ||
+    preferences.genres.includes('tvmovie')
+  ) {
     return 'movie';
   }
 

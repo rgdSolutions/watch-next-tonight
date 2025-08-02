@@ -3,7 +3,13 @@
 import { Calendar, Clock, Star } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { VideoPlayer } from '@/components/video-player';
 import { WatchProviders } from '@/components/watch-providers';
 import { useGenreLookup } from '@/hooks/use-genre-lookup';
@@ -55,6 +61,9 @@ export function TrailerModal({ item, isOpen, onClose, country = 'US' }: TrailerM
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl">{item.title}</DialogTitle>
+          <DialogDescription className="sr-only">
+            Watch trailer and details for {item.title}
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">
