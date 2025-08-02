@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 
+import { Analytics } from '@vercel/analytics/next';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
 
@@ -66,6 +67,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={inter.className}>
         <QueryProvider>{children}</QueryProvider>
+        <Analytics />
       </body>
     </html>
   );
