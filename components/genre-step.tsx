@@ -117,31 +117,33 @@ export function GenreStep({ onComplete }: GenreStepProps) {
                          md:grid-cols-4
                          lg:grid-cols-5"
           >
-            {genres.map((genre) => {
-              const isSelected = selectedGenres.includes(genre.id);
-              return (
-                <button
-                  key={genre.id}
-                  onClick={() => toggleGenre(genre.id)}
-                  className={cn(
-                    'p-3 rounded-lg border-2 transition-all duration-200 text-left',
-                    'hover:scale-105 hover:shadow-md',
-                    'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
-                    isSelected
-                      ? 'border-primary bg-primary text-primary-foreground shadow-lg scale-105'
-                      : 'border-border bg-background hover:border-primary/50'
-                  )}
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-lg mb-1">{genre.emoji}</div>
-                      <div className="text-sm font-medium">{genre.name}</div>
+            {genres
+              .filter((genre) => genre.id !== 'actionadventure') // Hide "Action & Adventure" since we show Action and Adventure separately
+              .map((genre) => {
+                const isSelected = selectedGenres.includes(genre.id);
+                return (
+                  <button
+                    key={genre.id}
+                    onClick={() => toggleGenre(genre.id)}
+                    className={cn(
+                      'p-3 rounded-lg border-2 transition-all duration-200 text-left',
+                      'hover:scale-105 hover:shadow-md',
+                      'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
+                      isSelected
+                        ? 'border-primary bg-primary text-primary-foreground shadow-lg scale-105'
+                        : 'border-border bg-background hover:border-primary/50'
+                    )}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="text-lg mb-1">{genre.emoji}</div>
+                        <div className="text-sm font-medium">{genre.name}</div>
+                      </div>
+                      {isSelected && !isAnyGenre && <Check className="w-4 h-4 flex-shrink-0" />}
                     </div>
-                    {isSelected && !isAnyGenre && <Check className="w-4 h-4 flex-shrink-0" />}
-                  </div>
-                </button>
-              );
-            })}
+                  </button>
+                );
+              })}
           </div>
 
           {/* Continue Button */}
