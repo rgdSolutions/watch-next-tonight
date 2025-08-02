@@ -6,7 +6,7 @@ On site load, the webapp should ask the user permission to obtain their country 
 
 Next, there should be a user-frienldy way for the user to multiple-choice, multi-select among popular genres, or simply choose the "any genre" answer. The experience of multi-selecting genres should be great UX and a fun, satisfying experience. This way, we have the list of possible genres to choose from.
 
-Next, there should be a user-friendly away for the user to select how recent the movie or show needs to be. Possible options could be:
+Next, there should be a user-friendly way for the user to select how recent the movie or show needs to be. Possible options could be:
 
 - Brand New (published in the last 3 months)
 - Very Recent (published in the last 18 months)
