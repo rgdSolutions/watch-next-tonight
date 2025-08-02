@@ -12,12 +12,16 @@ import {
 
 import { ContentDisplayWithQuery } from '../content-display-with-query';
 
-vi.mock('@/hooks/use-tmdb', () => ({
-  useMovieGenres: vi.fn(),
-  useTVGenres: vi.fn(),
-  useDiscoverMovies: vi.fn(),
-  useDiscoverTVShows: vi.fn(),
-}));
+vi.mock('@/hooks/use-tmdb', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...(actual as Record<string, any>),
+    useMovieGenres: vi.fn(),
+    useTVGenres: vi.fn(),
+    useDiscoverMovies: vi.fn(),
+    useDiscoverTVShows: vi.fn(),
+  };
+});
 
 // Mock the child components
 vi.mock('@/components/content-card', () => ({
@@ -270,7 +274,7 @@ describe('ContentDisplayWithQuery', () => {
       { wrapper: createWrapper() }
     );
 
-    fireEvent.click(screen.getByText('Change Preferences'));
+    fireEvent.click(screen.getByText('Start Over'));
     expect(mockOnBackToPreferences).toHaveBeenCalled();
   });
 
@@ -314,7 +318,10 @@ describe('ContentDisplayWithQuery', () => {
     // Should call discover with empty genre string when "any" is selected
     expect(vi.mocked(useDiscoverMovies)).toHaveBeenCalledWith(
       expect.objectContaining({
-        with_genres: '',
+        'primary_release_date.gte': '2025-02-02',
+        'primary_release_date.lte': '2025-08-02',
+        sort_by: 'popularity.desc',
+        watch_region: 'US',
       }),
       expect.any(Object)
     );

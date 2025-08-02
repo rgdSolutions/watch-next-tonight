@@ -1,6 +1,5 @@
 'use client';
 
-import { Switch } from '@radix-ui/react-switch';
 import { ArrowLeft, Filter } from 'lucide-react';
 import { useState } from 'react';
 
@@ -17,6 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Switch } from '@/components/ui/switch';
 import {
   useDiscoverMovies,
   useDiscoverTVShows,
@@ -154,7 +154,7 @@ export function ContentDisplayWithQuery({
   // Fetch movies and TV shows
   const { data: moviesData, isLoading: moviesLoading } = useDiscoverMovies(
     {
-      with_genres: movieGenreIds.join('|'),
+      ...(movieGenreIds.length > 0 && { with_genres: movieGenreIds.join('|') }),
       'primary_release_date.gte': dateRange.gte,
       'primary_release_date.lte': dateRange.lte,
       sort_by: 'popularity.desc',
@@ -165,13 +165,13 @@ export function ContentDisplayWithQuery({
       }),
     },
     {
-      enabled: contentType !== 'tv' && (movieGenres?.genres.length ?? 0) > 0,
+      enabled: contentType !== 'tv' && (isSurpriseMe || (movieGenres?.genres.length ?? 0) > 0),
     } as any
   );
 
   const { data: tvData, isLoading: tvLoading } = useDiscoverTVShows(
     {
-      with_genres: tvGenreIds.join('|'),
+      ...(tvGenreIds.length > 0 && { with_genres: tvGenreIds.join('|') }),
       'first_air_date.gte': dateRange.gte,
       'first_air_date.lte': dateRange.lte,
       sort_by: 'popularity.desc',
@@ -182,17 +182,25 @@ export function ContentDisplayWithQuery({
       }),
     },
     {
-      enabled: contentType !== 'movie' && (tvGenres?.genres.length ?? 0) > 0,
+      enabled: contentType !== 'movie' && (isSurpriseMe || (tvGenres?.genres.length ?? 0) > 0),
     } as any
   );
 
-  // Combine results based on content type filter
-  const allContent: MediaItem[] = [
+  // Combine results based on content type filter and tab
+  const searchContent: MediaItem[] = [
     ...(contentType !== 'movie' ? tvData?.results || [] : []),
     ...(contentType !== 'tv' ? moviesData?.results || [] : []),
   ];
 
-  const isLoading = moviesLoading || tvLoading;
+  const trendingContent: MediaItem[] = (trendingData?.results || []).filter((item) => {
+    if (contentType === 'all') return true;
+    return item.type === contentType;
+  });
+
+  const allContent = isSurpriseMe && tab === 'trending' ? trendingContent : searchContent;
+
+  const isLoading =
+    isSurpriseMe && tab === 'trending' ? !trendingData && isSurpriseMe : moviesLoading || tvLoading;
 
   let platforms = [
     { id: 'all', name: 'All Platforms' },
@@ -221,22 +229,35 @@ export function ContentDisplayWithQuery({
     <div data-testid="content-display" className="space-y-6">
       {/* Header with Back Button */}
       <div className="flex items-center justify-between flex-wrap">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={onBackToPreferences} className="gap-2">
+        <div className="flex items-center gap-4 flex-wrap">
+          <Button variant="outline" onClick={onBackToPreferences} className="gap-2">
             <ArrowLeft className="w-4 h-4" />
-            Change Preferences
+            Start Over
           </Button>
-          {/* TODO: If isSurpriseMe, display a switch to toggle between search and trending results */}
           {isSurpriseMe && (
-            <div className="flex items-center gap-2">
-              <Switch />
+            <div className="flex items-center gap-2 py-4">
+              <span className={tab === 'search' ? 'font-semibold' : 'text-muted-foreground'}>
+                🔍 Search
+              </span>
+              <Switch
+                checked={tab === 'trending'}
+                onCheckedChange={(checked) => setTab(checked ? 'trending' : 'search')}
+                aria-label="Toggle between search and trending results"
+              />
+              <span className={tab === 'trending' ? 'font-semibold' : 'text-muted-foreground'}>
+                Trending 🔥
+              </span>
             </div>
           )}
         </div>
 
         <div className="flex items-center gap-4">
-          <Select value={contentType} onValueChange={(value: any) => setContentType(value)}>
-            <SelectTrigger className="w-[156px]">
+          <Select
+            value={contentType}
+            onValueChange={(value: any) => setContentType(value)}
+            disabled={isSurpriseMe && tab === 'trending'}
+          >
+            <SelectTrigger className="w-[156px]" disabled={isSurpriseMe && tab === 'trending'}>
               <SelectValue placeholder="Content type" />
             </SelectTrigger>
             <SelectContent>
@@ -246,8 +267,12 @@ export function ContentDisplayWithQuery({
             </SelectContent>
           </Select>
 
-          <Select value={selectedPlatform} onValueChange={setSelectedPlatform}>
-            <SelectTrigger className="w-[160px]">
+          <Select
+            value={selectedPlatform}
+            onValueChange={setSelectedPlatform}
+            disabled={isSurpriseMe && tab === 'trending'}
+          >
+            <SelectTrigger className="w-[160px]" disabled={isSurpriseMe && tab === 'trending'}>
               <Filter className="w-4 h-4 mr-2" />
               <SelectValue placeholder="Filter by platform" />
             </SelectTrigger>
@@ -266,20 +291,30 @@ export function ContentDisplayWithQuery({
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">
-            {tab === 'search' ? 'Your Search Results' : 'Globally Trending Results'}
+            {isSurpriseMe && tab === 'trending'
+              ? 'Globally Trending Results'
+              : 'Your Search Results'}
           </CardTitle>
           <div className="flex flex-wrap gap-2 mt-4">
-            <Badge variant="secondary">Country: {FLAG_EMOJIS[preferences.country] ?? '🇺🇸'}</Badge>
-            <Badge variant="secondary">
-              Genres:{' '}
-              {preferences.genres.length
-                ? preferences.genres.map(capitalizeFirstLetter).join(', ')
-                : 'All'}
-            </Badge>
-            <Badge variant="secondary">Recency: {capitalizeFirstLetter(preferences.recency)}</Badge>
+            {tab === 'search' && (
+              <Badge variant="secondary">Country: {FLAG_EMOJIS[preferences.country] ?? '🇺🇸'}</Badge>
+            )}
+            {tab === 'search' && (
+              <Badge variant="secondary">
+                Genres:{' '}
+                {preferences.genres.length
+                  ? preferences.genres.map(capitalizeFirstLetter).join(', ')
+                  : 'All'}
+              </Badge>
+            )}
+            {tab === 'search' && (
+              <Badge variant="secondary">
+                Recency: {capitalizeFirstLetter(preferences.recency)}
+              </Badge>
+            )}
             <Badge variant="outline">{allContent.length} results found</Badge>
           </div>
-          {selectedPlatform === 'all' && (
+          {tab === 'search' && selectedPlatform === 'all' && (
             <p className="text-sm text-muted-foreground mt-2">
               * Includes some content that is only available for rent or purchase
             </p>
