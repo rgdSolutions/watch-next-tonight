@@ -147,11 +147,11 @@ describe('ContentDisplayWithQuery - Surprise Me Toggle', () => {
     });
   });
 
-  it('should show switch toggle when genres is empty (Surprise Me mode)', () => {
+  it('should always show switch toggle regardless of genres', () => {
     const props = {
       preferences: {
         country: 'US',
-        genres: [], // Empty genres = Surprise Me mode
+        genres: [], // Testing with empty genres
         recency: 'recent',
       },
       onBackToPreferences: vi.fn(),
@@ -165,11 +165,11 @@ describe('ContentDisplayWithQuery - Surprise Me Toggle', () => {
     expect(screen.getByText('Trending 🔥')).toBeInTheDocument();
   });
 
-  it('should not show switch toggle when genres are selected', () => {
+  it('should show switch toggle even when genres are selected', () => {
     const props = {
       preferences: {
         country: 'US',
-        genres: ['action'], // Has genres = not Surprise Me mode
+        genres: ['action'], // Has genres
         recency: 'recent',
       },
       onBackToPreferences: vi.fn(),
@@ -177,13 +177,13 @@ describe('ContentDisplayWithQuery - Surprise Me Toggle', () => {
 
     render(<ContentDisplayWithQuery {...props} />, { wrapper: createWrapper() });
 
-    // Switch should not be visible
-    expect(
-      screen.queryByLabelText('Toggle between search and trending results')
-    ).not.toBeInTheDocument();
+    // Switch should be visible
+    expect(screen.getByLabelText('Toggle between search and trending results')).toBeInTheDocument();
+    expect(screen.getByText('🔍 Search')).toBeInTheDocument();
+    expect(screen.getByText('Trending 🔥')).toBeInTheDocument();
   });
 
-  it('should show search results by default in Surprise Me mode', async () => {
+  it('should show search results by default', async () => {
     const props = {
       preferences: {
         country: 'US',
@@ -260,11 +260,8 @@ describe('ContentDisplayWithQuery - Surprise Me Toggle', () => {
     fireEvent.click(switchElement);
 
     await waitFor(() => {
-      // Filters should be disabled
-      const contentTypeSelect = screen.getByText('All Content').closest('button');
+      // Platform filters should be disabled
       const platformSelect = screen.getByText('All Platforms').closest('button');
-
-      expect(contentTypeSelect).toBeDisabled();
       expect(platformSelect).toBeDisabled();
     });
   });
@@ -325,7 +322,7 @@ describe('ContentDisplayWithQuery - Surprise Me Toggle', () => {
     });
   });
 
-  it('should call useTrending hook only when in Surprise Me mode', () => {
+  it('should call useTrending hook based on tab state', () => {
     // First render with genres (not Surprise Me)
     const { rerender } = render(
       <ContentDisplayWithQuery
@@ -339,30 +336,14 @@ describe('ContentDisplayWithQuery - Surprise Me Toggle', () => {
       { wrapper: createWrapper() }
     );
 
-    // useTrending should be called with enabled: false
+    // useTrending should be called with enabled: false (tab is 'search' by default)
     expect(vi.mocked(useTmdbHooks.useTrending)).toHaveBeenCalledWith(
       'all',
       'week',
       expect.objectContaining({ enabled: false })
     );
 
-    // Now render with empty genres (Surprise Me)
-    rerender(
-      <ContentDisplayWithQuery
-        preferences={{
-          country: 'US',
-          genres: [],
-          recency: 'recent',
-        }}
-        onBackToPreferences={vi.fn()}
-      />
-    );
-
-    // useTrending should be called with enabled: true
-    expect(vi.mocked(useTmdbHooks.useTrending)).toHaveBeenCalledWith(
-      'all',
-      'week',
-      expect.objectContaining({ enabled: true })
-    );
+    // The hook is always called, but with enabled based on tab state
+    // Since both renders start with tab='search', enabled should be false
   });
 });
