@@ -4,7 +4,7 @@ We are building an app called "Watch Next Tonight" where in a few clicks, the us
 
 On site load, the webapp should ask the user permission to obtain their country of location via the web browser. If the user denies permission, we can assume they are in the USA. This way, we have their country.
 
-Next, there should be a user-frienldy way for the user to multiple-choice, multi-select among popular genres, or simply choose the "any genre" answer. The experience of multi-selecting genres should be great UX and a fun, satisfying experience. This way, we have the list of possible genres to choose from.
+Next, there should be a user-friendly way for the user to multiple-choice, multi-select among popular genres, or simply choose the "any genre" answer. The experience of multi-selecting genres should be great UX and a fun, satisfying experience. This way, we have the list of possible genres to choose from.
 
 Next, there should be a user-friendly way for the user to select how recent the movie or show needs to be. Possible options could be:
 
