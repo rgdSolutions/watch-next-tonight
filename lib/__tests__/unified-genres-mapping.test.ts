@@ -52,10 +52,6 @@ describe('Unified Genres Mapping', () => {
     unifiedGenres.forEach((genre) => {
       expect(genre.movieIds.length).toBeGreaterThan(0);
       expect(genre.tvIds.length).toBeGreaterThan(0);
-
-      console.log(`Genre: ${genre.name} (${genre.id})`);
-      console.log(`  Movie IDs: ${genre.movieIds.join(', ')}`);
-      console.log(`  TV IDs: ${genre.tvIds.join(', ')}`);
     });
   });
 

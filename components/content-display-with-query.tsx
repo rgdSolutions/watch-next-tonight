@@ -314,7 +314,7 @@ export function ContentDisplayWithQuery({
             )}
             <Badge variant="outline">{allContent.length} results found</Badge>
           </div>
-          {tab === 'search' && selectedPlatform === 'all' && (
+          {(tab === 'trending' || selectedPlatform === 'all') && (
             <p className="text-sm text-muted-foreground mt-2">
               * Includes some content that is only available for rent or purchase
             </p>
