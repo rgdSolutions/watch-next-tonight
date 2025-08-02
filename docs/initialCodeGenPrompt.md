@@ -57,7 +57,7 @@ This app will not use any authentication.
 
 # Filtering Data
 
-All filtering will be done by the "server" by using valid filtering query paramenters in the API requests. No filtering will be done by the "client".
+All filtering will be done by the "server" by using valid filtering query parameters in the API requests. No filtering will be done by the "client".
 
 # Design
 
