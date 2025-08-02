@@ -36,7 +36,7 @@ A modern movie and TV show recommendation app built with Next.js 15, helping you
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/watch-next-tonight.git
+   git clone https://github.com/rgdSolutions/watch-next-tonight.git
    cd watch-next-tonight
    ```
 
@@ -209,7 +209,7 @@ This project is proprietary and confidential. All rights reserved.
 
 ## 📞 Support
 
-For issues and feature requests, please use the [GitHub Issues](https://github.com/yourusername/watch-next-tonight/issues) page.
+For issues and feature requests, please use the [GitHub Issues](https://github.com/rgdSolutions/watch-next-tonight/issues) page.
 
 ---
 
