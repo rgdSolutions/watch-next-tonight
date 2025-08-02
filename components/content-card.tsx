@@ -20,7 +20,7 @@ export function ContentCard({ item, onTrailerClick, onHide }: ContentCardProps) 
   const [isHovered, setIsHovered] = useState(false);
   const { getGenreWithEmoji } = useGenreLookup(item.type);
 
-  const handleShuffle = () => {
+  const handleHide = () => {
     onHide(item.id);
   };
 
@@ -37,7 +37,7 @@ export function ContentCard({ item, onTrailerClick, onHide }: ContentCardProps) 
       {/* Shuffle Button */}
       {isHovered && (
         <button
-          onClick={handleShuffle}
+          onClick={handleHide}
           className="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm 
                     flex items-center justify-center text-white hover:bg-black/80 transition-all duration-200
                     disabled:cursor-not-allowed disabled:opacity-50"
@@ -49,7 +49,7 @@ export function ContentCard({ item, onTrailerClick, onHide }: ContentCardProps) 
 
       <div className="flex gap-4 p-4">
         {/* Cover Art */}
-        <div className="flex-shrink-0" onClick={handleOpenModal}>
+        <div className="flex-shrink-0 cursor-pointer" onClick={handleOpenModal}>
           <div className="w-24 h-36 rounded-md overflow-hidden bg-muted">
             <img
               src={getTMDBImageUrl(item.posterPath, 'w500')}
