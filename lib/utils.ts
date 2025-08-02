@@ -10,5 +10,8 @@ export function capitalizeFirstLetter(str: string) {
 }
 
 export function returnFirstWord(str: string) {
+  if (typeof str !== 'string' || str.length === 0) {
+    return '';
+  }
   return str.split(' ')[0].toLowerCase();
 }
