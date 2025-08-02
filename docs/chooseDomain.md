@@ -2,11 +2,11 @@
 
 We are building an app where in a few clicks, the user can quickly narrow down a list of suggested movies or tv shows to watch tonight.
 
-We would like you to find, optimize and give us the list of no more than twenty of the best avialable domain names.
+We would like you to find, optimize and give us the list of no more than twenty of the best available domain names.
 
 ## Guidance and requirements for domains to choose
 
-Find us avilable domains that are:
+Find us available domains that are:
 
 - low-cost
 - high-quality
