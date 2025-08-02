@@ -128,10 +128,6 @@ const GENRE_FALLBACK_MAPPINGS: Record<string, { movie?: number; tv?: number }> =
 export function getUnifiedGenres(movieGenres: TMDBGenre[], tvGenres: TMDBGenre[]): UnifiedGenre[] {
   const unifiedMap = new Map<string, UnifiedGenre>();
 
-  // Create lookup maps for easy access
-  const movieGenreMap = new Map(movieGenres.map((g) => [g.id, g]));
-  const tvGenreMap = new Map(tvGenres.map((g) => [g.id, g]));
-
   // Process movie genres
   movieGenres.forEach((movieGenre) => {
     const baseId = normalizeGenreName(movieGenre.name);
