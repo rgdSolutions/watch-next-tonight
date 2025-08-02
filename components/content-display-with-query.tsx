@@ -1,5 +1,6 @@
 'use client';
 
+import { Switch } from '@radix-ui/react-switch';
 import { ArrowLeft, Filter } from 'lucide-react';
 import { useState } from 'react';
 
@@ -20,6 +21,7 @@ import {
   useDiscoverMovies,
   useDiscoverTVShows,
   useMovieGenres,
+  useTrending,
   useTVGenres,
 } from '@/hooks/use-tmdb';
 import { useUnifiedGenres } from '@/hooks/use-unified-genres';
@@ -84,6 +86,8 @@ export function ContentDisplayWithQuery({
   preferences,
   onBackToPreferences,
 }: ContentDisplayWithQueryProps) {
+  const isSurpriseMe = preferences.genres.length === 0;
+  const [tab, setTab] = useState<'search' | 'trending'>('search');
   const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
   const [contentType, setContentType] = useState<ContentType>(
     chooseInitialContentType(preferences)
@@ -92,6 +96,11 @@ export function ContentDisplayWithQuery({
   const [hiddenItems, setHiddenItems] = useState<string[]>([]);
 
   const handleHide = (itemId: string) => setHiddenItems((prev) => [...prev, itemId]);
+
+  const { data: trendingData } = useTrending('all', 'week', {
+    enabled: isSurpriseMe,
+    queryKey: ['trending', 'all', 'week'],
+  });
 
   // Get unified genres
   const { genres: unifiedGenres } = useUnifiedGenres();
@@ -212,10 +221,18 @@ export function ContentDisplayWithQuery({
     <div data-testid="content-display" className="space-y-6">
       {/* Header with Back Button */}
       <div className="flex items-center justify-between flex-wrap">
-        <Button variant="ghost" onClick={onBackToPreferences} className="gap-2">
-          <ArrowLeft className="w-4 h-4" />
-          Change Preferences
-        </Button>
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" onClick={onBackToPreferences} className="gap-2">
+            <ArrowLeft className="w-4 h-4" />
+            Change Preferences
+          </Button>
+          {/* TODO: If isSurpriseMe, display a switch to toggle between search and trending results */}
+          {isSurpriseMe && (
+            <div className="flex items-center gap-2">
+              <Switch />
+            </div>
+          )}
+        </div>
 
         <div className="flex items-center gap-4">
           <Select value={contentType} onValueChange={(value: any) => setContentType(value)}>
@@ -248,7 +265,9 @@ export function ContentDisplayWithQuery({
       {/* Results Summary */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Your Recommendations</CardTitle>
+          <CardTitle className="text-2xl">
+            {tab === 'search' ? 'Your Search Results' : 'Globally Trending Results'}
+          </CardTitle>
           <div className="flex flex-wrap gap-2 mt-4">
             <Badge variant="secondary">Country: {FLAG_EMOJIS[preferences.country] ?? '🇺🇸'}</Badge>
             <Badge variant="secondary">
