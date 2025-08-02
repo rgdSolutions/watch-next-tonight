@@ -34,7 +34,7 @@ export function ContentCard({ item, onTrailerClick, onHide }: ContentCardProps) 
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Shuffle Button */}
+      {/* Hide Button */}
       {isHovered && (
         <button
           onClick={handleHide}
