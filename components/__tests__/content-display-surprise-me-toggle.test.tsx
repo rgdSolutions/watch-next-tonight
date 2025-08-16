@@ -197,7 +197,7 @@ describe('ContentDisplayWithQuery - Surprise Me Toggle', () => {
 
     await waitFor(() => {
       // Should show search results
-      expect(screen.getByText('Your Search Results')).toBeInTheDocument();
+      expect(screen.getByText('🔍 Your Search Results')).toBeInTheDocument();
       expect(screen.getByText('Test Movie')).toBeInTheDocument();
 
       // Should not show trending results
@@ -224,7 +224,7 @@ describe('ContentDisplayWithQuery - Surprise Me Toggle', () => {
 
     await waitFor(() => {
       // Should show trending results
-      expect(screen.getByText('Globally Trending Results')).toBeInTheDocument();
+      expect(screen.getByText('🔥 Globally Trending Results')).toBeInTheDocument();
       expect(screen.getByText('Trending Movie')).toBeInTheDocument();
       expect(screen.getByText('Trending TV Show')).toBeInTheDocument();
 
