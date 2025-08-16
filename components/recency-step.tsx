@@ -85,7 +85,7 @@ export function RecencyStep({ onComplete, onBackToGenres }: RecencyStepProps) {
               isMobile && 'w-6 h-6'
             )}
           >
-            <Clock className="w-8 h-8 text-primary" />
+            <Clock className={cn('w-8 h-8 text-primary', isMobile && 'w-6 h-6')} />
           </div>
           <CardTitle className="text-2xl mb-2 pt-4">How recent should the content be?</CardTitle>
           <p className="text-muted-foreground">

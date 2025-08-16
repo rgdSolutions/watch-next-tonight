@@ -8,12 +8,12 @@ export const useIsMobileScreenWidth = (): boolean => {
     if (typeof window === 'undefined') {
       return false;
     }
-    return window.innerWidth < 640;
+    return window.innerWidth < MOBILE_BREAKPOINT_PX;
   });
 
   useEffect(() => {
     const handleResize = () => {
-      setMobile(window.innerWidth < 640);
+      setMobile(window.innerWidth < MOBILE_BREAKPOINT_PX);
     };
 
     window.addEventListener('resize', handleResize);
@@ -22,3 +22,5 @@ export const useIsMobileScreenWidth = (): boolean => {
 
   return mobile;
 };
+
+const MOBILE_BREAKPOINT_PX = 640;
