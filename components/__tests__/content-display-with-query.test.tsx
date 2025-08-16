@@ -7,6 +7,7 @@ import {
   useDiscoverMovies,
   useDiscoverTVShows,
   useMovieGenres,
+  useTrending,
   useTVGenres,
 } from '@/hooks/use-tmdb';
 
@@ -20,6 +21,10 @@ vi.mock('@/hooks/use-tmdb', async (importOriginal) => {
     useTVGenres: vi.fn(),
     useDiscoverMovies: vi.fn(),
     useDiscoverTVShows: vi.fn(),
+    useTrending: vi.fn(),
+    tmdbKeys: {
+      trending: (type: string, timeWindow: string) => ['trending', type, timeWindow],
+    },
   };
 });
 
@@ -96,6 +101,31 @@ const mockTVData = {
   ],
 };
 
+const mockTrendingData = {
+  results: [
+    {
+      id: 'tmdb-trending-1',
+      tmdbId: 3,
+      title: 'Trending Movie',
+      type: 'movie',
+      posterPath: '/poster3.jpg',
+      rating: 9.0,
+      releaseDate: '2024-03-01',
+      overview: 'A trending movie',
+    },
+    {
+      id: 'tmdb-trending-2',
+      tmdbId: 4,
+      title: 'Trending Show',
+      type: 'tv',
+      posterPath: '/poster4.jpg',
+      rating: 8.0,
+      releaseDate: '2024-03-15',
+      overview: 'A trending show',
+    },
+  ],
+};
+
 const createWrapper = () => {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -135,6 +165,11 @@ describe('ContentDisplayWithQuery', () => {
 
     vi.mocked(useDiscoverTVShows).mockReturnValue({
       data: mockTVData,
+      isLoading: false,
+    } as any);
+
+    vi.mocked(useTrending).mockReturnValue({
+      data: mockTrendingData,
       isLoading: false,
     } as any);
   });
@@ -473,6 +508,299 @@ describe('ContentDisplayWithQuery', () => {
       expect(
         screen.queryByText('* Includes some content that is only available for rent or purchase')
       ).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Trending Tab', () => {
+    it('should switch to trending tab and show trending content', async () => {
+      render(
+        <ContentDisplayWithQuery
+          preferences={mockPreferences}
+          onBackToPreferences={mockOnBackToPreferences}
+        />,
+        { wrapper: createWrapper() }
+      );
+
+      // Initially shows search results
+      expect(screen.getByText('🔍 Your Search Results')).toBeInTheDocument();
+      expect(screen.getByText('Test Movie 1')).toBeInTheDocument();
+      expect(screen.getByText('Test TV Show')).toBeInTheDocument();
+
+      // Click the switch to toggle to trending
+      const switchElement = screen.getByRole('switch', {
+        name: /toggle between search and trending/i,
+      });
+      fireEvent.click(switchElement);
+
+      // Should show trending content
+      await waitFor(() => {
+        expect(screen.getByText('🔥 Globally Trending Results')).toBeInTheDocument();
+        expect(screen.getByText('Trending Movie')).toBeInTheDocument();
+        expect(screen.getByText('Trending Show')).toBeInTheDocument();
+      });
+
+      // Should not show search results
+      expect(screen.queryByText('Test Movie 1')).not.toBeInTheDocument();
+      expect(screen.queryByText('Test TV Show')).not.toBeInTheDocument();
+    });
+
+    it('should show accent styling on Results Summary card when in trending mode', async () => {
+      const { container } = render(
+        <ContentDisplayWithQuery
+          preferences={mockPreferences}
+          onBackToPreferences={mockOnBackToPreferences}
+        />,
+        { wrapper: createWrapper() }
+      );
+
+      // Get the Results Summary card - it's the first Card with CardHeader
+      const cardElement = container.querySelector('[class*="transition-all duration-300"]');
+      expect(cardElement).toBeInTheDocument();
+
+      // Initially should not have accent classes
+      expect(cardElement?.className).not.toContain('border-orange');
+      expect(cardElement?.className).not.toContain('shadow-lg');
+
+      // Switch to trending
+      const switchElement = screen.getByRole('switch', {
+        name: /toggle between search and trending/i,
+      });
+      fireEvent.click(switchElement);
+
+      // Should have accent styling
+      await waitFor(() => {
+        const accentedCard = container.querySelector('[class*="border-orange"]');
+        expect(accentedCard).toBeInTheDocument();
+        expect(accentedCard?.className).toContain('border-2');
+        expect(accentedCard?.className).toContain('shadow-lg');
+      });
+    });
+
+    it('should apply gradient text to title in trending mode', async () => {
+      const { container } = render(
+        <ContentDisplayWithQuery
+          preferences={mockPreferences}
+          onBackToPreferences={mockOnBackToPreferences}
+        />,
+        { wrapper: createWrapper() }
+      );
+
+      // Initially title should not have gradient
+      const titleElement = screen.getByText('🔍 Your Search Results');
+      expect(titleElement.className).not.toContain('bg-gradient');
+
+      // Switch to trending
+      const switchElement = screen.getByRole('switch', {
+        name: /toggle between search and trending/i,
+      });
+      fireEvent.click(switchElement);
+
+      // Title should have gradient styling
+      await waitFor(() => {
+        const trendingTitle = screen.getByText('🔥 Globally Trending Results');
+        expect(trendingTitle.className).toContain('bg-gradient-to-r');
+        expect(trendingTitle.className).toContain('text-transparent');
+      });
+    });
+
+    it('should not show preferences badges in trending mode', async () => {
+      render(
+        <ContentDisplayWithQuery
+          preferences={mockPreferences}
+          onBackToPreferences={mockOnBackToPreferences}
+        />,
+        { wrapper: createWrapper() }
+      );
+
+      // Initially shows preferences badges
+      expect(screen.getByText('Country: 🇺🇸')).toBeInTheDocument();
+      expect(screen.getByText('Genres: Action, Comedy')).toBeInTheDocument();
+      expect(screen.getByText('Recency: Recent')).toBeInTheDocument();
+
+      // Switch to trending
+      const switchElement = screen.getByRole('switch', {
+        name: /toggle between search and trending/i,
+      });
+      fireEvent.click(switchElement);
+
+      // Should not show preferences badges
+      await waitFor(() => {
+        expect(screen.queryByText('Country: 🇺🇸')).not.toBeInTheDocument();
+        expect(screen.queryByText('Genres: Action, Comedy')).not.toBeInTheDocument();
+        expect(screen.queryByText('Recency: Recent')).not.toBeInTheDocument();
+      });
+    });
+
+    it('should disable platform filter when in trending mode', async () => {
+      render(
+        <ContentDisplayWithQuery
+          preferences={mockPreferences}
+          onBackToPreferences={mockOnBackToPreferences}
+        />,
+        { wrapper: createWrapper() }
+      );
+
+      // Platform filter should be enabled initially
+      const platformTrigger = screen.getByText('All Platforms').closest('button');
+      expect(platformTrigger).not.toBeDisabled();
+
+      // Switch to trending
+      const switchElement = screen.getByRole('switch', {
+        name: /toggle between search and trending/i,
+      });
+      fireEvent.click(switchElement);
+
+      // Platform filter should be disabled
+      await waitFor(() => {
+        const disabledPlatformTrigger = screen.getByText('All Platforms').closest('button');
+        expect(disabledPlatformTrigger).toBeDisabled();
+      });
+    });
+
+    it('should filter trending content by content type', async () => {
+      render(
+        <ContentDisplayWithQuery
+          preferences={mockPreferences}
+          onBackToPreferences={mockOnBackToPreferences}
+        />,
+        { wrapper: createWrapper() }
+      );
+
+      // Switch to trending
+      const switchElement = screen.getByRole('switch', {
+        name: /toggle between search and trending/i,
+      });
+      fireEvent.click(switchElement);
+
+      // Initially shows all trending content
+      await waitFor(() => {
+        expect(screen.getByText('Trending Movie')).toBeInTheDocument();
+        expect(screen.getByText('Trending Show')).toBeInTheDocument();
+      });
+
+      // Filter to movies only
+      const contentTypeSelect = screen.getByText('All Content');
+      fireEvent.click(contentTypeSelect);
+      fireEvent.click(screen.getByText('Movies Only'));
+
+      // Should only show trending movies
+      await waitFor(() => {
+        expect(screen.getByText('Trending Movie')).toBeInTheDocument();
+        expect(screen.queryByText('Trending Show')).not.toBeInTheDocument();
+      });
+    });
+
+    it('should show correct results count for trending content', async () => {
+      render(
+        <ContentDisplayWithQuery
+          preferences={mockPreferences}
+          onBackToPreferences={mockOnBackToPreferences}
+        />,
+        { wrapper: createWrapper() }
+      );
+
+      // Initially shows search results count
+      expect(screen.getByText('2 results found')).toBeInTheDocument();
+
+      // Switch to trending
+      const switchElement = screen.getByRole('switch', {
+        name: /toggle between search and trending/i,
+      });
+      fireEvent.click(switchElement);
+
+      // Should show trending results count
+      await waitFor(() => {
+        expect(screen.getByText('2 results found')).toBeInTheDocument(); // 2 trending items
+      });
+    });
+
+    it('should maintain tab state when filtering content type', async () => {
+      render(
+        <ContentDisplayWithQuery
+          preferences={mockPreferences}
+          onBackToPreferences={mockOnBackToPreferences}
+        />,
+        { wrapper: createWrapper() }
+      );
+
+      // Switch to trending
+      const switchElement = screen.getByRole('switch', {
+        name: /toggle between search and trending/i,
+      });
+      fireEvent.click(switchElement);
+
+      await waitFor(() => {
+        expect(screen.getByText('🔥 Globally Trending Results')).toBeInTheDocument();
+      });
+
+      // Filter content type
+      const contentTypeSelect = screen.getByText('All Content');
+      fireEvent.click(contentTypeSelect);
+      fireEvent.click(screen.getByText('Movies Only'));
+
+      // Should still be in trending mode
+      await waitFor(() => {
+        expect(screen.getByText('🔥 Globally Trending Results')).toBeInTheDocument();
+      });
+    });
+
+    it('should show platform disclaimer in trending mode', async () => {
+      render(
+        <ContentDisplayWithQuery
+          preferences={mockPreferences}
+          onBackToPreferences={mockOnBackToPreferences}
+        />,
+        { wrapper: createWrapper() }
+      );
+
+      // Switch to trending
+      const switchElement = screen.getByRole('switch', {
+        name: /toggle between search and trending/i,
+      });
+      fireEvent.click(switchElement);
+
+      // Should show disclaimer since trending content includes all platforms
+      await waitFor(() => {
+        expect(
+          screen.getByText('* Includes some content that is only available for rent or purchase')
+        ).toBeInTheDocument();
+      });
+    });
+
+    it('should call useTrending hook with correct parameters', async () => {
+      render(
+        <ContentDisplayWithQuery
+          preferences={mockPreferences}
+          onBackToPreferences={mockOnBackToPreferences}
+        />,
+        { wrapper: createWrapper() }
+      );
+
+      // Initially, useTrending should be called but disabled
+      expect(vi.mocked(useTrending)).toHaveBeenCalledWith(
+        'all',
+        'week',
+        expect.objectContaining({
+          enabled: false,
+        })
+      );
+
+      // Switch to trending
+      const switchElement = screen.getByRole('switch', {
+        name: /toggle between search and trending/i,
+      });
+      fireEvent.click(switchElement);
+
+      // Should enable the trending query
+      await waitFor(() => {
+        expect(vi.mocked(useTrending)).toHaveBeenCalledWith(
+          'all',
+          'week',
+          expect.objectContaining({
+            enabled: true,
+          })
+        );
+      });
     });
   });
 });
