@@ -1,7 +1,6 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { ContentDisplayWithQuery } from '@/components/content-display-with-query';
@@ -9,7 +8,7 @@ import { GenreStep } from '@/components/genre-step';
 import { LoadingScreen } from '@/components/loading-screen';
 import { LocationStep } from '@/components/location-step';
 import { RecencyStep } from '@/components/recency-step';
-import { Button } from '@/components/ui/button';
+import { useIsMobileScreenWidth } from '@/hooks/use-is-mobile-screen-width';
 import { tmdbPrefetch } from '@/hooks/use-tmdb';
 
 export type RecencyOption = 'brand-new' | 'very-recent' | 'recent' | 'contemporary' | 'any';
@@ -23,6 +22,7 @@ interface UserPreferences {
 type Step = 'location' | 'genres' | 'recency' | 'results';
 
 export default function Home() {
+  const isMobile = useIsMobileScreenWidth();
   const [currentStep, setCurrentStep] = useState<Step>('location');
   const [preferences, setPreferences] = useState<Partial<UserPreferences>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -78,12 +78,14 @@ export default function Home() {
           >
             Watch Next Tonight
           </h1>
-          <p
-            className="text-muted-foreground text-lg
+          {!isMobile && (
+            <p
+              className="text-muted-foreground text-lg
                        md:text-xl"
-          >
-            Find your perfect movie or show in just a few clicks
-          </p>
+            >
+              Find your perfect movie or show in just a few clicks
+            </p>
+          )}
         </div>
 
         {/* Step Components */}

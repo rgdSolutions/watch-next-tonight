@@ -4,11 +4,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState } from 'react';
 
+import { useIsMobileScreenWidth } from '@/hooks/use-is-mobile-screen-width';
+
 interface QueryProviderProps {
   children: React.ReactNode;
 }
 
 export function QueryProvider({ children }: QueryProviderProps) {
+  const isMobile = useIsMobileScreenWidth();
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -40,7 +43,7 @@ export function QueryProvider({ children }: QueryProviderProps) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {!isMobile && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 }

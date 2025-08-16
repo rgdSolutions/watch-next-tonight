@@ -14,7 +14,8 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "killall": "lsof -ti:3000,3001,3002 | xargs kill -9 2>/dev/null; echo 'Killed processes on ports 3000, 3001, and 3002'"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.0",

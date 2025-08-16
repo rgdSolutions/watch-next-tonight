@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { RecencyOption } from '@/app/page';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useIsMobileScreenWidth } from '@/hooks/use-is-mobile-screen-width';
 import { cn } from '@/lib/utils';
 
 interface RecencyStepProps {
@@ -52,6 +53,7 @@ export const RECENCY_OPTIONS = [
 ];
 
 export function RecencyStep({ onComplete, onBackToGenres }: RecencyStepProps) {
+  const isMobile = useIsMobileScreenWidth();
   const [selectedRecency, setSelectedRecency] = useState<RecencyOption | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -77,7 +79,12 @@ export function RecencyStep({ onComplete, onBackToGenres }: RecencyStepProps) {
             </Button>
           </div>
 
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+          <div
+            className={cn(
+              'w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center',
+              isMobile && 'w-6 h-6'
+            )}
+          >
             <Clock className="w-8 h-8 text-primary" />
           </div>
           <CardTitle className="text-2xl mb-2 pt-4">How recent should the content be?</CardTitle>
@@ -112,14 +119,16 @@ export function RecencyStep({ onComplete, onBackToGenres }: RecencyStepProps) {
                     <div className="text-2xl">{option.emoji}</div>
                     <div>
                       <div className="font-semibold text-base mb-1">{option.name}</div>
-                      <div
-                        className={cn(
-                          'text-sm',
-                          isSelected ? 'text-primary-foreground/80' : 'text-muted-foreground'
-                        )}
-                      >
-                        {option.description}
-                      </div>
+                      {!isMobile && (
+                        <div
+                          className={cn(
+                            'text-sm',
+                            isSelected ? 'text-primary-foreground/80' : 'text-muted-foreground'
+                          )}
+                        >
+                          {option.description}
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
