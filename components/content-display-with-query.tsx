@@ -29,6 +29,7 @@ import { useUnifiedGenres } from '@/hooks/use-unified-genres';
 import { FLAG_EMOJIS } from '@/lib/country-codes';
 import { getProviderIdsForPlatform } from '@/lib/streaming-providers';
 import { unifiedGenresToTMDBIds } from '@/lib/unified-genres';
+import { cn } from '@/lib/utils';
 import { capitalizeFirstLetter } from '@/lib/utils';
 import { MediaItem } from '@/types/tmdb';
 
@@ -281,10 +282,26 @@ export function ContentDisplayWithQuery({
       </div>
 
       {/* Results Summary */}
-      <Card>
+      <Card
+        className={cn(
+          'transition-all duration-300',
+          tab === 'trending' && [
+            'border-2',
+            'border-orange-500/50 dark:border-orange-400/50',
+            'bg-gradient-to-br from-orange-50/50 to-amber-50/30 dark:from-orange-950/20 dark:to-amber-950/10',
+            'shadow-lg shadow-orange-200/30 dark:shadow-orange-900/20',
+          ]
+        )}
+      >
         <CardHeader>
-          <CardTitle className="text-2xl">
-            {tab === 'trending' ? 'Globally Trending Results' : 'Your Search Results'}
+          <CardTitle
+            className={cn(
+              'text-2xl',
+              tab === 'trending' &&
+                'bg-gradient-to-r from-orange-600 to-amber-600 dark:from-orange-400 dark:to-amber-400 bg-clip-text text-transparent'
+            )}
+          >
+            {tab === 'trending' ? '🔥 Globally Trending Results' : 'Your Search Results'}
           </CardTitle>
           <div className="flex flex-wrap gap-2 mt-4">
             {tab === 'search' && (
