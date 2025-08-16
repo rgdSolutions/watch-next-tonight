@@ -301,7 +301,7 @@ export function ContentDisplayWithQuery({
                 'bg-gradient-to-r from-orange-600 to-amber-600 dark:from-orange-400 dark:to-amber-400 bg-clip-text text-transparent'
             )}
           >
-            {tab === 'trending' ? '🔥 Globally Trending Results' : 'Your Search Results'}
+            {tab === 'trending' ? '🔥 Globally Trending Results' : '🔍 Your Search Results'}
           </CardTitle>
           <div className="flex flex-wrap gap-2 mt-4">
             {tab === 'search' && (
