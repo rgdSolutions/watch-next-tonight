@@ -29,8 +29,7 @@ import { useUnifiedGenres } from '@/hooks/use-unified-genres';
 import { FLAG_EMOJIS } from '@/lib/country-codes';
 import { getProviderIdsForPlatform } from '@/lib/streaming-providers';
 import { unifiedGenresToTMDBIds } from '@/lib/unified-genres';
-import { cn } from '@/lib/utils';
-import { capitalizeFirstLetter } from '@/lib/utils';
+import { capitalizeFirstLetter, cn } from '@/lib/utils';
 import { MediaItem } from '@/types/tmdb';
 
 type ContentType = 'all' | 'movie' | 'tv';
