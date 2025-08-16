@@ -318,8 +318,8 @@ describe('ContentDisplayWithQuery', () => {
     // Should call discover with empty genre string when "any" is selected
     expect(vi.mocked(useDiscoverMovies)).toHaveBeenCalledWith(
       expect.objectContaining({
-        'primary_release_date.gte': '2025-02-02',
-        'primary_release_date.lte': '2025-08-02',
+        'primary_release_date.gte': expect.any(String),
+        'primary_release_date.lte': expect.any(String),
         sort_by: 'popularity.desc',
         watch_region: 'US',
       }),

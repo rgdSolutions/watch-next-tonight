@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useIsMobileScreenWidth } from '@/hooks/use-is-mobile-screen-width';
 import { useUnifiedGenres } from '@/hooks/use-unified-genres';
 import { cn } from '@/lib/utils';
 
@@ -13,6 +14,7 @@ interface GenreStepProps {
 }
 
 export function GenreStep({ onComplete }: GenreStepProps) {
+  const isMobile = useIsMobileScreenWidth();
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [isAnyGenre, setIsAnyGenre] = useState(false);
   const { genres, isLoading, error } = useUnifiedGenres();
@@ -30,6 +32,7 @@ export function GenreStep({ onComplete }: GenreStepProps) {
   const selectAnyGenre = () => {
     setIsAnyGenre(true);
     setSelectedGenres([]);
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
   };
 
   const handleContinue = () => {
@@ -38,6 +41,7 @@ export function GenreStep({ onComplete }: GenreStepProps) {
     } else {
       onComplete(selectedGenres);
     }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const canContinue = isAnyGenre || selectedGenres.length > 0;
@@ -74,13 +78,18 @@ export function GenreStep({ onComplete }: GenreStepProps) {
     <div className="max-w-4xl mx-auto">
       <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
         <CardHeader className="text-center">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-            <Sparkles className="w-8 h-8 text-primary" />
-          </div>
+          {!isMobile && (
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+              <Sparkles className="w-8 h-8 text-primary" />
+            </div>
+          )}
           <CardTitle className="text-2xl mb-2">What genres are you in the mood for?</CardTitle>
-          <p className="text-muted-foreground">
-            Select one or more genres, or choose &quot;Any Genre&quot; for surprise recommendations
-          </p>
+          {!isMobile && (
+            <p className="text-muted-foreground">
+              Select one or more genres, or choose &quot;Any Genre&quot; for surprise
+              recommendations
+            </p>
+          )}
         </CardHeader>
 
         <CardContent className="space-y-6">
@@ -112,8 +121,7 @@ export function GenreStep({ onComplete }: GenreStepProps) {
 
           {/* Genre Grid */}
           <div
-            className="grid grid-cols-2 gap-3
-                         sm:grid-cols-3
+            className="grid grid-cols-3 gap-3
                          md:grid-cols-4
                          lg:grid-cols-5"
           >

@@ -6,6 +6,8 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
 
+import { ThemeProvider } from '@/components/theme-provider';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { QueryProvider } from '@/providers/query-provider';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -67,9 +69,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
       </head>
       <body className={inter.className}>
-        <QueryProvider>{children}</QueryProvider>
-        <Analytics />
-        <SpeedInsights />
+        <ThemeProvider defaultTheme="system" storageKey="watch-next-theme">
+          <QueryProvider>{children}</QueryProvider>
+          <ThemeToggle />
+          <Analytics />
+          <SpeedInsights />
+        </ThemeProvider>
       </body>
     </html>
   );
