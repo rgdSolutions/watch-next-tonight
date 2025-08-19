@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import Home from '@/app/page';
+import SearchPage from '@/app/search/page';
 
 // Simple mock implementations
 vi.mock('@/components/location-step', () => ({
@@ -74,7 +74,7 @@ describe('TMDB Integration Flow - Simplified', () => {
   });
 
   it('should complete the full user flow from location to results', async () => {
-    render(<Home />, { wrapper: createWrapper() });
+    render(<SearchPage />, { wrapper: createWrapper() });
 
     // Step 1: Location selection
     expect(screen.getByTestId('location-step')).toBeInTheDocument();
@@ -112,7 +112,7 @@ describe('TMDB Integration Flow - Simplified', () => {
   });
 
   it('should allow navigating back from results to genres step', async () => {
-    render(<Home />, { wrapper: createWrapper() });
+    render(<SearchPage />, { wrapper: createWrapper() });
 
     // Navigate to results
     fireEvent.click(screen.getByText('United States'));
@@ -140,7 +140,7 @@ describe('TMDB Integration Flow - Simplified', () => {
   it('should prefetch genre data on mount', async () => {
     const { tmdbPrefetch } = await import('@/hooks/use-tmdb');
 
-    render(<Home />, { wrapper: createWrapper() });
+    render(<SearchPage />, { wrapper: createWrapper() });
 
     await waitFor(() => {
       expect(tmdbPrefetch.movieGenres).toHaveBeenCalled();
@@ -151,7 +151,7 @@ describe('TMDB Integration Flow - Simplified', () => {
   it('should prefetch trending data before showing results', async () => {
     const { tmdbPrefetch } = await import('@/hooks/use-tmdb');
 
-    render(<Home />, { wrapper: createWrapper() });
+    render(<SearchPage />, { wrapper: createWrapper() });
 
     // Navigate to recency step
     fireEvent.click(screen.getByText('United States'));

@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import Home from '../page';
+import SearchPage from '../search/page';
 
 // Mock the child components
 vi.mock('@/components/location-step', () => ({
@@ -72,13 +72,13 @@ const createWrapper = () => {
   return Wrapper;
 };
 
-describe('Home Page', () => {
+describe('Search Page', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('should render the title and subtitle', () => {
-    render(<Home />, { wrapper: createWrapper() });
+    render(<SearchPage />, { wrapper: createWrapper() });
 
     expect(screen.getByText('Watch Next Tonight')).toBeInTheDocument();
     expect(
@@ -87,14 +87,14 @@ describe('Home Page', () => {
   });
 
   it('should start with location step', () => {
-    render(<Home />, { wrapper: createWrapper() });
+    render(<SearchPage />, { wrapper: createWrapper() });
 
     expect(screen.getByTestId('location-step')).toBeInTheDocument();
     expect(screen.queryByTestId('genre-step')).not.toBeInTheDocument();
   });
 
   it('should progress through all steps', async () => {
-    render(<Home />, { wrapper: createWrapper() });
+    render(<SearchPage />, { wrapper: createWrapper() });
 
     // Step 1: Location
     expect(screen.getByTestId('location-step')).toBeInTheDocument();
@@ -132,7 +132,7 @@ describe('Home Page', () => {
   });
 
   it('should show back button on recency step', async () => {
-    render(<Home />, { wrapper: createWrapper() });
+    render(<SearchPage />, { wrapper: createWrapper() });
 
     // Navigate to recency step
     fireEvent.click(screen.getByText('Select US'));
@@ -154,7 +154,7 @@ describe('Home Page', () => {
   });
 
   it('should show Change Preferences button on results and allow going back to genres', async () => {
-    render(<Home />, { wrapper: createWrapper() });
+    render(<SearchPage />, { wrapper: createWrapper() });
 
     // Navigate to results
     fireEvent.click(screen.getByText('Select US'));
@@ -189,7 +189,7 @@ describe('Home Page', () => {
   it('should prefetch genre data on mount', async () => {
     const { tmdbPrefetch } = await import('@/hooks/use-tmdb');
 
-    render(<Home />, { wrapper: createWrapper() });
+    render(<SearchPage />, { wrapper: createWrapper() });
 
     await waitFor(() => {
       expect(tmdbPrefetch.movieGenres).toHaveBeenCalled();
@@ -200,7 +200,7 @@ describe('Home Page', () => {
   it('should prefetch trending content before showing results', async () => {
     const { tmdbPrefetch } = await import('@/hooks/use-tmdb');
 
-    render(<Home />, { wrapper: createWrapper() });
+    render(<SearchPage />, { wrapper: createWrapper() });
 
     // Navigate to recency step
     fireEvent.click(screen.getByText('Select US'));
