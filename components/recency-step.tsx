@@ -3,7 +3,7 @@
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import { useState } from 'react';
 
-import { RecencyOption } from '@/app/page';
+import { RecencyOption } from '@/app/search/page';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useIsMobileScreenWidth } from '@/hooks/use-is-mobile-screen-width';

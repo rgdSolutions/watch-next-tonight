@@ -1,8 +1,13 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import Home from '../page';
+import SearchPage from '../page';
+
+// Mock the Header component
+vi.mock('@/components/header', () => ({
+  Header: () => <div data-testid="header">Watch Next Tonight</div>,
+}));
 
 // Mock the child components
 vi.mock('@/components/location-step', () => ({
@@ -56,6 +61,11 @@ vi.mock('@/hooks/use-tmdb', () => ({
   },
 }));
 
+// Mock the mobile hook
+vi.mock('@/hooks/use-is-mobile-screen-width', () => ({
+  useIsMobileScreenWidth: () => false,
+}));
+
 const createWrapper = () => {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -72,29 +82,27 @@ const createWrapper = () => {
   return Wrapper;
 };
 
-describe('Home Page', () => {
+describe('SearchPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should render the title and subtitle', () => {
-    render(<Home />, { wrapper: createWrapper() });
+  it('should render the header component', () => {
+    render(<SearchPage />, { wrapper: createWrapper() });
 
+    expect(screen.getByTestId('header')).toBeInTheDocument();
     expect(screen.getByText('Watch Next Tonight')).toBeInTheDocument();
-    expect(
-      screen.getByText('Find your perfect movie or show in just a few clicks')
-    ).toBeInTheDocument();
   });
 
   it('should start with location step', () => {
-    render(<Home />, { wrapper: createWrapper() });
+    render(<SearchPage />, { wrapper: createWrapper() });
 
     expect(screen.getByTestId('location-step')).toBeInTheDocument();
     expect(screen.queryByTestId('genre-step')).not.toBeInTheDocument();
   });
 
   it('should progress through all steps', async () => {
-    render(<Home />, { wrapper: createWrapper() });
+    render(<SearchPage />, { wrapper: createWrapper() });
 
     // Step 1: Location
     expect(screen.getByTestId('location-step')).toBeInTheDocument();
@@ -132,7 +140,7 @@ describe('Home Page', () => {
   });
 
   it('should show back button on recency step', async () => {
-    render(<Home />, { wrapper: createWrapper() });
+    render(<SearchPage />, { wrapper: createWrapper() });
 
     // Navigate to recency step
     fireEvent.click(screen.getByText('Select US'));
@@ -154,7 +162,7 @@ describe('Home Page', () => {
   });
 
   it('should show Change Preferences button on results and allow going back to genres', async () => {
-    render(<Home />, { wrapper: createWrapper() });
+    render(<SearchPage />, { wrapper: createWrapper() });
 
     // Navigate to results
     fireEvent.click(screen.getByText('Select US'));
@@ -189,7 +197,7 @@ describe('Home Page', () => {
   it('should prefetch genre data on mount', async () => {
     const { tmdbPrefetch } = await import('@/hooks/use-tmdb');
 
-    render(<Home />, { wrapper: createWrapper() });
+    render(<SearchPage />, { wrapper: createWrapper() });
 
     await waitFor(() => {
       expect(tmdbPrefetch.movieGenres).toHaveBeenCalled();
@@ -200,7 +208,7 @@ describe('Home Page', () => {
   it('should prefetch trending content before showing results', async () => {
     const { tmdbPrefetch } = await import('@/hooks/use-tmdb');
 
-    render(<Home />, { wrapper: createWrapper() });
+    render(<SearchPage />, { wrapper: createWrapper() });
 
     // Navigate to recency step
     fireEvent.click(screen.getByText('Select US'));
@@ -214,5 +222,17 @@ describe('Home Page', () => {
     await waitFor(() => {
       expect(tmdbPrefetch.trending).toHaveBeenCalled();
     });
+  });
+
+  it('should have proper layout structure', () => {
+    const { container } = render(<SearchPage />, { wrapper: createWrapper() });
+
+    // Check for gradient background
+    const mainContainer = container.querySelector('.min-h-screen.bg-gradient-to-br');
+    expect(mainContainer).toBeInTheDocument();
+
+    // Check for container with proper spacing
+    const contentContainer = container.querySelector('.container.mx-auto.px-4.py-8');
+    expect(contentContainer).toBeInTheDocument();
   });
 });

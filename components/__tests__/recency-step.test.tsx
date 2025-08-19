@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { RecencyOption } from '@/app/page';
+import { RecencyOption } from '@/app/search/page';
 
 import { RECENCY_OPTIONS, RecencyStep } from '../recency-step';
 
