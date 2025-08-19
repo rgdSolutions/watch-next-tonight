@@ -17,11 +17,11 @@ export default function LandingPage() {
         <div className="flex flex-col md:flex-row gap-6 justify-center items-stretch">
           <Link href="/search" className="group block w-full md:w-96">
             <div className="relative bg-gradient-to-br from-purple-600 to-blue-600 p-1 rounded-3xl shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105 h-full">
-              <div className="bg-background dark:bg-slate-900 rounded-3xl px-6 sm:px-12 py-8 sm:py-16 border border-purple-500/20 h-full flex flex-col justify-center">
-                <div className="space-y-6">
-                  <div className="bg-gradient-to-r from-purple-500 to-blue-500 rounded-full p-6 mx-auto w-fit group-hover:scale-110 transition-transform">
+              <div className="bg-background dark:bg-slate-900 rounded-3xl px-6 sm:px-12 py-6 sm:py-16 border border-purple-500/20 h-full flex flex-col justify-center">
+                <div className="space-y-3 sm:space-y-6">
+                  <div className="bg-gradient-to-r from-purple-500 to-blue-500 rounded-full p-3 sm:p-6 mx-auto w-fit group-hover:scale-110 transition-transform">
                     <svg
-                      className="w-16 h-16 text-white"
+                      className="w-10 sm:w-16 h-10 sm:h-16 text-white"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
@@ -34,11 +34,11 @@ export default function LandingPage() {
                       />
                     </svg>
                   </div>
-                  <div className="space-y-3">
-                    <p className="text-2xl md:text-3xl font-bold text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-blue-400 transition-all">
+                  <div className="space-y-2 sm:space-y-3">
+                    <p className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-blue-400 transition-all">
                       Start Searching
                     </p>
-                    <p className="text-base text-muted-foreground">
+                    <p className="text-sm sm:text-base text-muted-foreground">
                       Share your location for
                       <br />
                       personalized recommendations
@@ -67,18 +67,22 @@ export default function LandingPage() {
 
           <Link href="/trending" className="group block w-full md:w-96">
             <div className="relative bg-gradient-to-br from-orange-600 to-red-600 p-1 rounded-3xl shadow-2xl hover:shadow-orange-500/50 transition-all duration-300 transform hover:scale-105 h-full">
-              <div className="bg-background dark:bg-slate-900 rounded-3xl px-6 sm:px-12 py-8 sm:py-16 border border-orange-500/20 h-full flex flex-col justify-center">
-                <div className="space-y-6">
-                  <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-full p-6 mx-auto w-fit group-hover:scale-110 transition-transform">
-                    <svg className="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <div className="bg-background dark:bg-slate-900 rounded-3xl px-6 sm:px-12 py-6 sm:py-16 border border-orange-500/20 h-full flex flex-col justify-center">
+                <div className="space-y-3 sm:space-y-6">
+                  <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-full p-3 sm:p-6 mx-auto w-fit group-hover:scale-110 transition-transform">
+                    <svg
+                      className="w-10 sm:w-16 h-10 sm:h-16 text-white"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
                       <path d="M19.48 12.35c-1.57-4.08-7.16-4.3-5.81-10.23c.1-.44-.37-.78-.75-.55C9.29 3.71 6.68 8 8.87 13.62c.18.46-.36.89-.75.59c-1.81-1.37-2-3.34-1.84-4.75c.06-.52-.62-.77-.91-.34C4.69 10.16 4 11.84 4 14.37c.38 5.6 5.11 7.32 6.81 7.54c2.43.31 5.06-.14 6.95-1.87c2.08-1.93 2.84-5.01 1.72-7.69zm-9.28 5.03c1.44.35 2.18-1.39 1.38-1.95c-.69-.48-1.94-.48-2.63 0c-.79.56-.06 2.3 1.25 1.95z" />
                     </svg>
                   </div>
-                  <div className="space-y-3">
-                    <p className="text-2xl md:text-3xl font-bold text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-orange-400 group-hover:to-red-400 transition-all">
+                  <div className="space-y-2 sm:space-y-3">
+                    <p className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-orange-400 group-hover:to-red-400 transition-all">
                       Trending Now
                     </p>
-                    <p className="text-base text-muted-foreground">
+                    <p className="text-sm sm:text-base text-muted-foreground">
                       In a hurry? See what&apos;s
                       <br />
                       hot globally right now
