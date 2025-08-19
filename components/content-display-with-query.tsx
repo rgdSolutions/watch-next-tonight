@@ -90,7 +90,7 @@ export function ContentDisplayWithQuery({
 }: ContentDisplayWithQueryProps) {
   const isSearchPage = preferences && onBackToPreferences;
   const router = useRouter();
-  const [tab, setTab] = useState<'search' | 'trending'>('search');
+  const [tab, setTab] = useState<'search' | 'trending'>(isSearchPage ? 'search' : 'trending');
   const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
   const [contentType, setContentType] = useState<ContentType>(
     isSearchPage ? chooseInitialContentType(preferences) : 'all'
@@ -321,13 +321,11 @@ export function ContentDisplayWithQuery({
           <CardTitle
             className={cn(
               'text-2xl',
-              (tab === 'trending' || !isSearchPage) &&
+              tab === 'trending' &&
                 'bg-gradient-to-r from-orange-600 to-amber-600 dark:from-orange-400 dark:to-amber-400 bg-clip-text text-transparent'
             )}
           >
-            {tab === 'trending' || !isSearchPage
-              ? '🔥 Globally Trending Results'
-              : '🔍 Your Search Results'}
+            {tab === 'trending' ? '🔥 Globally Trending Results' : '🔍 Your Search Results'}
           </CardTitle>
           {isSearchPage && (
             <div className="flex flex-wrap gap-2 mt-4">
