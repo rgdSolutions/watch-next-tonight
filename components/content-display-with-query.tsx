@@ -1,6 +1,7 @@
 'use client';
 
 import { ArrowLeft, Filter } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { ContentCard } from '@/components/content-card';
@@ -35,12 +36,12 @@ import { MediaItem } from '@/types/tmdb';
 type ContentType = 'all' | 'movie' | 'tv';
 
 interface ContentDisplayWithQueryProps {
-  preferences: {
+  preferences?: {
     country: string;
     genres: string[];
     recency: string;
   };
-  onBackToPreferences: () => void;
+  onBackToPreferences?: () => void;
 }
 
 export const chooseInitialContentType = (preferences: {
@@ -87,15 +88,21 @@ export function ContentDisplayWithQuery({
   preferences,
   onBackToPreferences,
 }: ContentDisplayWithQueryProps) {
+  const isSearchPage = preferences && onBackToPreferences;
+  const router = useRouter();
   const [tab, setTab] = useState<'search' | 'trending'>('search');
   const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
   const [contentType, setContentType] = useState<ContentType>(
-    chooseInitialContentType(preferences)
+    isSearchPage ? chooseInitialContentType(preferences) : 'all'
   );
   const [selectedTrailer, setSelectedTrailer] = useState<MediaItem | null>(null);
   const [hiddenItems, setHiddenItems] = useState<string[]>([]);
 
   const handleHide = (itemId: string) => setHiddenItems((prev) => [...prev, itemId]);
+
+  const handleGoToLandingPage = () => {
+    router.push('/');
+  };
 
   const { data: trendingData } = useTrending(contentType, 'week', {
     enabled: tab === 'trending',
@@ -110,6 +117,8 @@ export function ContentDisplayWithQuery({
 
   // Calculate date range based on recency preference
   const getDateRange = () => {
+    if (!preferences) return { gte: '', lte: '' };
+
     const now = new Date();
     const startDate = new Date();
 
@@ -139,11 +148,11 @@ export function ContentDisplayWithQuery({
   const dateRange = getDateRange();
   // Convert unified genre IDs to TMDB IDs
   const movieGenreIds =
-    preferences.genres.length === 0
+    !preferences || preferences.genres.length === 0
       ? []
       : unifiedGenresToTMDBIds(preferences.genres, unifiedGenres, 'movie');
   const tvGenreIds =
-    preferences.genres.length === 0
+    !preferences || preferences.genres.length === 0
       ? []
       : unifiedGenresToTMDBIds(preferences.genres, unifiedGenres, 'tv');
 
@@ -158,14 +167,18 @@ export function ContentDisplayWithQuery({
       'primary_release_date.gte': dateRange.gte,
       'primary_release_date.lte': dateRange.lte,
       sort_by: 'popularity.desc',
-      watch_region: preferences.country,
+      watch_region: preferences?.country,
       ...(watchProviderIds && {
         with_watch_providers: watchProviderIds,
         with_watch_monetization_types: 'flatrate|rent|buy',
       }),
     },
     {
-      enabled: tab === 'search' && contentType !== 'tv' && (movieGenres?.genres.length ?? 0) > 0,
+      enabled:
+        preferences &&
+        tab === 'search' &&
+        contentType !== 'tv' &&
+        (movieGenres?.genres.length ?? 0) > 0,
     } as any
   );
 
@@ -175,14 +188,18 @@ export function ContentDisplayWithQuery({
       'first_air_date.gte': dateRange.gte,
       'first_air_date.lte': dateRange.lte,
       sort_by: 'popularity.desc',
-      watch_region: preferences.country,
+      watch_region: preferences?.country,
       ...(watchProviderIds && {
         with_watch_providers: watchProviderIds,
         with_watch_monetization_types: 'flatrate|rent|buy',
       }),
     },
     {
-      enabled: tab === 'search' && contentType !== 'movie' && (tvGenres?.genres.length ?? 0) > 0,
+      enabled:
+        preferences &&
+        tab === 'search' &&
+        contentType !== 'movie' &&
+        (tvGenres?.genres.length ?? 0) > 0,
     } as any
   );
 
@@ -212,7 +229,7 @@ export function ContentDisplayWithQuery({
     { id: 'crunchyroll', name: 'Crunchyroll' },
   ];
 
-  if (preferences.country === 'US') {
+  if (preferences?.country === 'US') {
     platforms = [
       ...platforms,
       { id: 'hulu', name: 'Hulu' },
@@ -229,23 +246,29 @@ export function ContentDisplayWithQuery({
       {/* Header with Back Button */}
       <div className="flex items-center justify-between flex-wrap">
         <div className="flex items-center gap-4 flex-wrap">
-          <Button variant="outline" onClick={onBackToPreferences} className="gap-2">
+          <Button
+            variant="outline"
+            onClick={isSearchPage ? onBackToPreferences : handleGoToLandingPage}
+            className="gap-2"
+          >
             <ArrowLeft className="w-4 h-4" />
             Start Over
           </Button>
-          <div className="flex items-center gap-2 py-4">
-            <span className={tab === 'search' ? 'font-semibold' : 'text-muted-foreground'}>
-              🔍 Search
-            </span>
-            <Switch
-              checked={tab === 'trending'}
-              onCheckedChange={(checked) => setTab(checked ? 'trending' : 'search')}
-              aria-label="Toggle between search and trending results"
-            />
-            <span className={tab === 'trending' ? 'font-semibold' : 'text-muted-foreground'}>
-              Trending 🔥
-            </span>
-          </div>
+          {isSearchPage && (
+            <div className="flex items-center gap-2 py-4">
+              <span className={tab === 'search' ? 'font-semibold' : 'text-muted-foreground'}>
+                🔍 Search
+              </span>
+              <Switch
+                checked={tab === 'trending'}
+                onCheckedChange={(checked) => setTab(checked ? 'trending' : 'search')}
+                aria-label="Toggle between search and trending results"
+              />
+              <span className={tab === 'trending' ? 'font-semibold' : 'text-muted-foreground'}>
+                Trending 🔥
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="flex items-center gap-4">
@@ -260,23 +283,25 @@ export function ContentDisplayWithQuery({
             </SelectContent>
           </Select>
 
-          <Select
-            value={selectedPlatform}
-            onValueChange={setSelectedPlatform}
-            disabled={tab === 'trending'}
-          >
-            <SelectTrigger className="w-[160px]" disabled={tab === 'trending'}>
-              <Filter className="w-4 h-4 mr-2" />
-              <SelectValue placeholder="Filter by platform" />
-            </SelectTrigger>
-            <SelectContent>
-              {platforms.map((platform) => (
-                <SelectItem key={platform.id} value={platform.id}>
-                  {platform.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          {isSearchPage && (
+            <Select
+              value={selectedPlatform}
+              onValueChange={setSelectedPlatform}
+              disabled={tab === 'trending'}
+            >
+              <SelectTrigger className="w-[160px]" disabled={tab === 'trending'}>
+                <Filter className="w-4 h-4 mr-2" />
+                <SelectValue placeholder="Filter by platform" />
+              </SelectTrigger>
+              <SelectContent>
+                {platforms.map((platform) => (
+                  <SelectItem key={platform.id} value={platform.id}>
+                    {platform.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
         </div>
       </div>
 
@@ -296,31 +321,40 @@ export function ContentDisplayWithQuery({
           <CardTitle
             className={cn(
               'text-2xl',
-              tab === 'trending' &&
+              (tab === 'trending' || !isSearchPage) &&
                 'bg-gradient-to-r from-orange-600 to-amber-600 dark:from-orange-400 dark:to-amber-400 bg-clip-text text-transparent'
             )}
           >
-            {tab === 'trending' ? '🔥 Globally Trending Results' : '🔍 Your Search Results'}
+            {tab === 'trending' || !isSearchPage
+              ? '🔥 Globally Trending Results'
+              : '🔍 Your Search Results'}
           </CardTitle>
-          <div className="flex flex-wrap gap-2 mt-4">
-            {tab === 'search' && (
-              <Badge variant="secondary">Country: {FLAG_EMOJIS[preferences.country] ?? '🇺🇸'}</Badge>
-            )}
-            {tab === 'search' && (
-              <Badge variant="secondary">
-                Genres:{' '}
-                {preferences.genres.length
-                  ? preferences.genres.map(capitalizeFirstLetter).join(', ')
-                  : 'All'}
-              </Badge>
-            )}
-            {tab === 'search' && (
-              <Badge variant="secondary">
-                Recency: {capitalizeFirstLetter(preferences.recency)}
-              </Badge>
-            )}
-            <Badge variant="outline">{allContent.length} results found</Badge>
-          </div>
+          {isSearchPage && (
+            <div className="flex flex-wrap gap-2 mt-4">
+              {tab === 'search' && (
+                <Badge variant="secondary">
+                  Country: {preferences ? FLAG_EMOJIS[preferences.country] : '🇺🇸'}
+                </Badge>
+              )}
+              {tab === 'search' && preferences && (
+                <Badge variant="secondary">
+                  Genres:{' '}
+                  {preferences.genres.length
+                    ? preferences.genres.map(capitalizeFirstLetter).join(', ')
+                    : 'All'}
+                </Badge>
+              )}
+              {tab === 'search' && preferences && (
+                <Badge variant="secondary">
+                  Recency: {capitalizeFirstLetter(preferences.recency)}
+                </Badge>
+              )}
+              <Badge variant="outline">{allContent.length} results found</Badge>
+              <Button variant="outline" size="sm" onClick={onBackToPreferences}>
+                Change Preferences
+              </Button>
+            </div>
+          )}
           {(tab === 'trending' || selectedPlatform === 'all') && (
             <p className="text-sm text-muted-foreground mt-2">
               * Includes some content that is only available for rent or purchase
@@ -387,7 +421,7 @@ export function ContentDisplayWithQuery({
           item={selectedTrailer}
           isOpen={!!selectedTrailer}
           onClose={() => setSelectedTrailer(null)}
-          country={preferences.country}
+          country={preferences?.country}
         />
       )}
     </div>
