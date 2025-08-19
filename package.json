@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "checks": "npm run type-check && npm run format && npm run lint:fix && npm run test:coverage",
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
