@@ -1,6 +1,7 @@
 'use client';
 
 import { Calendar, Clock, Star } from 'lucide-react';
+import Image from 'next/image';
 
 import { Badge } from '@/components/ui/badge';
 import {
@@ -74,11 +75,14 @@ export function TrailerModal({ item, isOpen, onClose, country = 'US' }: TrailerM
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {/* Left Column - Cover and Basic Info */}
             <div className="space-y-4">
-              <div className="w-48 h-72 mx-auto rounded-lg overflow-hidden bg-muted">
-                <img
+              <div className="w-48 h-72 mx-auto rounded-lg overflow-hidden bg-muted relative">
+                <Image
                   src={getTMDBImageUrl(item.backdropPath || item.posterPath, 'original')}
                   alt={item.title}
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="192px"
+                  className="object-cover"
+                  priority
                 />
               </div>
 
