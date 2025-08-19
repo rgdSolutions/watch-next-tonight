@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-purple-950/20 to-background dark:from-slate-900 dark:via-purple-900 dark:to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-background via-purple-950/20 to-background dark:from-slate-900 dark:via-slate-800/30 dark:to-slate-900 flex items-center justify-center p-4">
       <div className="max-w-4xl w-full text-center space-y-8">
         <div className="space-y-4">
           <h1 className="text-5xl md:text-7xl font-bold text-foreground tracking-tight">
