@@ -92,7 +92,7 @@ export function GenreStep({ onComplete }: GenreStepProps) {
           )}
         </CardHeader>
 
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-6 px-2 sm:px-6">
           {/* Any Genre Option */}
           <div className="flex flex-row justify-center items-center">
             <Button
@@ -137,6 +137,7 @@ export function GenreStep({ onComplete }: GenreStepProps) {
                       'p-3 rounded-lg border-2 transition-all duration-200 text-left',
                       'hover:scale-105 hover:shadow-md',
                       'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
+                      isMobile && 'p-1',
                       isSelected
                         ? 'border-primary bg-primary text-primary-foreground shadow-lg scale-105'
                         : 'border-border bg-background hover:border-primary/50'
