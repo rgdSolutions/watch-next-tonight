@@ -350,9 +350,6 @@ export function ContentDisplayWithQuery({
                 </Badge>
               )}
               <Badge variant="outline">{allContent.length} results found</Badge>
-              <Button variant="outline" size="sm" onClick={onBackToPreferences}>
-                Change Preferences
-              </Button>
             </div>
           )}
           {(tab === 'trending' || selectedPlatform === 'all') && (
