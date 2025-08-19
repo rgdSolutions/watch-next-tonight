@@ -8,7 +8,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useGenreLookup } from '@/hooks/use-genre-lookup';
 import { getTMDBImageUrl, getYearFromDate } from '@/lib/tmdb-utils';
-import { cn } from '@/lib/utils';
 import { MediaItem } from '@/types/tmdb';
 
 interface ContentCardProps {
