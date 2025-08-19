@@ -8,6 +8,11 @@ import * as useUnifiedGenresHook from '@/hooks/use-unified-genres';
 
 import { ContentDisplayWithQuery } from '../content-display-with-query';
 
+// Mock Next.js Image component
+vi.mock('next/image', () => ({
+  default: ({ src, alt, ...props }: any) => <img src={src} alt={alt} {...props} />,
+}));
+
 // Mock hooks
 vi.mock('@/hooks/use-tmdb');
 vi.mock('@/hooks/use-unified-genres');
