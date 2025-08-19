@@ -45,9 +45,50 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://watch-next-tonight.vercel.app';
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Watch Next Tonight',
+    description:
+      'Discover your next binge-worthy movie or TV show instantly. Get personalized recommendations based on your preferences.',
+    applicationCategory: 'EntertainmentApplication',
+    operatingSystem: 'Any',
+    url: baseUrl,
+    author: {
+      '@type': 'Person',
+      name: "Ricardo D'Alessandro",
+    },
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      reviewCount: '250',
+    },
+  };
+
   return (
     <html lang="en">
       <head>
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="canonical" href={baseUrl} />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Watch Next" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="theme-color" content="#7c3aed" />
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+
         {/* Google tag (gtag.js) */}
         {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
           <>

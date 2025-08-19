@@ -1,13 +1,13 @@
 'use client';
 
 import { EyeOff, Play, Star } from 'lucide-react';
+import Image from 'next/image';
 import { useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useGenreLookup } from '@/hooks/use-genre-lookup';
 import { getTMDBImageUrl, getYearFromDate } from '@/lib/tmdb-utils';
-import { cn } from '@/lib/utils';
 import { MediaItem } from '@/types/tmdb';
 
 interface ContentCardProps {
@@ -50,11 +50,14 @@ export function ContentCard({ item, onTrailerClick, onHide }: ContentCardProps) 
       <div className="flex gap-4 p-4">
         {/* Cover Art */}
         <div className="flex-shrink-0 cursor-pointer" onClick={handleOpenModal}>
-          <div className="w-24 h-36 rounded-md overflow-hidden bg-muted">
-            <img
+          <div className="relative w-24 h-36 rounded-md overflow-hidden bg-muted">
+            <Image
               src={getTMDBImageUrl(item.posterPath, 'w500')}
-              alt={item.title}
-              className="w-full h-full object-cover"
+              alt={`${item.title} poster - ${item.type === 'movie' ? 'Movie' : 'TV Show'} released in ${getYearFromDate(item.releaseDate)}`}
+              fill
+              sizes="(max-width: 768px) 96px, 96px"
+              className="object-cover"
+              loading="lazy"
             />
           </div>
         </div>

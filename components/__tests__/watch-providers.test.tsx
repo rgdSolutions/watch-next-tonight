@@ -5,6 +5,14 @@ import { MediaType } from '@/types/tmdb';
 
 import { WatchProviders } from '../watch-providers';
 
+// Mock Next.js Image component
+vi.mock('next/image', () => ({
+  default: ({ src, alt, ...props }: any) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={src} alt={alt} {...props} />
+  ),
+}));
+
 // Mock the hooks
 const mockUseMovieWatchProviders = vi.fn();
 const mockUseTVWatchProviders = vi.fn();

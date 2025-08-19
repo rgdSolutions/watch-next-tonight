@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useMovieWatchProviders, useTVWatchProviders } from '@/hooks/use-tmdb';
@@ -122,10 +124,12 @@ export function WatchProviders({ mediaId, mediaType, country }: WatchProvidersPr
             className={`${colorClass} text-white border-0 transition-colors`}
           >
             {provider.logo_path && (
-              <img
+              <Image
                 src={getTMDBImageUrl(provider.logo_path, 'w92')}
                 alt={provider.provider_name}
-                className="w-4 h-4 mr-1 inline-block rounded"
+                width={16}
+                height={16}
+                className="mr-1 inline-block rounded"
               />
             )}
             {provider.provider_name}

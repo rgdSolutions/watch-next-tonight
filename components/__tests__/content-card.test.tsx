@@ -5,6 +5,14 @@ import { MediaItem, MediaType } from '@/types/tmdb';
 
 import { ContentCard } from '../content-card';
 
+// Mock Next.js Image component
+vi.mock('next/image', () => ({
+  default: ({ src, alt, ...props }: any) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={src} alt={alt} {...props} />
+  ),
+}));
+
 // Mock the hooks and utilities
 vi.mock('@/hooks/use-genre-lookup', () => ({
   useGenreLookup: () => ({
@@ -76,7 +84,7 @@ describe('ContentCard', () => {
     expect(screen.getByText(/This is a test movie overview/)).toBeInTheDocument();
 
     // Check poster image
-    const img = screen.getByAltText('Test Movie') as HTMLImageElement;
+    const img = screen.getByAltText(/Test Movie poster/) as HTMLImageElement;
     expect(img.src).toBe('https://image.tmdb.org/t/p/w500/test-poster.jpg');
 
     // Check Watch Trailer button
