@@ -84,6 +84,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="format-detection" content="telephone=no" />
         <meta name="theme-color" content="#7c3aed" />
 
+        {/* Google AdSense */}
+        {process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID && (
+          <meta name="google-adsense-account" content={process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID} />
+        )}
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
