@@ -110,13 +110,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
 
         {/* Google AdSense loader (loads once site-wide) */}
-        <Script
-          id="adsense-loader"
-          async
-          strategy="afterInteractive"
-          crossOrigin="anonymous"
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4907494101797790"
-        />
+        {process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID && (
+          <Script
+            id="adsense-loader"
+            async
+            strategy="afterInteractive"
+            crossOrigin="anonymous"
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}`}
+          />
+        )}
       </head>
       <body className={inter.className}>
         <ThemeProvider defaultTheme="system" storageKey="watch-next-theme">
