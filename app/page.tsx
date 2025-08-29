@@ -9,8 +9,8 @@ export default function LandingPage() {
             Watch Next Tonight
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto hidden sm:block">
-            Discover your perfect movie or show from all of your favorite streaming services in
-            seconds
+            Say goodbye to streaming paralysis. Your perfect stream, instantly unlocked across all
+            major platforms.
           </p>
         </div>
 
@@ -39,9 +39,9 @@ export default function LandingPage() {
                       Start Searching
                     </p>
                     <p className="text-sm sm:text-base text-muted-foreground">
-                      Share your location for
+                      Personalized movie recommendations
                       <br />
-                      personalized recommendations
+                      tailored to your mood instantly
                     </p>
                   </div>
                   <div className="hidden sm:flex items-center justify-center gap-2 text-purple-600 dark:text-purple-400">
@@ -83,9 +83,9 @@ export default function LandingPage() {
                       Trending Now
                     </p>
                     <p className="text-sm sm:text-base text-muted-foreground">
-                      In a hurry? See what&apos;s
+                      Discover global trending movies
                       <br />
-                      hot globally right now
+                      and best binge-worthy shows
                     </p>
                   </div>
                   <div className="hidden sm:flex items-center justify-center gap-2 text-orange-600 dark:text-orange-400">
@@ -115,21 +115,62 @@ export default function LandingPage() {
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
             </svg>
-            <span>Personalized Recommendations</span>
+            <span>AI-Powered Movie Matching</span>
           </div>
           <div className="flex items-center gap-2">
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
             </svg>
-            <span>All Streaming Platforms</span>
+            <span>Cross-Platform Streaming Guide</span>
           </div>
           <div className="flex items-center gap-2">
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
             </svg>
-            <span>Quick & Easy</span>
+            <span>Stop Endless Scrolling</span>
           </div>
         </div>
+
+        {/* SEO Content Section */}
+        <section className="mt-16 space-y-8 max-w-4xl mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold text-foreground">
+            Eliminate Decision Fatigue Streaming
+          </h2>
+          <div className="grid md:grid-cols-3 gap-6 text-left">
+            <div className="space-y-2">
+              <h3 className="font-semibold text-lg">Mood-Based Content Finder</h3>
+              <p className="text-sm text-muted-foreground">
+                Our smart TV show suggestions and genre-specific movie finder match your current
+                mood perfectly. Find what to watch instantly without endless browsing.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <h3 className="font-semibold text-lg">Unified Streaming Library</h3>
+              <p className="text-sm text-muted-foreground">
+                Access all streaming services content in one place. Our streaming service
+                availability checker shows where to watch movies online across Netflix, Prime Video,
+                Disney+, and more.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <h3 className="font-semibold text-lg">Personalized Film Discovery Tool</h3>
+              <p className="text-sm text-muted-foreground">
+                Get movie recommendations fast with our tailored entertainment recommendations.
+                Discover new streaming content and find your next favorite show effortlessly.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-12 p-6 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-950/20 dark:to-blue-950/20 rounded-xl">
+            <h3 className="text-xl font-semibold mb-3">Your Perfect Night In Entertainment</h3>
+            <p className="text-muted-foreground">
+              Watch Next Tonight is your ultimate movie night planner and digital content concierge.
+              Our quick entertainment finder app delivers curated streaming picks that simplify
+              content discovery. Experience effortless TV show discovery with our streamlined
+              content discovery solution.
+            </p>
+          </div>
+        </section>
       </div>
     </div>
   );
