@@ -108,6 +108,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Script>
           </>
         )}
+
+        {/* Google AdSense loader (loads once site-wide) */}
+        <Script
+          id="adsense-loader"
+          async
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4907494101797790"
+        />
       </head>
       <body className={inter.className}>
         <ThemeProvider defaultTheme="system" storageKey="watch-next-theme">
