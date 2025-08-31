@@ -25,11 +25,21 @@ export const metadata: Metadata = {
       'Discover your next binge-worthy movie or TV show instantly. Get personalized recommendations based on your preferences.',
     type: 'website',
     siteName: 'Watch Next Tonight',
+    url: 'https://watchnexttonight.com',
+    images: [
+      {
+        url: 'https://watchnexttonight.com/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'Watch Next Tonight - Movie & TV Show Recommendations',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Watch Next Tonight - Find Your Perfect Movie or Show',
     description: 'Discover your next binge-worthy movie or TV show instantly.',
+    images: ['https://watchnexttonight.com/opengraph-image'],
   },
   robots: {
     index: true,
@@ -45,7 +55,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://watch-next-tonight.vercel.app';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://watchnexttonight.com';
 
   const jsonLd = {
     '@context': 'https://schema.org',

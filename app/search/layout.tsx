@@ -10,15 +10,24 @@ export const metadata: Metadata = {
     title: 'Search Movies & TV Shows | Watch Next Tonight',
     description: 'Get personalized recommendations across all your streaming platforms',
     type: 'website',
-    url: '/search',
+    url: 'https://watchnexttonight.com/search',
+    images: [
+      {
+        url: 'https://watchnexttonight.com/search/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'Search Movies & TV Shows - Watch Next Tonight',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Search Movies & TV Shows',
     description: 'Find your perfect watch based on your preferences',
+    images: ['https://watchnexttonight.com/search/opengraph-image'],
   },
   alternates: {
-    canonical: '/search',
+    canonical: 'https://watchnexttonight.com/search',
   },
 };
 
