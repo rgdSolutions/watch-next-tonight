@@ -10,22 +10,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: ['/', '/search', '/trending'],
         disallow: ['/api/', '/_next/', '/static/'],
       },
-      {
-        userAgent: 'Googlebot',
-        allow: ['/', '/search', '/trending'],
-      },
-      {
-        userAgent: 'Mediapartners-Google',
-        allow: ['/', '/search', '/trending'],
-      },
-      {
-        userAgent: 'AdsBot-Google',
-        allow: ['/', '/search', '/trending'],
-      },
-      {
-        userAgent: 'AdsBot-Google-Mobile',
-        allow: ['/', '/search', '/trending'],
-      },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
   };
