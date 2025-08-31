@@ -10,15 +10,24 @@ export const metadata: Metadata = {
     title: 'Trending Now | Watch Next Tonight',
     description: "See what's hot globally right now across all streaming platforms",
     type: 'website',
-    url: '/trending',
+    url: 'https://watchnexttonight.com/trending',
+    images: [
+      {
+        url: 'https://watchnexttonight.com/trending/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'Trending Now - Watch Next Tonight',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Trending Movies & Shows',
     description: 'Discover what everyone is watching right now',
+    images: ['https://watchnexttonight.com/trending/opengraph-image'],
   },
   alternates: {
-    canonical: '/trending',
+    canonical: 'https://watchnexttonight.com/trending',
   },
 };
 
