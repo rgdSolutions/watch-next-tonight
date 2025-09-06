@@ -34,9 +34,10 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-xl font-semibold text-foreground mb-3">Analytics</h2>
           <p>
-            We use Google Analytics and Vercel Analytics to understand general usage patterns. This
-            service may collect anonymous data such as page views, device types, and geographic
-            regions. No personally identifiable information is collected.
+            We use Google Analytics and Vercel Analytics to understand general usage patterns. These
+            services may collect anonymous data such as page views, device types, and geographic
+            regions. This data does not typically include personally identifiable information; where
+            applicable we rely on the cookie opt-in to control data collection.
           </p>
         </section>
 
@@ -52,8 +53,17 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-xl font-semibold text-foreground mb-3">Third-Party Services</h2>
           <p>
-            Content data is provided by The Movie Database (TMDB) API. We do not share any user data
-            with TMDB as we do not collect user data.
+            Content data is provided by{' '}
+            <a
+              href="https://www.themoviedb.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              The Movie Database (TMDB)
+            </a>{' '}
+            API. This product uses the TMDB API but is not endorsed or certified by TMDB. We do not
+            share any user data with TMDB.
           </p>
         </section>
 
