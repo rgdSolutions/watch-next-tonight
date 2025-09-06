@@ -7,11 +7,19 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow: ['/', '/api/', '/search', '/trending', '/_next/', '/static/'],
+        allow: [
+          '/',
+          '/api/',
+          '/search/',
+          '/trending/',
+          '/privacy/',
+          '/_next/',
+          '/static/',
+          '/out/',
+        ],
         disallow: [
           '/__tests__/',
           '/coverage/',
-          '/out/',
           '/node_modules/',
           '/tests/',
           '/docs/',

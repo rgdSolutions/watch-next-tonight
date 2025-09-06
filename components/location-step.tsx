@@ -1,7 +1,7 @@
 'use client';
 
 import { Globe, Loader2, MapPin } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,7 +15,7 @@ export function LocationStep({ onComplete }: LocationStepProps) {
   const [isDetecting, setIsDetecting] = useState(false);
   const [hasAsked, setHasAsked] = useState(false);
 
-  const detectLocation = async () => {
+  const detectLocation = useCallback(async () => {
     setIsDetecting(true);
 
     try {
@@ -37,7 +37,7 @@ export function LocationStep({ onComplete }: LocationStepProps) {
     } finally {
       setIsDetecting(false);
     }
-  };
+  }, [onComplete]);
 
   const useUSA = () => {
     onComplete('US');
@@ -49,7 +49,7 @@ export function LocationStep({ onComplete }: LocationStepProps) {
       setHasAsked(true);
       detectLocation();
     }
-  }, [hasAsked]);
+  }, [detectLocation, hasAsked]);
 
   return (
     <div className="max-w-md mx-auto">
