@@ -26,7 +26,7 @@ export const metadata: Metadata = {
       'Discover your next binge-worthy movie or TV show instantly. Get personalized recommendations based on your preferences.',
     type: 'website',
     siteName: 'Watch Next Tonight',
-    url: 'https://watchnexttonight.com',
+    url: '/',
     images: [
       {
         url: '/opengraph-image',
