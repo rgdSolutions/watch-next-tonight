@@ -26,9 +26,6 @@ export const metadata: Metadata = {
     description: 'Find your perfect watch based on your preferences',
     images: ['/search/opengraph-image'],
   },
-  alternates: {
-    canonical: '/search',
-  },
 };
 
 export default function SearchLayout({ children }: { children: React.ReactNode }) {

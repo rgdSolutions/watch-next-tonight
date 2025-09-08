@@ -26,9 +26,6 @@ export const metadata: Metadata = {
     description: 'Discover what everyone is watching right now',
     images: ['/trending/opengraph-image'],
   },
-  alternates: {
-    canonical: '/trending',
-  },
 };
 
 export default function TrendingLayout({ children }: { children: React.ReactNode }) {
