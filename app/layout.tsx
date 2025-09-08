@@ -13,12 +13,16 @@ import { QueryProvider } from '@/providers/query-provider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://watchnexttonight.com'),
   title: 'Watch Next Tonight - Find Your Perfect Movie or Show',
   description:
     'Discover your next binge-worthy movie or TV show instantly. Get personalized recommendations based on your mood, genre preferences, and available streaming platforms.',
   keywords:
     'movie recommendations, TV show finder, streaming guide, Netflix, Prime Video, Disney+, Apple TV+, MAX, what to watch',
   authors: [{ name: "Ricardo D'Alessandro" }],
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: 'Watch Next Tonight - Find Your Perfect Movie or Show',
     description:
@@ -28,7 +32,7 @@ export const metadata: Metadata = {
     url: 'https://watchnexttonight.com',
     images: [
       {
-        url: 'https://watchnexttonight.com/opengraph-image',
+        url: '/opengraph-image',
         width: 1200,
         height: 630,
         alt: 'Watch Next Tonight - Movie & TV Show Recommendations',
@@ -39,7 +43,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Watch Next Tonight - Find Your Perfect Movie or Show',
     description: 'Discover your next binge-worthy movie or TV show instantly.',
-    images: ['https://watchnexttonight.com/opengraph-image'],
+    images: ['/opengraph-image'],
   },
   robots: {
     index: true,
@@ -86,7 +90,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <link rel="canonical" href={baseUrl} />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
