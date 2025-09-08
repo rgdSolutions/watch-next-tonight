@@ -13,6 +13,7 @@ import { QueryProvider } from '@/providers/query-provider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://watchnexttonight.com'),
   title: 'Watch Next Tonight - Find Your Perfect Movie or Show',
   description:
     'Discover your next binge-worthy movie or TV show instantly. Get personalized recommendations based on your mood, genre preferences, and available streaming platforms.',
@@ -25,10 +26,10 @@ export const metadata: Metadata = {
       'Discover your next binge-worthy movie or TV show instantly. Get personalized recommendations based on your preferences.',
     type: 'website',
     siteName: 'Watch Next Tonight',
-    url: 'https://watchnexttonight.com',
+    url: '/',
     images: [
       {
-        url: 'https://watchnexttonight.com/opengraph-image',
+        url: '/opengraph-image',
         width: 1200,
         height: 630,
         alt: 'Watch Next Tonight - Movie & TV Show Recommendations',
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Watch Next Tonight - Find Your Perfect Movie or Show',
     description: 'Discover your next binge-worthy movie or TV show instantly.',
-    images: ['https://watchnexttonight.com/opengraph-image'],
+    images: ['/opengraph-image'],
   },
   robots: {
     index: true,
@@ -86,7 +87,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <link rel="canonical" href={baseUrl} />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
