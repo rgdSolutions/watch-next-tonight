@@ -14,14 +14,24 @@ describe('PrivacyPage', () => {
     render(<PrivacyPage />);
 
     // Check for all main section headings
-    expect(screen.getByText('Data Collection')).toBeInTheDocument();
+    expect(screen.getByText('GDPR Compliance')).toBeInTheDocument();
+    expect(screen.getByText('Information We Collect')).toBeInTheDocument();
+    expect(screen.getByText('How We Use Information')).toBeInTheDocument();
+    expect(screen.getByText('Security Measures')).toBeInTheDocument();
     expect(screen.getByText('Analytics')).toBeInTheDocument();
     expect(screen.getByText('Cookies')).toBeInTheDocument();
     expect(screen.getByText('Third-Party Services')).toBeInTheDocument();
+    expect(screen.getByText('Third-Party Disclosure')).toBeInTheDocument();
     expect(screen.getByText('Advertising')).toBeInTheDocument();
-    expect(screen.getByText('Your Choices')).toBeInTheDocument();
-    expect(screen.getByText('Contact')).toBeInTheDocument();
-    expect(screen.getByText('Updates')).toBeInTheDocument();
+    expect(screen.getByText('Do Not Track Signals')).toBeInTheDocument();
+    expect(screen.getByText('California Privacy Rights (CalOPPA)')).toBeInTheDocument();
+    expect(screen.getByText("Children's Privacy (COPPA)")).toBeInTheDocument();
+    expect(screen.getByText('Data Breach Notification')).toBeInTheDocument();
+    expect(screen.getByText('Email Communications (CAN-SPAM)')).toBeInTheDocument();
+    expect(screen.getByText('Your Rights and Choices')).toBeInTheDocument();
+    expect(screen.getByText('Terms and Consent')).toBeInTheDocument();
+    expect(screen.getByText('Contact Information')).toBeInTheDocument();
+    expect(screen.getByText('Policy Updates')).toBeInTheDocument();
   });
 
   it('should have working go back navigation links', () => {
@@ -40,14 +50,10 @@ describe('PrivacyPage', () => {
   it('should have external links that open in new tabs', () => {
     render(<PrivacyPage />);
 
-    // Check Google Privacy Policy link
-    const googleLink = screen.getByRole('link', { name: /Google Privacy Policy/i });
-    expect(googleLink).toHaveAttribute('href', 'https://policies.google.com/privacy');
-    expect(googleLink).toHaveAttribute('target', '_blank');
-    expect(googleLink).toHaveAttribute('rel', 'noopener noreferrer');
-
     // Check GitHub repository link
-    const githubLink = screen.getByRole('link', { name: /GitHub repository/i });
+    const githubLink = screen.getByRole('link', {
+      name: 'github.com/rgdSolutions/watch-next-tonight',
+    });
     expect(githubLink).toHaveAttribute(
       'href',
       'https://github.com/rgdSolutions/watch-next-tonight'

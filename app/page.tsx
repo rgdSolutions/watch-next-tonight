@@ -131,12 +131,18 @@ export default function LandingPage() {
               <span>Quick & Easy</span>
             </div>
           </div>
-          <div className="text-center text-xs text-muted-foreground/60">
+          <div className="text-center text-xs text-muted-foreground/60 flex flex-row justify-center gap-8">
             <Link
               href="/privacy"
               className="hover:text-muted-foreground hover:underline transition-colors"
             >
               Privacy Policy
+            </Link>
+            <Link
+              href="/terms"
+              className="hover:text-muted-foreground hover:underline transition-colors"
+            >
+              Terms and Conditions
             </Link>
           </div>
         </footer>

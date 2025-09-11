@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Hide Next.js and React Query development overlay buttons */
+nextjs-portal,
+.tsqd-open-btn-container {
+  display: none !important;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
