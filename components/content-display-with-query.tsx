@@ -33,6 +33,8 @@ import { unifiedGenresToTMDBIds } from '@/lib/unified-genres';
 import { capitalizeFirstLetter, cn } from '@/lib/utils';
 import { MediaItem } from '@/types/tmdb';
 
+import { ScrollToTop } from './scroll-to-top';
+
 type ContentType = 'all' | 'movie' | 'tv';
 
 interface ContentDisplayWithQueryProps {
@@ -419,6 +421,9 @@ export function ContentDisplayWithQuery({
           country={preferences?.country}
         />
       )}
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </div>
   );
 }
