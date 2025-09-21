@@ -23,7 +23,7 @@ export function LoadingScreen({ preferences }: LoadingScreenProps) {
   const { genres } = useUnifiedGenres();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center">
+    <div className="flex-1 bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center">
       <div className="max-w-md mx-auto px-4">
         <Card data-testid="loading-card" className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
           <CardContent className="p-8 text-center">

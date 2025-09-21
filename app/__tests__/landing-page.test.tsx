@@ -66,7 +66,7 @@ describe('LandingPage', () => {
 
     // Check for responsive text sizes
     const title = screen.getByText('Watch Next Tonight');
-    expect(title).toHaveClass('text-5xl', 'md:text-7xl');
+    expect(title).toHaveClass('text-4xl', 'md:text-7xl');
   });
 
   it('should apply theme-aware colors', () => {

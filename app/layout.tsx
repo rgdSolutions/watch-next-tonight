@@ -136,7 +136,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           />
         )}
       </head>
-      <body className={inter.className}>
+      <body
+        className={inter.className}
+        style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+      >
         <ThemeProvider defaultTheme="system" storageKey="watch-next-theme">
           <NavigationHeader />
           <QueryProvider>{children}</QueryProvider>

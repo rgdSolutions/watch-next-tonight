@@ -2,10 +2,10 @@ import Link from 'next/link';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-purple-950/20 to-background dark:from-slate-900 dark:via-slate-800/30 dark:to-slate-900 flex items-center justify-center p-4">
+    <div className="flex-1 bg-gradient-to-br from-background via-purple-950/20 to-background dark:from-slate-900 dark:via-slate-800/30 dark:to-slate-900 flex items-center justify-center px-4 py-0 sm:py-4">
       <div className="max-w-4xl w-full text-center space-y-8">
         <div className="space-y-4">
-          <h1 className="text-5xl md:text-7xl font-bold text-foreground tracking-tight">
+          <h1 className="text-4xl md:text-7xl font-bold text-foreground tracking-tight">
             Watch Next Tonight
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto hidden sm:block">

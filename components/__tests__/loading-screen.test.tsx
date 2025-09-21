@@ -192,7 +192,7 @@ describe('LoadingScreen', () => {
 
     // Check for main container styling
     const mainDiv = container.firstChild;
-    expect(mainDiv).toHaveClass('min-h-screen');
+    expect(mainDiv).toHaveClass('flex-1');
     expect(mainDiv).toHaveClass('bg-gradient-to-br');
     expect(mainDiv).toHaveClass('flex');
     expect(mainDiv).toHaveClass('items-center');
