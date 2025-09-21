@@ -35,9 +35,9 @@ export default function LandingPage() {
                     </svg>
                   </div>
                   <div className="space-y-2 sm:space-y-3">
-                    <p className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-blue-400 transition-all">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-blue-400 transition-all">
                       Start Searching
-                    </p>
+                    </h2>
                     <p className="text-sm sm:text-base text-muted-foreground">
                       Share your location for
                       <br />
@@ -79,9 +79,9 @@ export default function LandingPage() {
                     </svg>
                   </div>
                   <div className="space-y-2 sm:space-y-3">
-                    <p className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-orange-400 group-hover:to-red-400 transition-all">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-orange-400 group-hover:to-red-400 transition-all">
                       Trending Now
-                    </p>
+                    </h2>
                     <p className="text-sm sm:text-base text-muted-foreground">
                       In a hurry? See what&apos;s
                       <br />
@@ -131,18 +131,36 @@ export default function LandingPage() {
               <span>Quick & Easy</span>
             </div>
           </div>
-          <div className="text-center text-xs text-muted-foreground/60 flex flex-row justify-center gap-8">
+          <div className="text-center text-xs text-muted-foreground/60 flex flex-wrap justify-center gap-4 sm:gap-8">
             <Link
-              href="/privacy"
+              href="/about/"
               className="hover:text-muted-foreground hover:underline transition-colors"
             >
-              Privacy Policy
+              About
             </Link>
             <Link
-              href="/terms"
+              href="/faq/"
               className="hover:text-muted-foreground hover:underline transition-colors"
             >
-              Terms and Conditions
+              FAQ
+            </Link>
+            <Link
+              href="/contact/"
+              className="hover:text-muted-foreground hover:underline transition-colors"
+            >
+              Contact
+            </Link>
+            <Link
+              href="/privacy/"
+              className="hover:text-muted-foreground hover:underline transition-colors"
+            >
+              Privacy
+            </Link>
+            <Link
+              href="/terms/"
+              className="hover:text-muted-foreground hover:underline transition-colors"
+            >
+              Terms
             </Link>
           </div>
         </footer>

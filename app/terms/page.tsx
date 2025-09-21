@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 
-import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+
+import { Breadcrumb } from '@/components/breadcrumb';
+import { ScrollToTop } from '@/components/scroll-to-top';
 
 export const metadata: Metadata = {
   title: 'Terms and Conditions - Watch Next Tonight',
@@ -21,13 +23,7 @@ export default function TermsPage() {
 
   return (
     <div className="container max-w-3xl mx-auto px-4 py-12">
-      <Link
-        href="/"
-        className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        <span>Go back</span>
-      </Link>
+      <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Terms and Conditions' }]} />
 
       <h1 className="text-3xl font-bold mb-8">Terms and Conditions</h1>
 
@@ -302,13 +298,8 @@ export default function TermsPage() {
         </section>
       </div>
 
-      <Link
-        href="/"
-        className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mt-12"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        <span>Go back</span>
-      </Link>
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </div>
   );
 }

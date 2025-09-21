@@ -117,6 +117,6 @@ describe('LandingPage', () => {
 
     // Check for navigation links
     const links = screen.getAllByRole('link');
-    expect(links).toHaveLength(4);
+    expect(links).toHaveLength(7);
   });
 });

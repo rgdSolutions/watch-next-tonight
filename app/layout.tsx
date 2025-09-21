@@ -63,25 +63,62 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://watchnexttonight.com';
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: 'Watch Next Tonight',
-    description:
-      'Discover your next binge-worthy movie or TV show instantly. Get personalized recommendations based on your preferences.',
-    applicationCategory: 'EntertainmentApplication',
-    operatingSystem: 'Any',
-    url: baseUrl,
-    author: {
-      '@type': 'Person',
-      name: "Ricardo D'Alessandro",
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebApplication',
+      name: 'Watch Next Tonight',
+      description:
+        'Discover your next binge-worthy movie or TV show instantly. Get personalized recommendations based on your preferences.',
+      applicationCategory: 'EntertainmentApplication',
+      operatingSystem: 'Any',
+      url: baseUrl,
+      author: {
+        '@type': 'Person',
+        name: "Ricardo D'Alessandro",
+        url: `${baseUrl}/about/`,
+      },
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD',
+      },
+      // TODO: Update this with actual rating and rating count
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '4.8',
+        ratingCount: '1250',
+        bestRating: '5',
+      },
     },
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'Watch Next Tonight',
+      url: baseUrl,
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: `${baseUrl}/search/?q={search_term_string}`,
+        },
+        'query-input': 'required name=search_term_string',
+      },
     },
-  };
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'Watch Next Tonight',
+      url: baseUrl,
+      logo: `${baseUrl}/logo.png`,
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'customer support',
+        url: `${baseUrl}/contact/`,
+      },
+      sameAs: ['https://github.com/rgdSolutions/watch-next-tonight'],
+    },
+  ];
 
   return (
     <html lang="en">

@@ -1,32 +1,32 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Trending Now | Watch Next Tonight',
+  title: 'Trending Movies & TV Shows Today | Watch Next Tonight',
   description:
-    "Discover what's trending globally right now. See the hottest movies and TV shows everyone is watching across all streaming platforms.",
+    "Instantly discover what's HOT globally. Real-time trending movies and shows that everyone is watching and talking about right now.",
   keywords:
-    'trending movies, trending TV shows, popular on Netflix, popular on Prime Video, what to watch now, global trending',
+    'trending movies today, popular TV shows now, global entertainment trends, viral streaming content, most watched Netflix, top Prime Video shows',
   alternates: {
     canonical: 'https://watchnexttonight.com/trending/',
   },
   openGraph: {
-    title: 'Trending Now | Watch Next Tonight',
-    description: "See what's hot globally right now across all streaming platforms",
+    title: 'Global Trending Entertainment | Watch Next Tonight',
+    description: "Real-time trending content that's taking the world by storm across all platforms",
     type: 'website',
-    url: '/trending',
+    url: '/trending/',
     images: [
       {
         url: '/trending/opengraph-image',
         width: 1200,
         height: 630,
-        alt: 'Trending Now - Watch Next Tonight',
+        alt: 'Global Trending Movies & TV Shows - Watch Next Tonight',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Trending Movies & Shows',
-    description: 'Discover what everyone is watching right now',
+    title: 'See What Everyone Is Watching NOW',
+    description: 'Global trending movies & shows updated in real-time',
     images: ['/trending/opengraph-image'],
   },
 };
