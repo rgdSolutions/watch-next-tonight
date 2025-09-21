@@ -54,4 +54,8 @@ export const metadata = {
   title: '404 - Page Not Found | Watch Next Tonight',
   description:
     "The page you're looking for couldn't be found. Let's get you back to finding great content.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };

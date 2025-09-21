@@ -21,6 +21,9 @@ export const metadata: Metadata = {
   keywords:
     'movie recommendations, TV show finder, streaming guide, Netflix, Prime Video, Disney+, Apple TV+, MAX, what to watch',
   authors: [{ name: "Ricardo D'Alessandro" }],
+  alternates: {
+    canonical: 'https://watchnexttonight.com/',
+  },
   openGraph: {
     title: 'Watch Next Tonight - Find Your Perfect Movie or Show',
     description:
