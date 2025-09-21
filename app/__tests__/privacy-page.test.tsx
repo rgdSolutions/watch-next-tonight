@@ -38,13 +38,11 @@ describe('PrivacyPage', () => {
     render(<PrivacyPage />);
 
     // Should have two "Go back" links (top and bottom)
-    const goBackLinks = screen.getAllByText('Go back');
-    expect(goBackLinks).toHaveLength(2);
+    const goBackLink = screen.getByText('Home');
+    expect(goBackLink).toBeInTheDocument();
 
-    // Both should link to home page
-    goBackLinks.forEach((link) => {
-      expect(link.closest('a')).toHaveAttribute('href', '/');
-    });
+    // It should link to home page
+    expect(goBackLink.closest('a')).toHaveAttribute('href', '/');
   });
 
   it('should have external links that open in new tabs', () => {

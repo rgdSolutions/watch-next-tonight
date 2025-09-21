@@ -83,6 +83,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         price: '0',
         priceCurrency: 'USD',
       },
+      // TODO: Update this with actual rating and rating count
       aggregateRating: {
         '@type': 'AggregateRating',
         ratingValue: '4.8',

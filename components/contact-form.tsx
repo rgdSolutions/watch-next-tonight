@@ -28,7 +28,7 @@ export function ContactForm() {
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
-    // Simulate form submission (replace with actual API call)
+    // TODO: Replace simulated form submission with actual API call
     try {
       // Here you would normally send the form data to your backend
       await new Promise((resolve) => setTimeout(resolve, 1500));
