@@ -81,11 +81,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       price: '0',
       priceCurrency: 'USD',
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      reviewCount: '250',
-    },
   };
 
   return (
