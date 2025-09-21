@@ -1,5 +1,17 @@
-import { Film, Home, Search, TrendingUp } from 'lucide-react';
+import type { Metadata } from 'next';
+
+import { Home, Search, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: '404 - Page Not Found | Watch Next Tonight',
+  description:
+    "The page you're looking for couldn't be found. Let's get you back to finding great content.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default function NotFound() {
   return (
@@ -49,13 +61,3 @@ export default function NotFound() {
     </main>
   );
 }
-
-export const metadata = {
-  title: '404 - Page Not Found | Watch Next Tonight',
-  description:
-    "The page you're looking for couldn't be found. Let's get you back to finding great content.",
-  robots: {
-    index: false,
-    follow: false,
-  },
-};

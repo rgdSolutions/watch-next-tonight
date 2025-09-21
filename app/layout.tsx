@@ -9,6 +9,7 @@ import Script from 'next/script';
 import { NavigationHeader } from '@/components/navigation-header';
 import { ThemeProvider } from '@/components/theme-provider';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { cn } from '@/lib/utils';
 import { QueryProvider } from '@/providers/query-provider';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -139,10 +140,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           />
         )}
       </head>
-      <body
-        className={inter.className}
-        style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
-      >
+      <body className={cn(inter.className, 'flex flex-col min-h-screen')}>
         <ThemeProvider defaultTheme="system" storageKey="watch-next-theme">
           <NavigationHeader />
           <QueryProvider>{children}</QueryProvider>

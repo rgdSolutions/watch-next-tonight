@@ -12,8 +12,18 @@ vi.mock('next/navigation', () => ({
 
 // Mock next/link to avoid navigation errors in tests
 vi.mock('next/link', () => ({
-  default: ({ children, href }: { children: React.ReactNode; href: string }) => (
-    <a href={href}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    [key: string]: any;
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }));
 
@@ -47,7 +57,7 @@ describe('NavigationHeader', () => {
     it('does not show mobile menu button on desktop', () => {
       render(<NavigationHeader />);
 
-      const menuButton = screen.getByRole('button', { name: /toggle menu/i });
+      const menuButton = screen.getByRole('button');
       expect(menuButton).toHaveClass('md:hidden');
     });
 
@@ -75,11 +85,14 @@ describe('NavigationHeader', () => {
       expect(screen.getByText('Watch Next Tonight')).toHaveClass('hidden', 'sm:inline');
     });
 
-    it('shows mobile menu button', () => {
+    it('shows mobile menu button with correct initial state', () => {
       render(<NavigationHeader />);
 
-      const menuButton = screen.getByRole('button', { name: /toggle menu/i });
+      const menuButton = screen.getByRole('button');
       expect(menuButton).toBeInTheDocument();
+      expect(menuButton).toHaveAttribute('aria-expanded', 'false');
+      expect(menuButton).toHaveAttribute('aria-controls', 'mobile-menu');
+      expect(menuButton).toHaveAttribute('aria-label', 'Open menu');
     });
 
     it('toggles mobile menu when button is clicked', () => {
@@ -89,7 +102,7 @@ describe('NavigationHeader', () => {
       expect(screen.queryByRole('list')).toHaveClass('hidden', 'md:flex');
 
       // Click menu button to open
-      const menuButton = screen.getByRole('button', { name: /toggle menu/i });
+      const menuButton = screen.getByRole('button');
       fireEvent.click(menuButton);
 
       // Mobile menu should now be visible (there will be 2 lists - desktop and mobile)
@@ -101,7 +114,7 @@ describe('NavigationHeader', () => {
     it('changes menu icon when mobile menu is toggled', () => {
       render(<NavigationHeader />);
 
-      const menuButton = screen.getByRole('button', { name: /toggle menu/i });
+      const menuButton = screen.getByRole('button');
 
       // Initially shows Menu icon
       expect(menuButton.innerHTML).toContain('svg');
@@ -148,11 +161,66 @@ describe('NavigationHeader', () => {
   });
 
   describe('Accessibility', () => {
-    it('has proper ARIA label for menu toggle button', () => {
+    it('has proper ARIA labels and attributes that change with state', () => {
       render(<NavigationHeader />);
 
-      const menuButton = screen.getByRole('button', { name: /toggle menu/i });
-      expect(menuButton).toHaveAttribute('aria-label', 'Toggle menu');
+      // Initial state - menu closed
+      let menuButton = screen.getByRole('button');
+      expect(menuButton).toHaveAttribute('aria-label', 'Open menu');
+      expect(menuButton).toHaveAttribute('aria-expanded', 'false');
+
+      // Click to open menu
+      fireEvent.click(menuButton);
+
+      // Menu open state
+      menuButton = screen.getByRole('button');
+      expect(menuButton).toHaveAttribute('aria-label', 'Close menu');
+      expect(menuButton).toHaveAttribute('aria-expanded', 'true');
+    });
+
+    it('adds aria-current="page" to active navigation items', () => {
+      mockUsePathname.mockReturnValue('/search/');
+      render(<NavigationHeader />);
+
+      const searchLink = screen.getByRole('link', { name: /search/i });
+      expect(searchLink).toHaveAttribute('aria-current', 'page');
+
+      const homeLink = screen.getByRole('link', { name: /home/i });
+      expect(homeLink).not.toHaveAttribute('aria-current');
+
+      const trendingLink = screen.getByRole('link', { name: /trending/i });
+      expect(trendingLink).not.toHaveAttribute('aria-current');
+    });
+
+    it('mobile menu has proper ARIA attributes', () => {
+      render(<NavigationHeader />);
+
+      // Open mobile menu
+      const menuButton = screen.getByRole('button');
+      fireEvent.click(menuButton);
+
+      // Check mobile menu container
+      const mobileMenu = screen.getByRole('navigation', { name: /mobile navigation/i });
+      expect(mobileMenu).toHaveAttribute('id', 'mobile-menu');
+    });
+
+    it('closes mobile menu with Escape key', () => {
+      render(<NavigationHeader />);
+
+      // Open mobile menu
+      const menuButton = screen.getByRole('button');
+      fireEvent.click(menuButton);
+
+      // Verify menu is open
+      expect(screen.getByRole('navigation', { name: /mobile navigation/i })).toBeInTheDocument();
+
+      // Press Escape key
+      fireEvent.keyDown(document, { key: 'Escape' });
+
+      // Verify menu is closed
+      expect(
+        screen.queryByRole('navigation', { name: /mobile navigation/i })
+      ).not.toBeInTheDocument();
     });
 
     it('uses semantic navigation element', () => {
@@ -208,7 +276,7 @@ describe('NavigationHeader', () => {
       expect(desktopList).toHaveClass('hidden', 'md:flex');
 
       // Mobile menu button
-      const menuButton = screen.getByRole('button', { name: /toggle menu/i });
+      const menuButton = screen.getByRole('button');
       expect(menuButton).toHaveClass('md:hidden');
 
       // Logo text variations
