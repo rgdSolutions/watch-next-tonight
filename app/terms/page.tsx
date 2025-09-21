@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: 'Terms and Conditions - Watch Next Tonight',
   description:
     'Terms and Conditions for Watch Next Tonight - Read our terms of service and usage guidelines.',
+  alternates: {
+    canonical: 'https://watchnexttonight.com/terms/',
+  },
 };
 
 export default function TermsPage() {

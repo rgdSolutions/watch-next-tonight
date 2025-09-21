@@ -56,7 +56,7 @@ describe('TrendingPage', () => {
     const { container } = render(<TrendingPage />, { wrapper: createWrapper() });
 
     // Check for gradient background
-    const mainContainer = container.querySelector('.min-h-screen.bg-gradient-to-br');
+    const mainContainer = container.querySelector('.flex-1.bg-gradient-to-br');
     expect(mainContainer).toBeInTheDocument();
 
     // Check for container with proper spacing

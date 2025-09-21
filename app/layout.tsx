@@ -6,8 +6,10 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
 
+import { NavigationHeader } from '@/components/navigation-header';
 import { ThemeProvider } from '@/components/theme-provider';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { cn } from '@/lib/utils';
 import { QueryProvider } from '@/providers/query-provider';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -20,6 +22,9 @@ export const metadata: Metadata = {
   keywords:
     'movie recommendations, TV show finder, streaming guide, Netflix, Prime Video, Disney+, Apple TV+, MAX, what to watch',
   authors: [{ name: "Ricardo D'Alessandro" }],
+  alternates: {
+    canonical: 'https://watchnexttonight.com/',
+  },
   openGraph: {
     title: 'Watch Next Tonight - Find Your Perfect Movie or Show',
     description:
@@ -76,11 +81,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       price: '0',
       priceCurrency: 'USD',
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      reviewCount: '250',
-    },
   };
 
   return (
@@ -135,8 +135,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           />
         )}
       </head>
-      <body className={inter.className}>
+      <body className={cn(inter.className, 'flex flex-col min-h-screen')}>
         <ThemeProvider defaultTheme="system" storageKey="watch-next-theme">
+          <NavigationHeader />
           <QueryProvider>{children}</QueryProvider>
           <ThemeToggle />
           <Analytics />

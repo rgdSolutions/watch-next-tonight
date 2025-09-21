@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: 'Privacy Policy - Watch Next Tonight',
   description:
     'Privacy policy for Watch Next Tonight - We respect your privacy and are committed to protecting your data.',
+  alternates: {
+    canonical: 'https://watchnexttonight.com/privacy/',
+  },
 };
 
 export default function PrivacyPage() {

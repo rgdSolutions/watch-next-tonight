@@ -6,6 +6,9 @@ export const metadata: Metadata = {
     'Find personalized movie and TV show recommendations based on your location, favorite genres, and viewing preferences across all streaming platforms.',
   keywords:
     'movie search, TV show finder, personalized recommendations, streaming search, Netflix search, Prime Video search, Disney+ search',
+  alternates: {
+    canonical: 'https://watchnexttonight.com/search/',
+  },
   openGraph: {
     title: 'Search Movies & TV Shows | Watch Next Tonight',
     description: 'Get personalized recommendations across all your streaming platforms',
