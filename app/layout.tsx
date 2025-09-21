@@ -6,6 +6,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
 
+import { NavigationHeader } from '@/components/navigation-header';
 import { ThemeProvider } from '@/components/theme-provider';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { QueryProvider } from '@/providers/query-provider';
@@ -137,6 +138,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={inter.className}>
         <ThemeProvider defaultTheme="system" storageKey="watch-next-theme">
+          <NavigationHeader />
           <QueryProvider>{children}</QueryProvider>
           <ThemeToggle />
           <Analytics />
