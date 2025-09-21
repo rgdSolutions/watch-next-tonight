@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center px-4 ">
+    <main className="flex flex-1 flex-col items-center justify-center px-4">
       <div className="mx-auto max-w-2xl text-center">
         {/* 404 Error Code */}
         <h1 className="mb-4 text-8xl font-bold text-primary">404</h1>
