@@ -1,32 +1,33 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Search Movies & TV Shows | Watch Next Tonight',
+  title: 'Personalized Movie & TV Recommendations | Watch Next Tonight',
   description:
-    'Find personalized movie and TV show recommendations based on your location, favorite genres, and viewing preferences across all streaming platforms.',
+    'Get custom movie and TV suggestions tailored to YOUR taste. Select genres, location, and content recency for perfectly matched streaming recommendations.',
   keywords:
-    'movie search, TV show finder, personalized recommendations, streaming search, Netflix search, Prime Video search, Disney+ search',
+    'personalized movie recommendations, custom TV show finder, genre preferences, tailored streaming content, location-based suggestions, mood-based movies',
   alternates: {
     canonical: 'https://watchnexttonight.com/search/',
   },
   openGraph: {
-    title: 'Search Movies & TV Shows | Watch Next Tonight',
-    description: 'Get personalized recommendations across all your streaming platforms',
+    title: 'Personalized Streaming Recommendations | Watch Next Tonight',
+    description:
+      'Customize your entertainment with AI-powered recommendations tailored to your unique preferences',
     type: 'website',
-    url: '/search',
+    url: '/search/',
     images: [
       {
         url: '/search/opengraph-image',
         width: 1200,
         height: 630,
-        alt: 'Search Movies & TV Shows - Watch Next Tonight',
+        alt: 'Personalized Movie & TV Recommendations - Watch Next Tonight',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Search Movies & TV Shows',
-    description: 'Find your perfect watch based on your preferences',
+    title: 'Get Personalized Movie & TV Recommendations',
+    description: 'Custom suggestions based on YOUR genres, location, and viewing preferences',
     images: ['/search/opengraph-image'],
   },
 };
