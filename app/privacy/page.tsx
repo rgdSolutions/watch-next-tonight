@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 
-import Link from 'next/link';
-
+import { baseUrl } from '@/app/layout';
 import { Breadcrumb } from '@/components/breadcrumb';
 import { ScrollToTop } from '@/components/scroll-to-top';
 
@@ -10,7 +9,7 @@ export const metadata: Metadata = {
   description:
     'Privacy policy for Watch Next Tonight - We respect your privacy and are committed to protecting your data.',
   alternates: {
-    canonical: 'https://watchnexttonight.com/privacy/',
+    canonical: `${baseUrl}/privacy/`,
   },
 };
 

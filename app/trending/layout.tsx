@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
 
+import { baseUrl } from '@/app/layout';
+
 export const metadata: Metadata = {
   title: 'Trending Movies & TV Shows Today | Watch Next Tonight',
   description:
@@ -7,16 +9,16 @@ export const metadata: Metadata = {
   keywords:
     'trending movies today, popular TV shows now, global entertainment trends, viral streaming content, most watched Netflix, top Prime Video shows',
   alternates: {
-    canonical: 'https://watchnexttonight.com/trending/',
+    canonical: `${baseUrl}/trending/`,
   },
   openGraph: {
     title: 'Global Trending Entertainment | Watch Next Tonight',
     description: "Real-time trending content that's taking the world by storm across all platforms",
     type: 'website',
-    url: '/trending/',
+    url: `${baseUrl}/trending/`,
     images: [
       {
-        url: '/trending/opengraph-image',
+        url: `${baseUrl}/trending/opengraph-image`,
         width: 1200,
         height: 630,
         alt: 'Global Trending Movies & TV Shows - Watch Next Tonight',
@@ -27,7 +29,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'See What Everyone Is Watching NOW',
     description: 'Global trending movies & shows updated in real-time',
-    images: ['/trending/opengraph-image'],
+    images: [`${baseUrl}/trending/opengraph-image`],
   },
 };
 

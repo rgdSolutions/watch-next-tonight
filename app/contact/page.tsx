@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { ArrowRight, Github, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 
+import { baseUrl } from '@/app/layout';
 import { Breadcrumb } from '@/components/breadcrumb';
 import { ContactForm } from '@/components/contact-form';
 import { ScrollToTop } from '@/components/scroll-to-top';
@@ -12,12 +13,12 @@ export const metadata: Metadata = {
   description:
     "Get in touch with Watch Next Tonight. We're here to help with questions, feedback, or partnership inquiries.",
   alternates: {
-    canonical: 'https://watchnexttonight.com/contact/',
+    canonical: `${baseUrl}/contact/`,
   },
   openGraph: {
     title: 'Contact Watch Next Tonight',
     description: "Questions, feedback, or suggestions? We'd love to hear from you.",
-    url: '/contact/',
+    url: `${baseUrl}/contact/`,
   },
 };
 

@@ -29,6 +29,11 @@ vi.mock('next/image', () => ({
   },
 }));
 
+// Mock Next.js Font component
+vi.mock('next/font/google', () => ({
+  Inter: () => ({ className: 'inter' }),
+}));
+
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,

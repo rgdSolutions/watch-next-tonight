@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import Link from 'next/link';
 
+import { baseUrl } from '@/app/layout';
 import { Breadcrumb } from '@/components/breadcrumb';
 import { ScrollToTop } from '@/components/scroll-to-top';
 
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
   description:
     'Terms and Conditions for Watch Next Tonight - Read our terms of service and usage guidelines.',
   alternates: {
-    canonical: 'https://watchnexttonight.com/terms/',
+    canonical: `${baseUrl}/terms/`,
   },
 };
 

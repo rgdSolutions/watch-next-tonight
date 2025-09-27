@@ -4,6 +4,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import Link from 'next/link';
 import Script from 'next/script';
 
+import { baseUrl } from '@/app/layout';
 import { Breadcrumb } from '@/components/breadcrumb';
 import { ScrollToTop } from '@/components/scroll-to-top';
 
@@ -12,13 +13,13 @@ export const metadata: Metadata = {
   description:
     'Find answers to common questions about Watch Next Tonight. Learn how to get personalized movie and TV show recommendations across streaming platforms.',
   alternates: {
-    canonical: 'https://watchnexttonight.com/faq/',
+    canonical: `${baseUrl}/faq/`,
   },
   openGraph: {
     title: 'Frequently Asked Questions - Watch Next Tonight',
     description:
       'Get answers to your questions about finding the perfect movie or TV show to watch tonight.',
-    url: '/faq/',
+    url: `${baseUrl}/faq/`,
   },
 };
 
