@@ -3,11 +3,10 @@ import type { Metadata } from 'next';
 import { ArrowRight, Github, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 
+import { baseUrl } from '@/app/layout';
 import { Breadcrumb } from '@/components/breadcrumb';
 import { ContactForm } from '@/components/contact-form';
 import { ScrollToTop } from '@/components/scroll-to-top';
-
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://watchnexttonight.com';
 
 export const metadata: Metadata = {
   title: 'Contact Us - Watch Next Tonight Support',

@@ -4,10 +4,9 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import Link from 'next/link';
 import Script from 'next/script';
 
+import { baseUrl } from '@/app/layout';
 import { Breadcrumb } from '@/components/breadcrumb';
 import { ScrollToTop } from '@/components/scroll-to-top';
-
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://watchnexttonight.com';
 
 export const metadata: Metadata = {
   title: 'FAQ - Frequently Asked Questions | Watch Next Tonight',

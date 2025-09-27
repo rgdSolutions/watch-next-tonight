@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
 
+import { baseUrl } from '@/app/layout';
 import { Breadcrumb } from '@/components/breadcrumb';
 import { ScrollToTop } from '@/components/scroll-to-top';
-
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://watchnexttonight.com';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy - Watch Next Tonight',
