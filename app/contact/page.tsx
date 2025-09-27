@@ -7,7 +7,7 @@ import { Breadcrumb } from '@/components/breadcrumb';
 import { ContactForm } from '@/components/contact-form';
 import { ScrollToTop } from '@/components/scroll-to-top';
 
-import { baseUrl } from '../layout';
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://watchnexttonight.com';
 
 export const metadata: Metadata = {
   title: 'Contact Us - Watch Next Tonight Support',
