@@ -13,17 +13,19 @@ import { cn } from '@/lib/utils';
 import { QueryProvider } from '@/providers/query-provider';
 
 const inter = Inter({ subsets: ['latin'] });
+export const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://watchnexttonight.com';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://watchnexttonight.com'),
+  metadataBase: new URL(baseUrl),
   title: 'Watch Next Tonight - Find Your Perfect Movie or Show',
   description:
     'Discover your next binge-worthy movie or TV show instantly. Get personalized recommendations based on your mood, genre preferences, and available streaming platforms.',
+  category: 'entertainment',
   keywords:
     'movie recommendations, TV show finder, streaming guide, Netflix, Prime Video, Disney+, Apple TV+, MAX, what to watch',
   authors: [{ name: "Ricardo D'Alessandro" }],
   alternates: {
-    canonical: 'https://watchnexttonight.com/',
+    canonical: baseUrl,
   },
   openGraph: {
     title: 'Watch Next Tonight - Find Your Perfect Movie or Show',
@@ -31,10 +33,10 @@ export const metadata: Metadata = {
       'Discover your next binge-worthy movie or TV show instantly. Get personalized recommendations based on your preferences.',
     type: 'website',
     siteName: 'Watch Next Tonight',
-    url: '/',
+    url: baseUrl,
     images: [
       {
-        url: '/opengraph-image',
+        url: `${baseUrl}/opengraph-image/`,
         width: 1200,
         height: 630,
         alt: 'Watch Next Tonight - Movie & TV Show Recommendations',
@@ -45,7 +47,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Watch Next Tonight - Find Your Perfect Movie or Show',
     description: 'Discover your next binge-worthy movie or TV show instantly.',
-    images: ['/opengraph-image'],
+    images: [`${baseUrl}/opengraph-image/`],
   },
   robots: {
     index: true,
@@ -58,11 +60,15 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  manifest: '/manifest.json',
+  verification: {
+    google: 'google',
+    yandex: 'yandex',
+    yahoo: 'yahoo',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://watchnexttonight.com';
-
   const jsonLd = [
     {
       '@context': 'https://schema.org',

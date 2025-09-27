@@ -7,17 +7,19 @@ import { Breadcrumb } from '@/components/breadcrumb';
 import { ContactForm } from '@/components/contact-form';
 import { ScrollToTop } from '@/components/scroll-to-top';
 
+import { baseUrl } from '../layout';
+
 export const metadata: Metadata = {
   title: 'Contact Us - Watch Next Tonight Support',
   description:
     "Get in touch with Watch Next Tonight. We're here to help with questions, feedback, or partnership inquiries.",
   alternates: {
-    canonical: 'https://watchnexttonight.com/contact/',
+    canonical: `${baseUrl}/contact/`,
   },
   openGraph: {
     title: 'Contact Watch Next Tonight',
     description: "Questions, feedback, or suggestions? We'd love to hear from you.",
-    url: '/contact/',
+    url: `${baseUrl}/contact/`,
   },
 };
 
