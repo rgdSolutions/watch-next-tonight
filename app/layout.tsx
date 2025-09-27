@@ -61,11 +61,6 @@ export const metadata: Metadata = {
     },
   },
   manifest: '/manifest.json',
-  verification: {
-    google: 'google',
-    yandex: 'yandex',
-    yahoo: 'yahoo',
-  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
