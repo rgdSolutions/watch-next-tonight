@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 
-import { baseUrl } from '../layout';
+import { baseUrl } from '@/app/layout';
 
 export const metadata: Metadata = {
   title: 'Trending Movies & TV Shows Today | Watch Next Tonight',
