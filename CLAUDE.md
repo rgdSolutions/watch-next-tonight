@@ -40,6 +40,8 @@ npm run start
 - `app/`: Next.js App Router pages and layouts
 - `components/`: React components including UI library from Shadcn/ui
 - `lib/`: Utilities and mock data
+- `content/`: MDX content files (blog posts)
+- `docs/`: **Important** - Contains additional context, implementation guides, and project documentation. Always check this folder for relevant information before making changes.
 
 ### Application Flow
 
@@ -86,6 +88,21 @@ The app uses The Movie Database (TMDB) API for real content data:
 - Client library at `/lib/tmdb-client.ts`
 - React Query for caching and data fetching
 - Custom hooks in `/hooks/use-tmdb.ts`
+
+## Blog System
+
+The app includes an MDX-powered blog:
+
+- Blog posts are stored as `.mdx` files in `/content/blog/`
+- Posts require frontmatter with ALL properties mandatory:
+  - `title`: The blog post title
+  - `publishedAt`: Date in YYYY-MM-DD format (use the date the article is generated)
+  - `summary`: A brief description of the post (always required)
+  - `author`: Always set to "Ricardo D'Alessandro"
+  - `image`: URL or path to cover image (generate with AI for every post)
+- Custom styled MDX components defined in `/mdx-components.tsx`
+- Blog utilities and parsers in `/lib/blog.ts`
+- Blog pages at `/app/blog/` (listing) and `/app/blog/[slug]/` (individual posts)
 
 ## Testing
 

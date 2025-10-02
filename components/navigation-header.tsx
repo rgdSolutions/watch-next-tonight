@@ -1,6 +1,6 @@
 'use client';
 
-import { Film, Menu, Search, TrendingUp, X } from 'lucide-react';
+import { BookOpen, Film, Menu, Search, TrendingUp, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -22,6 +22,11 @@ const navItems = [
     href: '/trending/',
     label: 'Trending',
     icon: TrendingUp,
+  },
+  {
+    href: '/blog/',
+    label: 'Blog',
+    icon: BookOpen,
   },
 ];
 

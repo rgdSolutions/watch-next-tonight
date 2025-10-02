@@ -15,3 +15,11 @@ export function returnFirstWord(str: string) {
   }
   return str.split(' ')[0].toLowerCase();
 }
+
+export function formatDate(date: string) {
+  return new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}

@@ -1,9 +1,22 @@
 import { MetadataRoute } from 'next';
 
 import { baseUrl } from '@/app/layout';
+import { getBlogPosts } from '@/lib/blog';
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  return [
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Get all blog posts
+  const posts = await getBlogPosts();
+
+  // Create blog post entries
+  const blogPosts: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.metadata.publishedAt),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }));
+
+  // Static pages
+  const staticPages: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
       lastModified: new Date(),
@@ -15,6 +28,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.85,
     },
     {
       url: `${baseUrl}/trending`,
@@ -53,4 +72,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.3,
     },
   ];
+
+  // Combine static pages and blog posts
+  return [...staticPages, ...blogPosts];
 }

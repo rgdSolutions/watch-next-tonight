@@ -1,0 +1,96 @@
+import Image from 'next/image';
+import { notFound } from 'next/navigation';
+
+import { getBlogPosts } from '@/lib/blog';
+import { formatDate } from '@/lib/utils';
+
+export async function generateStaticParams() {
+  const posts = await getBlogPosts();
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const posts = await getBlogPosts();
+  const post = posts.find((post) => post.slug === slug);
+
+  if (!post) {
+    return {};
+  }
+
+  const {
+    title,
+    publishedAt: publishedTime,
+    summary,
+    meta_description,
+    keywords,
+    image,
+  } = post.metadata;
+
+  return {
+    title: `${title} - Watch Next Tonight Blog`,
+    description: meta_description || summary,
+    keywords: keywords || [],
+    openGraph: {
+      title,
+      description: meta_description || summary,
+      type: 'article',
+      publishedTime,
+      url: `https://watchnexttonight.com/blog/${post.slug}`,
+      images: [
+        {
+          url: image || '/og-image.png',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description: meta_description || summary,
+      images: [image || '/og-image.png'],
+    },
+  };
+}
+
+export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const posts = await getBlogPosts();
+  const post = posts.find((post) => post.slug === slug);
+
+  if (!post) {
+    notFound();
+  }
+
+  return (
+    <article className="container mx-auto px-4 py-12 max-w-3xl">
+      <header className="mb-8">
+        <h1 className="text-4xl font-bold tracking-tight mb-4">{post.metadata.title}</h1>
+        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
+          {post.metadata.publishedAt && (
+            <time dateTime={post.metadata.publishedAt}>
+              {formatDate(post.metadata.publishedAt)}
+            </time>
+          )}
+          {post.metadata.author && <span>by {post.metadata.author}</span>}
+        </div>
+        {post.metadata.image && (
+          <div className="relative w-full aspect-square mb-8 rounded-lg overflow-hidden">
+            <Image
+              src={post.metadata.image}
+              alt={post.metadata.title}
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+        )}
+      </header>
+
+      <div className="prose prose-neutral dark:prose-invert max-w-none">
+        <post.content />
+      </div>
+    </article>
+  );
+}
