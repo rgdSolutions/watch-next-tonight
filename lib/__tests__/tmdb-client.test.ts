@@ -41,7 +41,7 @@ describe('TMDBClient', () => {
       const result = await client.searchMulti('fight club');
 
       expect(mockFetch).toHaveBeenCalledWith(
-        '/api/tmdb/search/multi?query=fight+club&page=1',
+        '/api/tmdb/search/multi?query=fight+club&page=1&include_adult=false',
         undefined
       );
       expect(result).toEqual(mockResponse);
@@ -56,7 +56,10 @@ describe('TMDBClient', () => {
 
       await client.searchMulti('test', 2);
 
-      expect(mockFetch).toHaveBeenCalledWith('/api/tmdb/search/multi?query=test&page=2', undefined);
+      expect(mockFetch).toHaveBeenCalledWith(
+        '/api/tmdb/search/multi?query=test&page=2&include_adult=false',
+        undefined
+      );
     });
   });
 
@@ -82,7 +85,7 @@ describe('TMDBClient', () => {
       });
 
       expect(mockFetch).toHaveBeenCalledWith(
-        '/api/tmdb/discover/movie?with_genres=28&sort_by=popularity.desc&primary_release_date.gte=2023-01-01',
+        '/api/tmdb/discover/movie?include_adult=false&with_genres=28&sort_by=popularity.desc&primary_release_date.gte=2023-01-01',
         undefined
       );
       expect(result).toEqual(mockResponse);
@@ -111,7 +114,7 @@ describe('TMDBClient', () => {
       });
 
       expect(mockFetch).toHaveBeenCalledWith(
-        '/api/tmdb/discover/tv?with_genres=18&sort_by=vote_average.desc&first_air_date.gte=2020-01-01',
+        '/api/tmdb/discover/tv?include_adult=false&with_genres=18&sort_by=vote_average.desc&first_air_date.gte=2020-01-01',
         undefined
       );
       expect(result).toEqual(mockResponse);

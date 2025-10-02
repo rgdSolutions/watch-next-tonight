@@ -245,7 +245,7 @@ describe('NavigationHeader', () => {
 
       lists.forEach((list) => {
         const items = list.querySelectorAll('li');
-        expect(items.length).toBe(3); // Home, Search, Trending
+        expect(items.length).toBe(4); // Home, Search, Trending
       });
     });
   });

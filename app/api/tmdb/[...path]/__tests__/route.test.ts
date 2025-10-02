@@ -46,7 +46,7 @@ describe('TMDB API Route', () => {
       const data = await response.json();
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://api.themoviedb.org/3/search/multi?query=fight',
+        'https://api.themoviedb.org/3/search/multi?query=fight&include_adult=false',
         {
           headers: {
             Authorization: 'Bearer test-token-123',
@@ -85,7 +85,7 @@ describe('TMDB API Route', () => {
       const data = await response.json();
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://api.themoviedb.org/3/discover/movie?with_genres=28',
+        'https://api.themoviedb.org/3/discover/movie?with_genres=28&include_adult=false',
         expect.any(Object)
       );
 
@@ -110,7 +110,7 @@ describe('TMDB API Route', () => {
       const data = await response.json();
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://api.themoviedb.org/3/discover/tv?with_genres=18',
+        'https://api.themoviedb.org/3/discover/tv?with_genres=18&include_adult=false',
         expect.any(Object)
       );
 
