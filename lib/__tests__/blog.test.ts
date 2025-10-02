@@ -8,19 +8,16 @@ import { getBlogPosts } from '../blog';
 vi.mock('fs');
 vi.mock('path');
 
-// Mock dynamic imports
-vi.mock('@/content/blog/test-post.mdx', () => ({
-  default: () => 'Test Content Component',
-}));
-
-vi.mock('@/content/blog/another-post.mdx', () => ({
-  default: () => 'Another Content Component',
-}));
+// Mock content importer function
+const mockContentImporter = vi.fn();
 
 describe('getBlogPosts', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(process.cwd).mockReturnValue('/test/path');
+    vi.spyOn(process, 'cwd').mockReturnValue('/test/path');
+
+    // Set up the mock implementation for content importer
+    mockContentImporter.mockResolvedValue(() => 'Mock Content Component');
   });
 
   describe('Normal operation', () => {
@@ -28,7 +25,7 @@ describe('getBlogPosts', () => {
       vi.mocked(path.join).mockReturnValue('/test/path/content/blog');
       vi.mocked(fs.existsSync).mockReturnValue(false);
 
-      const result = await getBlogPosts();
+      const result = await getBlogPosts(mockContentImporter);
 
       expect(result).toEqual([]);
       expect(fs.existsSync).toHaveBeenCalledWith('/test/path/content/blog');
@@ -39,7 +36,7 @@ describe('getBlogPosts', () => {
       vi.mocked(fs.existsSync).mockReturnValue(true);
       vi.mocked(fs.readdirSync).mockReturnValue([]);
 
-      const result = await getBlogPosts();
+      const result = await getBlogPosts(mockContentImporter);
 
       expect(result).toEqual([]);
       expect(fs.readdirSync).toHaveBeenCalledWith('/test/path/content/blog');
@@ -74,7 +71,7 @@ Content`);
 
       vi.mocked(path.basename).mockReturnValue('test-post');
 
-      const result = await getBlogPosts();
+      const result = await getBlogPosts(mockContentImporter);
 
       expect(result).toHaveLength(1);
       expect(result[0].slug).toBe('test-post');
@@ -103,7 +100,7 @@ This is the blog content.`;
       vi.mocked(fs.readFileSync).mockReturnValue(frontmatter);
       vi.mocked(path.basename).mockReturnValue('test-post');
 
-      const result = await getBlogPosts();
+      const result = await getBlogPosts(mockContentImporter);
 
       expect(result).toHaveLength(1);
       expect(result[0].metadata).toEqual({
@@ -148,7 +145,7 @@ Content 2`);
 
       vi.mocked(path.basename).mockReturnValueOnce('test-post').mockReturnValueOnce('another-post');
 
-      const result = await getBlogPosts();
+      const result = await getBlogPosts(mockContentImporter);
 
       expect(result).toHaveLength(2);
       expect(result[0].metadata.title).toBe('Second Post'); // Sorted by date, newest first
@@ -202,7 +199,7 @@ Content`);
         .mockReturnValueOnce('new-post')
         .mockReturnValueOnce('middle-post');
 
-      const result = await getBlogPosts();
+      const result = await getBlogPosts(mockContentImporter);
 
       expect(result).toHaveLength(3);
       expect(result[0].metadata.title).toBe('New Post');
@@ -230,7 +227,7 @@ Content`);
 
       vi.mocked(path.basename).mockReturnValue('my-awesome-blog-post');
 
-      const result = await getBlogPosts();
+      const result = await getBlogPosts(mockContentImporter);
 
       expect(result[0].slug).toBe('my-awesome-blog-post');
     });
@@ -255,7 +252,7 @@ Content`);
 
       vi.mocked(path.basename).mockReturnValue('test-post');
 
-      const result = await getBlogPosts();
+      const result = await getBlogPosts(mockContentImporter);
 
       expect(result[0].content).toBeDefined();
       expect(typeof result[0].content).toBe('function');
@@ -272,7 +269,7 @@ Content`);
         throw new Error('Permission denied');
       });
 
-      const result = await getBlogPosts();
+      const result = await getBlogPosts(mockContentImporter);
 
       expect(result).toEqual([]);
       expect(consoleErrorSpy).toHaveBeenCalledWith('Error reading blog posts:', expect.any(Error));
@@ -292,7 +289,7 @@ Content`);
       vi.mocked(fs.readFileSync).mockReturnValue('# Just content without frontmatter');
       vi.mocked(path.basename).mockReturnValue('bad-post');
 
-      const result = await getBlogPosts();
+      const result = await getBlogPosts(mockContentImporter);
 
       expect(result).toEqual([]);
       expect(consoleErrorSpy).toHaveBeenCalled();
@@ -317,7 +314,7 @@ publishedAt: 2025-10-01
 Content`);
       vi.mocked(path.basename).mockReturnValue('incomplete-post');
 
-      const result = await getBlogPosts();
+      const result = await getBlogPosts(mockContentImporter);
 
       expect(result).toEqual([]);
       expect(consoleErrorSpy).toHaveBeenCalled();
@@ -357,7 +354,7 @@ Content B`);
 
       vi.mocked(path.basename).mockReturnValueOnce('post-a').mockReturnValueOnce('post-b');
 
-      const result = await getBlogPosts();
+      const result = await getBlogPosts(mockContentImporter);
 
       expect(result).toHaveLength(2);
       // Both have same date, order doesn't matter but should be stable
@@ -385,7 +382,7 @@ Content`);
 
       vi.mocked(path.basename).mockReturnValue('post-with-special-chars-$@!');
 
-      const result = await getBlogPosts();
+      const result = await getBlogPosts(mockContentImporter);
 
       expect(result[0].slug).toBe('post-with-special-chars-$@!');
     });
@@ -416,7 +413,7 @@ Content ${i}`);
         vi.mocked(path.basename).mockReturnValueOnce(`post-${i}`);
       });
 
-      const result = await getBlogPosts();
+      const result = await getBlogPosts(mockContentImporter);
 
       expect(result).toHaveLength(100);
       // Check that posts are sorted by date (newest first)

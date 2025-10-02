@@ -337,7 +337,7 @@ Content.`;
       const result = parseFrontmatter(fileContent);
 
       expect(consoleWarnSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Skipping frontmatter line with empty value')
+        expect.stringContaining('Skipping malformed frontmatter line: "emptyfield:"')
       );
       expect(result.metadata.title).toBe('Test');
 

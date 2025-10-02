@@ -83,7 +83,18 @@ function readMDXFile(filePath: string) {
   return parseFrontmatter(rawContent);
 }
 
-async function getMDXData(dir: string): Promise<BlogPost[]> {
+// Extracted for testability - can be mocked in tests
+export async function importMDXContent(fileName: string): Promise<React.ComponentType> {
+  // Ensure fileName includes .mdx extension for Vite's static analysis
+  const fileNameWithExt = fileName.endsWith('.mdx') ? fileName : `${fileName}.mdx`;
+  const { default: content } = await import(`@/content/blog/${fileNameWithExt}`);
+  return content;
+}
+
+async function getMDXData(
+  dir: string,
+  contentImporter: (fileName: string) => Promise<React.ComponentType> = importMDXContent
+): Promise<BlogPost[]> {
   const mdxFiles = getMDXFiles(dir);
 
   return Promise.all(
@@ -91,8 +102,8 @@ async function getMDXData(dir: string): Promise<BlogPost[]> {
       const { metadata } = readMDXFile(path.join(dir, file));
       const slug = path.basename(file, path.extname(file));
 
-      // Dynamically import the MDX file
-      const { default: content } = await import(`@/content/blog/${file}`);
+      // Dynamically import the MDX file using the provided importer
+      const content = await contentImporter(file);
 
       return {
         metadata,
@@ -103,7 +114,9 @@ async function getMDXData(dir: string): Promise<BlogPost[]> {
   );
 }
 
-export async function getBlogPosts(): Promise<BlogPost[]> {
+export async function getBlogPosts(
+  contentImporter?: (fileName: string) => Promise<React.ComponentType>
+): Promise<BlogPost[]> {
   const contentDir = path.join(process.cwd(), 'content', 'blog');
 
   // Check if directory exists
@@ -112,7 +125,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
   }
 
   try {
-    const posts = await getMDXData(contentDir);
+    const posts = await getMDXData(contentDir, contentImporter);
     return posts.sort((a, b) => {
       // Sort by publishedAt date, newest first
       return (
