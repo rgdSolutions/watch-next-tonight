@@ -15,7 +15,7 @@ export interface BlogPost {
   content: React.ComponentType;
 }
 
-function parseFrontmatter(fileContent: string) {
+export function parseFrontmatter(fileContent: string) {
   const frontmatterRegex = /---\s*([\s\S]*?)\s*---/;
   const match = frontmatterRegex.exec(fileContent);
   if (!match) {
@@ -27,8 +27,24 @@ function parseFrontmatter(fileContent: string) {
   const metadata: Partial<BlogPost['metadata']> = {};
 
   frontMatterLines.forEach((line) => {
+    // Skip empty lines
+    if (!line.trim()) return;
+
+    // Check if line contains the required ': ' separator
+    if (!line.includes(': ')) {
+      console.warn(`Skipping malformed frontmatter line: "${line}"`);
+      return;
+    }
+
     const [key, ...valueArr] = line.split(': ');
     let value = valueArr.join(': ').trim();
+
+    // Skip lines with empty values
+    if (!value) {
+      console.warn(`Skipping frontmatter line with empty value: "${line}"`);
+      return;
+    }
+
     value = value.replace(/^['"](.*)['"]$/, '$1'); // Remove quotes
 
     // Handle keywords as array
@@ -38,6 +54,22 @@ function parseFrontmatter(fileContent: string) {
       metadata[key.trim() as keyof BlogPost['metadata']] = value as any;
     }
   });
+
+  // Validate required fields
+  const requiredFields: (keyof BlogPost['metadata'])[] = [
+    'title',
+    'publishedAt',
+    'summary',
+    'author',
+    'image',
+    'meta_description',
+    'keywords',
+  ];
+
+  const missingFields = requiredFields.filter((field) => !metadata[field]);
+  if (missingFields.length > 0) {
+    throw new Error(`Missing required frontmatter fields: ${missingFields.join(', ')}`);
+  }
 
   return { metadata: metadata as BlogPost['metadata'], content };
 }
