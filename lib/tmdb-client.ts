@@ -30,6 +30,7 @@ export class TMDBClient {
     const params = new URLSearchParams({
       query,
       page: page.toString(),
+      include_adult: 'false',
     });
 
     return this.fetchFromAPI<SearchResults>(`/search/multi?${params}`);
@@ -47,6 +48,8 @@ export class TMDBClient {
     with_watch_monetization_types?: string;
   }): Promise<SearchResults> {
     const searchParams = new URLSearchParams();
+    // Always exclude adult content
+    searchParams.append('include_adult', 'false');
     Object.entries(params).forEach(([key, value]) => {
       if (value) searchParams.append(key, value.toString());
     });
@@ -66,6 +69,8 @@ export class TMDBClient {
     with_watch_monetization_types?: string;
   }): Promise<SearchResults> {
     const searchParams = new URLSearchParams();
+    // Always exclude adult content
+    searchParams.append('include_adult', 'false');
     Object.entries(params).forEach(([key, value]) => {
       if (value) searchParams.append(key, value.toString());
     });

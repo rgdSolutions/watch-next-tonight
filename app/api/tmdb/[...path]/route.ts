@@ -39,6 +39,7 @@ function transformMediaItem(item: any, mediaType: 'movie' | 'tv') {
 function transformSearchResults(data: any) {
   const movies = (data.results || [])
     .filter((item: any) => item.media_type === 'movie')
+    .filter((item: any) => !item.adult) // Filter out adult content
     .map((item: any) => transformMediaItem(item, 'movie'));
 
   const tvShows = (data.results || [])
@@ -56,7 +57,9 @@ function transformSearchResults(data: any) {
 // Transform discover results
 function transformDiscoverResults(data: any, mediaType: 'movie' | 'tv') {
   return {
-    results: (data.results || []).map((item: any) => transformMediaItem(item, mediaType)),
+    results: (data.results || [])
+      .filter((item: any) => (mediaType === 'movie' ? !item.adult : true)) // Filter out adult movies
+      .map((item: any) => transformMediaItem(item, mediaType)),
     page: data.page,
     totalPages: data.total_pages,
     totalResults: data.total_results,
@@ -72,10 +75,12 @@ function transformGenres(data: any) {
 
 // Transform trending results
 function transformTrendingResults(data: any) {
-  const results = (data.results || []).map((item: any) => {
-    const mediaType = item.media_type === 'movie' ? 'movie' : 'tv';
-    return transformMediaItem(item, mediaType);
-  });
+  const results = (data.results || [])
+    .filter((item: any) => (item.media_type === 'movie' ? !item.adult : true)) // Filter out adult movies
+    .map((item: any) => {
+      const mediaType = item.media_type === 'movie' ? 'movie' : 'tv';
+      return transformMediaItem(item, mediaType);
+    });
 
   return {
     results,
@@ -137,7 +142,13 @@ export async function GET(
 
   // Reconstruct the TMDB API path
   const tmdbPath = resolvedParams.path.join('/');
-  const searchParams = request.nextUrl.searchParams;
+  const searchParams = new URLSearchParams(request.nextUrl.searchParams);
+
+  // Always inject include_adult=false for search and discover endpoints
+  if (tmdbPath.includes('search/') || tmdbPath.includes('discover/')) {
+    searchParams.set('include_adult', 'false');
+  }
+
   const queryString = searchParams.toString();
 
   // Build the full TMDB URL
