@@ -68,7 +68,7 @@ async function getMDXData(dir: string): Promise<BlogPost[]> {
   );
 }
 
-export async function getBlogPosts() {
+export async function getBlogPosts(): Promise<BlogPost[]> {
   const contentDir = path.join(process.cwd(), 'content', 'blog');
 
   // Check if directory exists
