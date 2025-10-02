@@ -28,12 +28,12 @@ export default async function BlogPage() {
               <div className="grid md:grid-cols-[300px_1fr] gap-6">
                 {post.metadata.image && (
                   <Link href={`/blog/${post.slug}`} className="group">
-                    <div className="relative w-[300px] h-[300px] ratio-square rounded-lg overflow-hidden">
+                    <div className="relative w-[300px] h-[300px] aspect-square rounded-lg overflow-hidden">
                       <Image
                         src={post.metadata.image}
                         alt={post.metadata.title}
                         fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300 h-full w-full ratio-square"
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
                   </Link>
