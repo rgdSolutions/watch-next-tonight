@@ -99,10 +99,12 @@ The app includes an MDX-powered blog:
   - `publishedAt`: Date in YYYY-MM-DD format (use the date the article is generated)
   - `summary`: A brief description of the post (always required)
   - `author`: Always set to "Ricardo D'Alessandro"
-  - `image`: URL or path to cover image (generate with AI for every post)
+  - `image`: URL or path to cover image in the format ###-titles-first-four-words.png
 - Custom styled MDX components defined in `/mdx-components.tsx`
 - Blog utilities and parsers in `/lib/blog.ts`
 - Blog pages at `/app/blog/` (listing) and `/app/blog/[slug]/` (individual posts)
+- Only use markdown dividers (---) twice per blog; just before and just after the frontmatter properties
+- Do not mix markdown headings prefixed with hashtags (#) and markdown bold (\*\*) on the same line
 
 ## Testing
 
