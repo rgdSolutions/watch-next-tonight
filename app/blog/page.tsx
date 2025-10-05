@@ -13,8 +13,8 @@ export const metadata: Metadata = {
   },
 };
 
-// Static page - no revalidation needed
-export const revalidate = false;
+// Cache blog listing page for 1 hour
+export const revalidate = 3600;
 
 export default async function BlogPage() {
   const posts: BlogPost[] = await getBlogPosts();
