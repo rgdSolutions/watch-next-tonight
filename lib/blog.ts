@@ -157,6 +157,4 @@ export async function getBlogPosts(
   } else {
     return getBlogPostsUncached(contentImporter);
   }
-
-  return getCachedPosts();
 }
