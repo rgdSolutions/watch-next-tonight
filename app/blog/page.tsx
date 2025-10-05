@@ -2,11 +2,15 @@ import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { baseUrl } from '@/app/layout';
 import { type BlogPost, getBlogPosts } from '@/lib/blog';
 
 export const metadata: Metadata = {
   title: 'Blog - Watch Next Tonight',
   description: 'Read our latest articles about movies, TV shows, and streaming recommendations',
+  alternates: {
+    canonical: `${baseUrl}/blog`,
+  },
 };
 
 export default async function BlogPage() {
