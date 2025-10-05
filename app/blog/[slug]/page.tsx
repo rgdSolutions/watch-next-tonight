@@ -12,8 +12,8 @@ export async function generateStaticParams() {
   }));
 }
 
-// Revalidate individual blog posts every hour
-export const revalidate = 3600;
+// Static page - no revalidation needed
+export const revalidate = false;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

@@ -21,6 +21,9 @@ export const metadata: Metadata = {
   },
 };
 
+// Static page - no revalidation needed
+export const revalidate = false;
+
 export default function AboutPage() {
   const features = [
     {

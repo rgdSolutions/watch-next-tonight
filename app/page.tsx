@@ -1,5 +1,8 @@
 import Link from 'next/link';
 
+// Static page - no revalidation needed
+export const revalidate = false;
+
 export default function LandingPage() {
   return (
     <div className="flex-1 bg-gradient-to-br from-background via-purple-950/20 to-background dark:from-slate-900 dark:via-slate-800/30 dark:to-slate-900 flex items-center justify-center px-4 py-0 sm:py-4">
