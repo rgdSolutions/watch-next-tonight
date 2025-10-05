@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { unstable_cache } from 'next/cache';
 import path from 'path';
 
 export interface BlogPost {
@@ -114,7 +115,7 @@ async function getMDXData(
   );
 }
 
-export async function getBlogPosts(
+async function getBlogPostsUncached(
   contentImporter?: (fileName: string) => Promise<React.ComponentType>
 ): Promise<BlogPost[]> {
   const contentDir = path.join(process.cwd(), 'content', 'blog');
@@ -136,4 +137,20 @@ export async function getBlogPosts(
     console.error('Error reading blog posts:', error);
     return [];
   }
+}
+
+export async function getBlogPosts(
+  contentImporter?: (fileName: string) => Promise<React.ComponentType>
+): Promise<BlogPost[]> {
+  // Use unstable_cache for production performance
+  const getCachedPosts = unstable_cache(
+    async () => getBlogPostsUncached(contentImporter),
+    ['blog-posts'],
+    {
+      revalidate: 3600, // Cache for 1 hour
+      tags: ['blog-posts'],
+    }
+  );
+
+  return getCachedPosts();
 }

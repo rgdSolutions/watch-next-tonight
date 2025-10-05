@@ -12,6 +12,9 @@ export async function generateStaticParams() {
   }));
 }
 
+// Revalidate individual blog posts every hour
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const posts = await getBlogPosts();

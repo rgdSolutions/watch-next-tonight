@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   },
 };
 
+// Revalidate blog listing page every hour
+export const revalidate = 3600;
+
 export default async function BlogPage() {
   const posts: BlogPost[] = await getBlogPosts();
 
