@@ -12,9 +12,6 @@ export async function generateStaticParams() {
   }));
 }
 
-// Static page - no revalidation needed
-export const revalidate = false;
-
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const posts = await getBlogPosts();
