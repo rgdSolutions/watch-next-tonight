@@ -142,15 +142,17 @@ async function getBlogPostsUncached(
 export async function getBlogPosts(
   contentImporter?: (fileName: string) => Promise<React.ComponentType>
 ): Promise<BlogPost[]> {
-  // Use unstable_cache for production performance
-  const getCachedPosts = unstable_cache(
-    async () => getBlogPostsUncached(contentImporter),
-    ['blog-posts'],
-    {
-      revalidate: 3600, // Cache for 1 hour
-      tags: ['blog-posts'],
-    }
-  );
+  // If a custom contentImporter is provided (e.g., in tests), skip caching
+  // to avoid cache key conflicts with different importer functions
+  if (contentImporter) {
+    return getBlogPostsUncached(contentImporter);
+  }
+
+  // Use unstable_cache for production performance (default importer only)
+  const getCachedPosts = unstable_cache(async () => getBlogPostsUncached(), ['blog-posts'], {
+    revalidate: 3600, // Cache for 1 hour
+    tags: ['blog-posts'],
+  });
 
   return getCachedPosts();
 }
