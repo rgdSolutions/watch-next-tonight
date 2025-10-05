@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   },
 };
 
+// Static page - no revalidation needed
+export const revalidate = false;
+
 export default function PrivacyPage() {
   const lastUpdated = new Date('2025-09-11').toLocaleDateString('en-US', {
     year: 'numeric',

@@ -23,6 +23,9 @@ export const metadata: Metadata = {
   },
 };
 
+// Static page - no revalidation needed
+export const revalidate = false;
+
 export default function FAQPage() {
   const faqs = [
     {
