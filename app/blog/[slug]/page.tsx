@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
+import { baseUrl } from '@/app/layout';
 import { getBlogPosts } from '@/lib/blog';
 import { formatDate } from '@/lib/utils';
 
@@ -33,12 +34,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: `${title} - Watch Next Tonight Blog`,
     description: meta_description || summary,
     keywords: keywords || [],
+    alternates: {
+      canonical: `${baseUrl}/blog/${slug}`,
+    },
     openGraph: {
       title,
       description: meta_description || summary,
       type: 'article',
       publishedTime,
-      url: `https://watchnexttonight.com/blog/${post.slug}`,
+      url: `${baseUrl}/blog/${slug}`,
       images: [
         {
           url: image || '/og-image.png',
