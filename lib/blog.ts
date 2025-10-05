@@ -1,5 +1,4 @@
 import fs from 'fs';
-import { unstable_cache } from 'next/cache';
 import path from 'path';
 
 export interface BlogPost {
@@ -115,7 +114,7 @@ async function getMDXData(
   );
 }
 
-async function getBlogPostsUncached(
+export async function getBlogPosts(
   contentImporter?: (fileName: string) => Promise<React.ComponentType>
 ): Promise<BlogPost[]> {
   const contentDir = path.join(process.cwd(), 'content', 'blog');
@@ -136,25 +135,5 @@ async function getBlogPostsUncached(
   } catch (error) {
     console.error('Error reading blog posts:', error);
     return [];
-  }
-}
-
-// Move the cached function to module scope
-const getBlogPostsCached = unstable_cache(
-  async () => getBlogPostsUncached(undefined),
-  ['blog-posts'],
-  {
-    revalidate: 3600, // Cache for 1 hour
-    tags: ['blog-posts'],
-  }
-);
-
-export async function getBlogPosts(
-  contentImporter?: (fileName: string) => Promise<React.ComponentType>
-): Promise<BlogPost[]> {
-  if (typeof contentImporter === 'undefined') {
-    return getBlogPostsCached();
-  } else {
-    return getBlogPostsUncached(contentImporter);
   }
 }
