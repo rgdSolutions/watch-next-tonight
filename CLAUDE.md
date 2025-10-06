@@ -108,6 +108,8 @@ The app includes an MDX-powered blog:
 - Only use markdown dividers (---) twice per blog; just before and just after the frontmatter properties
 - Do not mix markdown headings prefixed with hashtags (#) and markdown bold (\*\*) on the same line
 - Each blog article should be at least 2000 words (excluding the frontmatter data).
+- All blog articles end with "About the Author" and Ricardo component
+- Each article needs to internally link to at least 4 other articles
 
 ## Testing
 
