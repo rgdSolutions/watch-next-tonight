@@ -111,6 +111,54 @@ The app includes an MDX-powered blog:
 - All blog articles end with an "## About the Author" heading followed by the `<Ricardo />` component (defined in `/components/ricardo.tsx)
 - Each article needs to internally link to at least 4 other articles
 
+**Mandatory Blog System Rules:**
+
+- All frontmatter fields required: title, publishedAt (2025-10-11), summary, meta_description, keywords, author ("Ricardo D'Alessandro"), image (###-titles-first-four-words.png format)
+- At least 2000 words per article (excluding frontmatter)
+- Use markdown dividers (---) only twice: before and after frontmatter
+- No mixing heading hashtags (#) and bold (\*\*) on same line
+- Import Ricardo component at top
+- End with "## About the Author" heading + `<Ricardo />` component
+- Link to at least 4 other articles internally
+- Use paragraph-content slightly more than list-content, but do use list-content occasionally
+
+**Style Patterns Observed:**
+
+- Warm, empathetic, conversational tone with "you" address
+- Opening hook with relatable scenario
+- Mix of practical advice (lists) and philosophical reflection (longer paragraphs)
+- Case studies/vignettes
+- FAQ section (4 questions)
+- Multiple clear section headings
+- Rich, textured language in reflective sections
+- Internal links to watchnexttonight.com and other blog articles
+
+**For Each Article:**
+
+1. Create engaging opening hook (relatable scenario)
+2. Write 2000+ words with sections:
+   - Problem statement
+   - Practical strategies (mix lists and paragraphs, favor paragraphs)
+   - Case studies/vignettes
+   - Deeper philosophical reflections
+   - FAQ section (4 or more questions)
+   - Challenge/call-to-action
+3. Link to 4+ other articles from existing or new set
+4. Place CTA to Watch Next Tonight naturally in content
+5. End with "## About the Author" + Ricardo component
+6. Ensure proper frontmatter with today's date
+7. Image path: /images/blog/###-[first-four-words].png
+
+**Quality Checks:**
+
+- Word count verification (2000+ words)
+- Internal link count (4+ links)
+- Frontmatter completeness
+- Ricardo component placement
+- Markdown divider usage (exactly 2)
+- No mixed heading/bold on same line
+- Paragraph/list balance (favor paragraphs)
+
 ## Testing
 
 - Unit tests with Vitest and React Testing Library
