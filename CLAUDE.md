@@ -113,7 +113,7 @@ The app includes an MDX-powered blog:
 
 **Mandatory Blog System Rules:**
 
-- All frontmatter fields required: title, publishedAt (2025-10-11), summary, meta_description, keywords, author ("Ricardo D'Alessandro"), image (###-titles-first-four-words.png format)
+- All frontmatter fields required: title, publishedAt (YYYY-MM-DD), summary, meta_description, keywords, author ("Ricardo D'Alessandro"), image (###-titles-first-four-words.png format)
 - At least 2000 words per article (excluding frontmatter)
 - Use markdown dividers (---) only twice: before and after frontmatter
 - No mixing heading hashtags (#) and bold (\*\*) on same line
