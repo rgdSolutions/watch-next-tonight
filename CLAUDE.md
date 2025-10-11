@@ -153,6 +153,7 @@ The app includes an MDX-powered blog:
 
 - Word count verification (2000+ words)
 - Internal link count (4+ links)
+- Endure all links are valid and there are no broken links
 - Frontmatter completeness
 - Ricardo component placement
 - Markdown divider usage (exactly 2)

@@ -100,7 +100,10 @@ async function getMDXData(
   return Promise.all(
     mdxFiles.map(async (file) => {
       const { metadata } = readMDXFile(path.join(dir, file));
-      const slug = path.basename(file, path.extname(file));
+      let slug = path.basename(file, path.extname(file));
+
+      // Remove the number prefix (e.g., "001-" or "042-") from the slug
+      slug = slug.replace(/^\d{3}-/, '');
 
       // Dynamically import the MDX file using the provided importer
       const content = await contentImporter(file);
