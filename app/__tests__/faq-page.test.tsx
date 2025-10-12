@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
-import FAQPage from '../faq/page';
+import FAQPage from '@/app/faq/page';
 
 // Mock next/navigation
 vi.mock('next/navigation', () => ({

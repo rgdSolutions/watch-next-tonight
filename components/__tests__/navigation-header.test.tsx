@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation';
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { NavigationHeader } from '../navigation-header';
+import { NavigationHeader } from '@/components/navigation-header';
 
 // Mock next/navigation
 vi.mock('next/navigation', () => ({
