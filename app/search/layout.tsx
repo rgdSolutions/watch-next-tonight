@@ -9,14 +9,14 @@ export const metadata: Metadata = {
   keywords:
     'personalized movie recommendations, custom TV show finder, genre preferences, tailored streaming content, location-based suggestions, mood-based movies',
   alternates: {
-    canonical: `${baseUrl}/search/`,
+    canonical: `${baseUrl}/search`,
   },
   openGraph: {
     title: 'Personalized Streaming Recommendations | Watch Next Tonight',
     description:
       'Customize your entertainment with AI-powered recommendations tailored to your unique preferences',
     type: 'website',
-    url: `${baseUrl}/search/`,
+    url: `${baseUrl}/search`,
     images: [
       {
         url: `${baseUrl}/search/opengraph-image`,

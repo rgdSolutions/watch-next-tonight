@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     url: baseUrl,
     images: [
       {
-        url: `${baseUrl}/opengraph-image/`,
+        url: `${baseUrl}/opengraph-image`,
         width: 1200,
         height: 630,
         alt: 'Watch Next Tonight - Movie & TV Show Recommendations',
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Watch Next Tonight - Find Your Perfect Movie or Show',
     description: 'Discover your next binge-worthy movie or TV show instantly.',
-    images: [`${baseUrl}/opengraph-image/`],
+    images: [`${baseUrl}/opengraph-image`],
   },
   robots: {
     index: true,
@@ -77,7 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       author: {
         '@type': 'Person',
         name: "Ricardo D'Alessandro",
-        url: `${baseUrl}/about/`,
+        url: `${baseUrl}/about`,
       },
       offers: {
         '@type': 'Offer',
@@ -115,7 +115,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       contactPoint: {
         '@type': 'ContactPoint',
         contactType: 'customer support',
-        url: `${baseUrl}/contact/`,
+        url: `${baseUrl}/contact`,
       },
       sameAs: ['https://github.com/rgdSolutions/watch-next-tonight'],
     },

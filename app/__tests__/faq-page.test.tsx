@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
-import FAQPage from '../faq/page';
+import FAQPage from '@/app/faq/page';
 
 // Mock next/navigation
 vi.mock('next/navigation', () => ({
@@ -92,7 +92,7 @@ describe('FAQPage', () => {
     ).toBeInTheDocument();
 
     const contactLink = screen.getByRole('link', { name: 'Contact Support' });
-    expect(contactLink).toHaveAttribute('href', '/contact/');
+    expect(contactLink).toHaveAttribute('href', '/contact');
 
     const issueLink = screen.getByRole('link', { name: 'Report an Issue' });
     expect(issueLink).toHaveAttribute(

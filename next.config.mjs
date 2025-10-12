@@ -28,7 +28,7 @@ const nextConfig = {
   reactStrictMode: true,
 
   // SEO Optimizations
-  trailingSlash: true, // Ensures URL consistency for better SEO
+  trailingSlash: false, // Ensures URL consistency for better SEO
 
   // Production build optimizations
   productionBrowserSourceMaps: false, // Smaller bundle sizes

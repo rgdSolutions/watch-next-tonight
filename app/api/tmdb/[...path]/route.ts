@@ -98,7 +98,7 @@ function transformResponse(path: string, data: any): any {
   }
 
   // Trending endpoints
-  if (path.includes('trending/')) {
+  if (path === 'trending' || path.startsWith('trending/')) {
     return transformTrendingResults(data);
   }
 

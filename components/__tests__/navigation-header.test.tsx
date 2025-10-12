@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation';
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { NavigationHeader } from '../navigation-header';
+import { NavigationHeader } from '@/components/navigation-header';
 
 // Mock next/navigation
 vi.mock('next/navigation', () => ({
@@ -140,12 +140,12 @@ describe('NavigationHeader', () => {
 
       const searchLinks = screen.getAllByRole('link', { name: /search/i });
       searchLinks.forEach((link) => {
-        expect(link).toHaveAttribute('href', '/search/');
+        expect(link).toHaveAttribute('href', '/search');
       });
 
       const trendingLinks = screen.getAllByRole('link', { name: /trending/i });
       trendingLinks.forEach((link) => {
-        expect(link).toHaveAttribute('href', '/trending/');
+        expect(link).toHaveAttribute('href', '/trending');
       });
     });
 
@@ -179,7 +179,7 @@ describe('NavigationHeader', () => {
     });
 
     it('adds aria-current="page" to active navigation items', () => {
-      mockUsePathname.mockReturnValue('/search/');
+      mockUsePathname.mockReturnValue('/search');
       render(<NavigationHeader />);
 
       const searchLink = screen.getByRole('link', { name: /search/i });

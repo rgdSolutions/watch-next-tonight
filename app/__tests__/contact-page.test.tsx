@@ -62,7 +62,7 @@ describe('ContactPage', () => {
     ).toBeInTheDocument();
 
     const faqLink = screen.getByRole('link', { name: /View FAQ/i });
-    expect(faqLink).toHaveAttribute('href', '/faq/');
+    expect(faqLink).toHaveAttribute('href', '/faq');
   });
 
   it('should display expected response time information', () => {

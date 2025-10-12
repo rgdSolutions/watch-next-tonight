@@ -136,31 +136,31 @@ export default function LandingPage() {
           </div>
           <div className="text-center text-xs text-muted-foreground/60 flex flex-wrap justify-center gap-4 sm:gap-8">
             <Link
-              href="/about/"
+              href="/about"
               className="hover:text-muted-foreground hover:underline transition-colors"
             >
               About
             </Link>
             <Link
-              href="/faq/"
+              href="/faq"
               className="hover:text-muted-foreground hover:underline transition-colors"
             >
               FAQ
             </Link>
             <Link
-              href="/contact/"
+              href="/contact"
               className="hover:text-muted-foreground hover:underline transition-colors"
             >
               Contact
             </Link>
             <Link
-              href="/privacy/"
+              href="/privacy"
               className="hover:text-muted-foreground hover:underline transition-colors"
             >
               Privacy
             </Link>
             <Link
-              href="/terms/"
+              href="/terms"
               className="hover:text-muted-foreground hover:underline transition-colors"
             >
               Terms

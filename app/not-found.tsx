@@ -42,7 +42,7 @@ export default function NotFound() {
           </Link>
 
           <Link
-            href="/search/"
+            href="/search"
             className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-6 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
           >
             <Search className="h-4 w-4" />
@@ -50,7 +50,7 @@ export default function NotFound() {
           </Link>
 
           <Link
-            href="/trending/"
+            href="/trending"
             className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-6 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
           >
             <TrendingUp className="h-4 w-4" />
