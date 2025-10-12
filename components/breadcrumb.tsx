@@ -43,6 +43,7 @@ export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
     })();
 
   // Generate schema.org BreadcrumbList
+  const baseUrl = 'https://watchnexttonight.com';
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -50,7 +51,7 @@ export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
       '@type': 'ListItem',
       position: index + 1,
       name: item.label,
-      item: item.href ? `https://watchnexttonight.com${item.href}` : undefined,
+      item: item.href ? (item.href === '/' ? baseUrl : `${baseUrl}${item.href}`) : undefined,
     })),
   };
 
