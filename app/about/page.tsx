@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Code, Film, Globe, Shield, Star, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 
+import { baseUrl } from '@/app/layout';
 import { Breadcrumb } from '@/components/breadcrumb';
 import { Ricardo } from '@/components/ricardo';
 import { ScrollToTop } from '@/components/scroll-to-top';
@@ -12,22 +13,13 @@ export const metadata: Metadata = {
   description:
     'Learn about Watch Next Tonight, the AI-powered streaming recommendation platform helping millions find their perfect movie or TV show across all major platforms.',
   alternates: {
-import { baseUrl } from '@/app/layout';
-
-export const metadata: Metadata = {
-  title: 'About Watch Next Tonight - Your Personalized Streaming Guide',
-  description:
-    'Learn about Watch Next Tonight, the AI-powered streaming recommendation platform helping millions find their perfect movie or TV show across all major platforms.',
-  alternates: {
     canonical: `${baseUrl}/about`,
-  },
-};
   },
   openGraph: {
     title: 'About Watch Next Tonight - Your Personalized Streaming Guide',
     description:
       'Discover how Watch Next Tonight helps you find the perfect content across Netflix, Prime Video, Disney+, and more.',
-    url: '/about',
+    url: `${baseUrl}/about`,
   },
 };
 
