@@ -12,7 +12,16 @@ export const metadata: Metadata = {
   description:
     'Learn about Watch Next Tonight, the AI-powered streaming recommendation platform helping millions find their perfect movie or TV show across all major platforms.',
   alternates: {
-    canonical: 'https://watchnexttonight.com/about',
+import { baseUrl } from '@/app/layout';
+
+export const metadata: Metadata = {
+  title: 'About Watch Next Tonight - Your Personalized Streaming Guide',
+  description:
+    'Learn about Watch Next Tonight, the AI-powered streaming recommendation platform helping millions find their perfect movie or TV show across all major platforms.',
+  alternates: {
+    canonical: `${baseUrl}/about`,
+  },
+};
   },
   openGraph: {
     title: 'About Watch Next Tonight - Your Personalized Streaming Guide',
