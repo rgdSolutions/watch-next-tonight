@@ -28,9 +28,11 @@ export default defineConfig({
         'out/',
         'app/',
         'components/ui/',
-        'tests/',
+        'tests/**/*.test.*',
+        'tests/**/*.spec.*',
         '.lintstagedrc.js',
       ],
+      include: ['**/*.{js,jsx,ts,tsx}', 'tests/utils/**/*.{ts,tsx}'],
     },
   },
   resolve: {
