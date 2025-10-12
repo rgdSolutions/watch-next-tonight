@@ -14,17 +14,17 @@ const navItems = [
     icon: Film,
   },
   {
-    href: '/search/',
+    href: '/search',
     label: 'Search',
     icon: Search,
   },
   {
-    href: '/trending/',
+    href: '/trending',
     label: 'Trending',
     icon: TrendingUp,
   },
   {
-    href: '/blog/',
+    href: '/blog',
     label: 'Blog',
     icon: BookOpen,
   },

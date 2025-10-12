@@ -9,13 +9,13 @@ export const metadata: Metadata = {
   keywords:
     'trending movies today, popular TV shows now, global entertainment trends, viral streaming content, most watched Netflix, top Prime Video shows',
   alternates: {
-    canonical: `${baseUrl}/trending/`,
+    canonical: `${baseUrl}/trending`,
   },
   openGraph: {
     title: 'Global Trending Entertainment | Watch Next Tonight',
     description: "Real-time trending content that's taking the world by storm across all platforms",
     type: 'website',
-    url: `${baseUrl}/trending/`,
+    url: `${baseUrl}/trending`,
     images: [
       {
         url: `${baseUrl}/trending/opengraph-image`,

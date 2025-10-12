@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     'Privacy policy for Watch Next Tonight - We respect your privacy and are committed to protecting your data.',
   alternates: {
-    canonical: `${baseUrl}/privacy/`,
+    canonical: `${baseUrl}/privacy`,
   },
 };
 

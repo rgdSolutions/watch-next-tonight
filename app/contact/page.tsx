@@ -13,12 +13,12 @@ export const metadata: Metadata = {
   description:
     "Get in touch with Watch Next Tonight. We're here to help with questions, feedback, or partnership inquiries.",
   alternates: {
-    canonical: `${baseUrl}/contact/`,
+    canonical: `${baseUrl}/contact`,
   },
   openGraph: {
     title: 'Contact Watch Next Tonight',
     description: "Questions, feedback, or suggestions? We'd love to hear from you.",
-    url: `${baseUrl}/contact/`,
+    url: `${baseUrl}/contact`,
   },
 };
 
@@ -98,7 +98,7 @@ export default function ContactPage() {
         <p className="text-muted-foreground mb-4">
           Before reaching out, you might find your answer in our FAQ section.
         </p>
-        <Link href="/faq/" className="inline-flex items-center gap-2 text-primary hover:underline">
+        <Link href="/faq" className="inline-flex items-center gap-2 text-primary hover:underline">
           View FAQ
           <ArrowRight className="w-4 h-4" />
         </Link>

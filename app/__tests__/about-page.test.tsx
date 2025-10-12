@@ -87,8 +87,8 @@ describe('AboutPage', () => {
     const personalizedSearchLink = screen.getByRole('link', { name: /Start Personalized Search/i });
     const trendingLink = screen.getByRole('link', { name: /See What's Trending/i });
 
-    expect(personalizedSearchLink).toHaveAttribute('href', '/search/');
-    expect(trendingLink).toHaveAttribute('href', '/trending/');
+    expect(personalizedSearchLink).toHaveAttribute('href', '/search');
+    expect(trendingLink).toHaveAttribute('href', '/trending');
   });
 
   it('should include breadcrumb navigation', () => {

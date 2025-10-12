@@ -277,7 +277,7 @@ describe('Breadcrumb', () => {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://watchnexttonight.com/',
+        item: 'https://watchnexttonight.com',
       });
 
       expect(jsonLd.itemListElement[1]).toEqual({

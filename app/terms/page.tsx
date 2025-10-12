@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description:
     'Terms and Conditions for Watch Next Tonight - Read our terms of service and usage guidelines.',
   alternates: {
-    canonical: `${baseUrl}/terms/`,
+    canonical: `${baseUrl}/terms`,
   },
 };
 

@@ -13,13 +13,13 @@ export const metadata: Metadata = {
   description:
     'Find answers to common questions about Watch Next Tonight. Learn how to get personalized movie and TV show recommendations across streaming platforms.',
   alternates: {
-    canonical: `${baseUrl}/faq/`,
+    canonical: `${baseUrl}/faq`,
   },
   openGraph: {
     title: 'Frequently Asked Questions - Watch Next Tonight',
     description:
       'Get answers to your questions about finding the perfect movie or TV show to watch tonight.',
-    url: `${baseUrl}/faq/`,
+    url: `${baseUrl}/faq`,
   },
 };
 
@@ -164,7 +164,7 @@ export default function FAQPage() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
-            href="/contact/"
+            href="/contact"
             className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
             Contact Support

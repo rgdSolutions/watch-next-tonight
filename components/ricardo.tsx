@@ -22,7 +22,7 @@ export const Ricardo = () => (
       >
         GitHub
       </Link>
-      <Link href="/contact/" className="text-primary hover:underline">
+      <Link href="/contact" className="text-primary hover:underline">
         Contact
       </Link>
     </div>

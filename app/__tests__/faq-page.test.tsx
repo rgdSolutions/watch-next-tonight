@@ -92,7 +92,7 @@ describe('FAQPage', () => {
     ).toBeInTheDocument();
 
     const contactLink = screen.getByRole('link', { name: 'Contact Support' });
-    expect(contactLink).toHaveAttribute('href', '/contact/');
+    expect(contactLink).toHaveAttribute('href', '/contact');
 
     const issueLink = screen.getByRole('link', { name: 'Report an Issue' });
     expect(issueLink).toHaveAttribute(

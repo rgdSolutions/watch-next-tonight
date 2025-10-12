@@ -12,13 +12,13 @@ export const metadata: Metadata = {
   description:
     'Learn about Watch Next Tonight, the AI-powered streaming recommendation platform helping millions find their perfect movie or TV show across all major platforms.',
   alternates: {
-    canonical: 'https://watchnexttonight.com/about/',
+    canonical: 'https://watchnexttonight.com/about',
   },
   openGraph: {
     title: 'About Watch Next Tonight - Your Personalized Streaming Guide',
     description:
       'Discover how Watch Next Tonight helps you find the perfect content across Netflix, Prime Video, Disney+, and more.',
-    url: '/about/',
+    url: '/about',
   },
 };
 
@@ -225,14 +225,14 @@ export default function AboutPage() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
-            href="/search/"
+            href="/search"
             className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
             <Film className="h-4 w-4" />
             Start Personalized Search
           </Link>
           <Link
-            href="/trending/"
+            href="/trending"
             className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-6 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
           >
             <TrendingUp className="h-4 w-4" />
