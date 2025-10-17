@@ -1,42 +1,13 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-
-import { getCountryCodeFromCoordinates } from '@/lib/country-codes';
+import { useSearchNavigation } from '@/hooks/use-search-navigation';
 
 export function SearchButton() {
-  const router = useRouter();
-
-  const handleSearchClick = async () => {
-    let countryCode = 'US'; // Default fallback
-
-    try {
-      // Request geolocation permission
-      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          enableHighAccuracy: false,
-          timeout: 10000,
-          maximumAge: 300000,
-        });
-      });
-
-      const { latitude, longitude } = position.coords;
-      countryCode = await getCountryCodeFromCoordinates(latitude, longitude);
-    } catch (error) {
-      console.error('Location detection error:', error);
-      // Permission denied or error - use default US
-    }
-
-    // Store in localStorage for fallback
-    localStorage.setItem('userCountry', countryCode);
-
-    // Navigate with query param
-    router.push(`/search?country=${countryCode}`);
-  };
+  const { navigateToSearch } = useSearchNavigation();
 
   return (
     <button
-      onClick={handleSearchClick}
+      onClick={navigateToSearch}
       className="group block w-full md:w-96 appearance-none border-none bg-transparent p-0 m-0 cursor-pointer text-left"
     >
       <div className="relative bg-gradient-to-br from-purple-600 to-blue-600 p-1 rounded-3xl shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105 h-full">

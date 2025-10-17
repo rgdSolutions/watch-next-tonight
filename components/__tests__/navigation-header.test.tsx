@@ -8,6 +8,16 @@ import { NavigationHeader } from '@/components/navigation-header';
 // Mock next/navigation
 vi.mock('next/navigation', () => ({
   usePathname: vi.fn(),
+  useRouter: vi.fn(() => ({
+    push: vi.fn(),
+  })),
+}));
+
+// Mock useSearchNavigation hook
+vi.mock('@/hooks/use-search-navigation', () => ({
+  useSearchNavigation: vi.fn(() => ({
+    navigateToSearch: vi.fn(),
+  })),
 }));
 
 // Mock next/link to avoid navigation errors in tests
@@ -50,14 +60,14 @@ describe('NavigationHeader', () => {
       render(<NavigationHeader />);
 
       expect(screen.getByRole('link', { name: /home/i })).toBeInTheDocument();
-      expect(screen.getByRole('link', { name: /search/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /search/i })).toBeInTheDocument();
       expect(screen.getByRole('link', { name: /trending/i })).toBeInTheDocument();
     });
 
     it('does not show mobile menu button on desktop', () => {
       render(<NavigationHeader />);
 
-      const menuButton = screen.getByRole('button');
+      const menuButton = screen.getByRole('button', { name: /open menu|close menu/i });
       expect(menuButton).toHaveClass('md:hidden');
     });
 
@@ -88,7 +98,7 @@ describe('NavigationHeader', () => {
     it('shows mobile menu button with correct initial state', () => {
       render(<NavigationHeader />);
 
-      const menuButton = screen.getByRole('button');
+      const menuButton = screen.getByRole('button', { name: /open menu/i });
       expect(menuButton).toBeInTheDocument();
       expect(menuButton).toHaveAttribute('aria-expanded', 'false');
       expect(menuButton).toHaveAttribute('aria-controls', 'mobile-menu');
@@ -102,7 +112,7 @@ describe('NavigationHeader', () => {
       expect(screen.queryByRole('list')).toHaveClass('hidden', 'md:flex');
 
       // Click menu button to open
-      const menuButton = screen.getByRole('button');
+      const menuButton = screen.getByRole('button', { name: /open menu/i });
       fireEvent.click(menuButton);
 
       // Mobile menu should now be visible (there will be 2 lists - desktop and mobile)
@@ -114,7 +124,7 @@ describe('NavigationHeader', () => {
     it('changes menu icon when mobile menu is toggled', () => {
       render(<NavigationHeader />);
 
-      const menuButton = screen.getByRole('button');
+      const menuButton = screen.getByRole('button', { name: /open menu/i });
 
       // Initially shows Menu icon
       expect(menuButton.innerHTML).toContain('svg');
@@ -130,7 +140,7 @@ describe('NavigationHeader', () => {
   });
 
   describe('Navigation Links', () => {
-    it('has correct href attributes for all links', () => {
+    it('has correct href attributes for all links and buttons for search', () => {
       render(<NavigationHeader />);
 
       const homeLinks = screen.getAllByRole('link', { name: /home/i });
@@ -138,10 +148,9 @@ describe('NavigationHeader', () => {
         expect(link).toHaveAttribute('href', '/');
       });
 
-      const searchLinks = screen.getAllByRole('link', { name: /search/i });
-      searchLinks.forEach((link) => {
-        expect(link).toHaveAttribute('href', '/search');
-      });
+      // Search is now a button, not a link
+      const searchButtons = screen.getAllByRole('button', { name: /search/i });
+      expect(searchButtons.length).toBeGreaterThan(0);
 
       const trendingLinks = screen.getAllByRole('link', { name: /trending/i });
       trendingLinks.forEach((link) => {
@@ -165,7 +174,7 @@ describe('NavigationHeader', () => {
       render(<NavigationHeader />);
 
       // Initial state - menu closed
-      let menuButton = screen.getByRole('button');
+      let menuButton = screen.getByRole('button', { name: /open menu/i });
       expect(menuButton).toHaveAttribute('aria-label', 'Open menu');
       expect(menuButton).toHaveAttribute('aria-expanded', 'false');
 
@@ -173,7 +182,7 @@ describe('NavigationHeader', () => {
       fireEvent.click(menuButton);
 
       // Menu open state
-      menuButton = screen.getByRole('button');
+      menuButton = screen.getByRole('button', { name: /close menu/i });
       expect(menuButton).toHaveAttribute('aria-label', 'Close menu');
       expect(menuButton).toHaveAttribute('aria-expanded', 'true');
     });
@@ -182,8 +191,9 @@ describe('NavigationHeader', () => {
       mockUsePathname.mockReturnValue('/search');
       render(<NavigationHeader />);
 
-      const searchLink = screen.getByRole('link', { name: /search/i });
-      expect(searchLink).toHaveAttribute('aria-current', 'page');
+      // Search is now a button, not a link
+      const searchButton = screen.getByRole('button', { name: /search/i });
+      expect(searchButton).toHaveAttribute('aria-current', 'page');
 
       const homeLink = screen.getByRole('link', { name: /home/i });
       expect(homeLink).not.toHaveAttribute('aria-current');
@@ -196,7 +206,7 @@ describe('NavigationHeader', () => {
       render(<NavigationHeader />);
 
       // Open mobile menu
-      const menuButton = screen.getByRole('button');
+      const menuButton = screen.getByRole('button', { name: /open menu/i });
       fireEvent.click(menuButton);
 
       // Check mobile menu container
@@ -208,7 +218,7 @@ describe('NavigationHeader', () => {
       render(<NavigationHeader />);
 
       // Open mobile menu
-      const menuButton = screen.getByRole('button');
+      const menuButton = screen.getByRole('button', { name: /open menu/i });
       fireEvent.click(menuButton);
 
       // Verify menu is open
@@ -256,8 +266,9 @@ describe('NavigationHeader', () => {
       render(<NavigationHeader />);
 
       // Should not highlight any nav item for nested paths
-      const searchLink = screen.getByRole('link', { name: /search/i });
-      expect(searchLink).not.toHaveClass('bg-primary');
+      // Search is now a button
+      const searchButton = screen.getByRole('button', { name: /search/i });
+      expect(searchButton).not.toHaveClass('bg-primary');
     });
 
     it('handles empty pathname gracefully', () => {
@@ -276,7 +287,7 @@ describe('NavigationHeader', () => {
       expect(desktopList).toHaveClass('hidden', 'md:flex');
 
       // Mobile menu button
-      const menuButton = screen.getByRole('button');
+      const menuButton = screen.getByRole('button', { name: /open menu/i });
       expect(menuButton).toHaveClass('md:hidden');
 
       // Logo text variations
