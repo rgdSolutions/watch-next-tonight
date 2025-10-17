@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
+import { useSearchNavigation } from '@/hooks/use-search-navigation';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -35,6 +36,7 @@ export function NavigationHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const { navigateToSearch } = useSearchNavigation();
 
   const isActive = (href: string) => {
     // Handle trailing slash consistency
@@ -86,21 +88,39 @@ export function NavigationHeader() {
             {navItems.map((item) => {
               const Icon = item.icon;
               const active = isActive(item.href);
+              const isSearchLink = item.href === '/search';
+
               return (
                 <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    aria-current={active ? 'page' : undefined}
-                    className={cn(
-                      'flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
-                      active
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                    )}
-                  >
-                    <Icon className="h-4 w-4" />
-                    <span>{item.label}</span>
-                  </Link>
+                  {isSearchLink ? (
+                    <button
+                      onClick={navigateToSearch}
+                      aria-current={active ? 'page' : undefined}
+                      className={cn(
+                        'flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer',
+                        active
+                          ? 'bg-primary text-primary-foreground'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                      )}
+                    >
+                      <Icon className="h-4 w-4" />
+                      <span>{item.label}</span>
+                    </button>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      aria-current={active ? 'page' : undefined}
+                      className={cn(
+                        'flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+                        active
+                          ? 'bg-primary text-primary-foreground'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                      )}
+                    >
+                      <Icon className="h-4 w-4" />
+                      <span>{item.label}</span>
+                    </Link>
+                  )}
                 </li>
               );
             })}
@@ -132,22 +152,43 @@ export function NavigationHeader() {
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const active = isActive(item.href);
+                const isSearchLink = item.href === '/search';
+
                 return (
                   <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      aria-current={active ? 'page' : undefined}
-                      className={cn(
-                        'flex items-center space-x-3 px-4 py-3 rounded-lg text-base font-medium transition-colors',
-                        active
-                          ? 'bg-primary text-primary-foreground'
-                          : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                      )}
-                    >
-                      <Icon className="h-5 w-5" />
-                      <span>{item.label}</span>
-                    </Link>
+                    {isSearchLink ? (
+                      <button
+                        onClick={() => {
+                          setIsMobileMenuOpen(false);
+                          navigateToSearch();
+                        }}
+                        aria-current={active ? 'page' : undefined}
+                        className={cn(
+                          'flex items-center space-x-3 px-4 py-3 rounded-lg text-base font-medium transition-colors cursor-pointer w-full',
+                          active
+                            ? 'bg-primary text-primary-foreground'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                        )}
+                      >
+                        <Icon className="h-5 w-5" />
+                        <span>{item.label}</span>
+                      </button>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        aria-current={active ? 'page' : undefined}
+                        className={cn(
+                          'flex items-center space-x-3 px-4 py-3 rounded-lg text-base font-medium transition-colors',
+                          active
+                            ? 'bg-primary text-primary-foreground'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                        )}
+                      >
+                        <Icon className="h-5 w-5" />
+                        <span>{item.label}</span>
+                      </Link>
+                    )}
                   </li>
                 );
               })}

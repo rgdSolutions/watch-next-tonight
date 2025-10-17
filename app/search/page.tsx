@@ -1,13 +1,13 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
 import { ContentDisplayWithQuery } from '@/components/content-display-with-query';
 import { GenreStep } from '@/components/genre-step';
 import { Header } from '@/components/header';
 import { LoadingScreen } from '@/components/loading-screen';
-import { LocationStep } from '@/components/location-step';
 import { RecencyStep } from '@/components/recency-step';
 import { useIsMobileScreenWidth } from '@/hooks/use-is-mobile-screen-width';
 import { tmdbPrefetch } from '@/hooks/use-tmdb';
@@ -20,11 +20,12 @@ interface UserPreferences {
   recency: RecencyOption;
 }
 
-type Step = 'location' | 'genres' | 'recency' | 'results';
+type Step = 'genres' | 'recency' | 'results';
 
-export default function SearchPage() {
+function SearchPageContent() {
   const isMobile = useIsMobileScreenWidth();
-  const [currentStep, setCurrentStep] = useState<Step>('location');
+  const searchParams = useSearchParams();
+  const [currentStep, setCurrentStep] = useState<Step>('genres');
   const [preferences, setPreferences] = useState<Partial<UserPreferences>>({});
   const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
@@ -35,10 +36,15 @@ export default function SearchPage() {
     tmdbPrefetch.tvGenres(queryClient);
   }, [queryClient]);
 
-  const handleLocationComplete = (country: string) => {
+  // Get country from query param, localStorage, or default to US
+  useEffect(() => {
+    const countryFromParam = searchParams.get('country');
+    const countryFromStorage =
+      typeof window !== 'undefined' ? localStorage.getItem('userCountry') : null;
+    const country = countryFromParam || countryFromStorage || 'US';
+
     setPreferences((prev) => ({ ...prev, country }));
-    setCurrentStep('genres');
-  };
+  }, [searchParams]);
 
   const handleGenresComplete = (genres: string[]) => {
     setPreferences((prev) => ({ ...prev, genres }));
@@ -74,8 +80,6 @@ export default function SearchPage() {
         <Header />
 
         {/* Step Components */}
-        {currentStep === 'location' && <LocationStep onComplete={handleLocationComplete} />}
-
         {currentStep === 'genres' && <GenreStep onComplete={handleGenresComplete} />}
 
         {currentStep === 'recency' && (
@@ -90,5 +94,22 @@ export default function SearchPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex-1 bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading...</p>
+          </div>
+        </div>
+      }
+    >
+      <SearchPageContent />
+    </Suspense>
   );
 }
