@@ -41,8 +41,14 @@ export function useSearchNavigation() {
       // Permission denied, network error, or API error - use default US
     }
 
-    // Store in localStorage for fallback
-    localStorage.setItem('userCountry', countryCode);
+    // Store in localStorage for fallback (best effort)
+    try {
+      localStorage.setItem('userCountry', countryCode);
+    } catch (error) {
+      // localStorage may be unavailable (private browsing, quota exceeded, etc.)
+      // This is non-critical, so we just log and continue
+      console.warn('Failed to save country preference to localStorage:', error);
+    }
 
     // Navigate with query param
     router.push(`/search?country=${countryCode}`);
