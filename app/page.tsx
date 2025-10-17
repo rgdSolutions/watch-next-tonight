@@ -1,40 +1,11 @@
-'use client';
-
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
-import { getCountryCodeFromCoordinates } from '@/lib/country-codes';
+import { SearchButton } from '@/components/search-button';
+
+// Static page - no revalidation needed
+export const revalidate = false;
 
 export default function LandingPage() {
-  const router = useRouter();
-
-  const handleSearchClick = async () => {
-    let countryCode = 'US'; // Default fallback
-
-    try {
-      // Request geolocation permission
-      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          enableHighAccuracy: false,
-          timeout: 10000,
-          maximumAge: 300000,
-        });
-      });
-
-      const { latitude, longitude } = position.coords;
-      countryCode = await getCountryCodeFromCoordinates(latitude, longitude);
-    } catch (error) {
-      console.error('Location detection error:', error);
-      // Permission denied or error - use default US
-    }
-
-    // Store in localStorage for fallback
-    localStorage.setItem('userCountry', countryCode);
-
-    // Navigate with query param
-    router.push(`/search?country=${countryCode}`);
-  };
-
   return (
     <div className="flex-1 bg-gradient-to-br from-background via-purple-950/20 to-background dark:from-slate-900 dark:via-slate-800/30 dark:to-slate-900 flex items-center justify-center px-4 py-0 sm:py-4">
       <div className="max-w-4xl w-full text-center space-y-8">
@@ -49,58 +20,7 @@ export default function LandingPage() {
         </div>
 
         <div className="flex flex-col md:flex-row gap-6 justify-center items-stretch">
-          <button
-            onClick={handleSearchClick}
-            className="group block w-full md:w-96 appearance-none border-none bg-transparent p-0 m-0 cursor-pointer text-left"
-          >
-            <div className="relative bg-gradient-to-br from-purple-600 to-blue-600 p-1 rounded-3xl shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105 h-full">
-              <div className="bg-background dark:bg-slate-900 rounded-3xl px-6 sm:px-12 py-6 sm:py-16 border border-purple-500/20 h-full flex flex-col justify-center">
-                <div className="space-y-3 sm:space-y-6">
-                  <div className="bg-gradient-to-r from-purple-500 to-blue-500 rounded-full p-3 sm:p-6 mx-auto w-fit group-hover:scale-110 transition-transform">
-                    <svg
-                      className="w-10 sm:w-16 h-10 sm:h-16 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                      />
-                    </svg>
-                  </div>
-                  <div className="space-y-2 sm:space-y-3">
-                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-blue-400 transition-all">
-                      Start Searching
-                    </h2>
-                    <p className="text-sm sm:text-base text-muted-foreground">
-                      Share your location for
-                      <br />
-                      personalized recommendations
-                    </p>
-                  </div>
-                  <div className="hidden sm:flex items-center justify-center gap-2 text-purple-600 dark:text-purple-400">
-                    <span className="text-sm">Click to begin</span>
-                    <svg
-                      className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </button>
+          <SearchButton />
 
           <Link href="/trending" className="group block w-full md:w-96">
             <div className="relative bg-gradient-to-br from-orange-600 to-red-600 p-1 rounded-3xl shadow-2xl hover:shadow-orange-500/50 transition-all duration-300 transform hover:scale-105 h-full">

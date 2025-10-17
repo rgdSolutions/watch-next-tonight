@@ -2,7 +2,7 @@
 
 import { useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import { ContentDisplayWithQuery } from '@/components/content-display-with-query';
 import { GenreStep } from '@/components/genre-step';
@@ -22,7 +22,7 @@ interface UserPreferences {
 
 type Step = 'genres' | 'recency' | 'results';
 
-export default function SearchPage() {
+function SearchPageContent() {
   const isMobile = useIsMobileScreenWidth();
   const searchParams = useSearchParams();
   const [currentStep, setCurrentStep] = useState<Step>('genres');
@@ -94,5 +94,22 @@ export default function SearchPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex-1 bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading...</p>
+          </div>
+        </div>
+      }
+    >
+      <SearchPageContent />
+    </Suspense>
   );
 }
