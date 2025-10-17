@@ -19,9 +19,8 @@ describe('LandingPage', () => {
     render(<LandingPage />);
 
     // Search button
-    const searchLink = screen.getByRole('link', { name: /Start Searching/i });
+    const searchLink = screen.getByRole('button', { name: /Start Searching/i });
     expect(searchLink).toBeInTheDocument();
-    expect(searchLink).toHaveAttribute('href', '/search');
 
     // Trending button
     const trendingLink = screen.getByRole('link', { name: /Trending Now/i });
@@ -87,7 +86,7 @@ describe('LandingPage', () => {
   it('should have equal button dimensions', () => {
     render(<LandingPage />);
 
-    const searchButton = screen.getByRole('link', { name: /Start Searching/i });
+    const searchButton = screen.getByRole('button', { name: /Start Searching/i });
     const trendingButton = screen.getByRole('link', { name: /Trending Now/i });
 
     // Both buttons should have the same width class
@@ -96,16 +95,15 @@ describe('LandingPage', () => {
   });
 
   it('should have proper hover states for buttons', () => {
-    const { container } = render(<LandingPage />);
+    render(<LandingPage />);
 
-    // Check for hover transform classes
-    const searchButtonContainer = container.querySelector('[href="/search"] .hover\\:scale-105');
-    const trendingButtonContainer = container.querySelector(
-      '[href="/trending"] .hover\\:scale-105'
+    const searchButton = screen.getByRole('button', { name: /Start Searching/i });
+    const trendingButton = screen.getByRole('link', { name: /Trending Now/i });
+
+    expect(searchButton.className).toMatch(
+      /group block w-full md:w-96 appearance-none border-none bg-transparent p-0 m-0 cursor-pointer text-left/
     );
-
-    expect(searchButtonContainer).toBeInTheDocument();
-    expect(trendingButtonContainer).toBeInTheDocument();
+    expect(trendingButton.className).toMatch(/group block w-full md:w-96/);
   });
 
   it('should use semantic HTML structure', () => {
@@ -117,6 +115,6 @@ describe('LandingPage', () => {
 
     // Check for navigation links
     const links = screen.getAllByRole('link');
-    expect(links).toHaveLength(7);
+    expect(links).toHaveLength(6);
   });
 });

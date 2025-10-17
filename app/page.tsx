@@ -1,9 +1,40 @@
-import Link from 'next/link';
+'use client';
 
-// Static page - no revalidation needed
-export const revalidate = false;
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+import { getCountryCodeFromCoordinates } from '@/lib/country-codes';
 
 export default function LandingPage() {
+  const router = useRouter();
+
+  const handleSearchClick = async () => {
+    let countryCode = 'US'; // Default fallback
+
+    try {
+      // Request geolocation permission
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: false,
+          timeout: 10000,
+          maximumAge: 300000,
+        });
+      });
+
+      const { latitude, longitude } = position.coords;
+      countryCode = await getCountryCodeFromCoordinates(latitude, longitude);
+    } catch (error) {
+      console.error('Location detection error:', error);
+      // Permission denied or error - use default US
+    }
+
+    // Store in localStorage for fallback
+    localStorage.setItem('userCountry', countryCode);
+
+    // Navigate with query param
+    router.push(`/search?country=${countryCode}`);
+  };
+
   return (
     <div className="flex-1 bg-gradient-to-br from-background via-purple-950/20 to-background dark:from-slate-900 dark:via-slate-800/30 dark:to-slate-900 flex items-center justify-center px-4 py-0 sm:py-4">
       <div className="max-w-4xl w-full text-center space-y-8">
@@ -18,7 +49,10 @@ export default function LandingPage() {
         </div>
 
         <div className="flex flex-col md:flex-row gap-6 justify-center items-stretch">
-          <Link href="/search" className="group block w-full md:w-96">
+          <button
+            onClick={handleSearchClick}
+            className="group block w-full md:w-96 appearance-none border-none bg-transparent p-0 m-0 cursor-pointer text-left"
+          >
             <div className="relative bg-gradient-to-br from-purple-600 to-blue-600 p-1 rounded-3xl shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105 h-full">
               <div className="bg-background dark:bg-slate-900 rounded-3xl px-6 sm:px-12 py-6 sm:py-16 border border-purple-500/20 h-full flex flex-col justify-center">
                 <div className="space-y-3 sm:space-y-6">
@@ -66,7 +100,7 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
-          </Link>
+          </button>
 
           <Link href="/trending" className="group block w-full md:w-96">
             <div className="relative bg-gradient-to-br from-orange-600 to-red-600 p-1 rounded-3xl shadow-2xl hover:shadow-orange-500/50 transition-all duration-300 transform hover:scale-105 h-full">
