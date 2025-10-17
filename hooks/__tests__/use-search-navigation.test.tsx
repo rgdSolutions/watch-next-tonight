@@ -428,11 +428,14 @@ describe('useSearchNavigation', () => {
   });
 
   describe('edge cases', () => {
-    it('should handle when localStorage is unavailable', async () => {
+    it('should handle when localStorage is unavailable and still navigate', async () => {
       // Mock localStorage to throw
       (localStorage.setItem as ReturnType<typeof vi.fn>).mockImplementation(() => {
         throw new Error('localStorage unavailable');
       });
+
+      // Mock console.warn to verify it's called
+      vi.spyOn(console, 'warn').mockImplementation(() => {});
 
       mockGeolocation.getCurrentPosition.mockImplementation((success, error) => {
         error({ code: 1, message: 'Permission denied' });
@@ -440,8 +443,18 @@ describe('useSearchNavigation', () => {
 
       const { result } = renderHook(() => useSearchNavigation());
 
-      // Should not throw, even if localStorage fails
-      await expect(result.current.navigateToSearch()).rejects.toThrow('localStorage unavailable');
+      // Should not throw, navigation proceeds despite localStorage error
+      await result.current.navigateToSearch();
+
+      await waitFor(() => {
+        expect(console.warn).toHaveBeenCalledWith(
+          'Failed to save country preference to localStorage:',
+          expect.any(Error)
+        );
+      });
+
+      // Should still navigate successfully
+      expect(mockPush).toHaveBeenCalledWith('/search?country=US');
     });
 
     it('should handle empty country code response', async () => {
