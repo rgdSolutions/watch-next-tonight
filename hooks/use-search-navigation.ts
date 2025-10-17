@@ -1,7 +1,5 @@
 import { useRouter } from 'next/navigation';
 
-import { getCountryCodeFromCoordinates } from '@/lib/country-codes';
-
 export function useSearchNavigation() {
   const router = useRouter();
 
@@ -19,10 +17,28 @@ export function useSearchNavigation() {
       });
 
       const { latitude, longitude } = position.coords;
-      countryCode = await getCountryCodeFromCoordinates(latitude, longitude);
+
+      // Call internal API route (privacy-preserving, doesn't expose coordinates to third parties)
+      const response = await fetch('/api/geocode', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ latitude, longitude }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        countryCode = data.countryCode;
+      } else {
+        // Log error details for debugging
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        console.error('Geocoding API error:', response.status, errorData);
+        // Fall back to default US
+      }
     } catch (error) {
       console.error('Location detection error:', error);
-      // Permission denied or error - use default US
+      // Permission denied, network error, or API error - use default US
     }
 
     // Store in localStorage for fallback

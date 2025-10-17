@@ -2,8 +2,6 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { getCountryCodeFromCoordinates } from '@/lib/country-codes';
-
 import { useSearchNavigation } from '../use-search-navigation';
 
 // Mock next/navigation
@@ -11,15 +9,10 @@ vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
 }));
 
-// Mock country-codes utility
-vi.mock('@/lib/country-codes', () => ({
-  getCountryCodeFromCoordinates: vi.fn(),
-}));
-
 describe('useSearchNavigation', () => {
   const mockPush = vi.fn();
   const mockUseRouter = useRouter as ReturnType<typeof vi.fn>;
-  const mockGetCountryCode = getCountryCodeFromCoordinates as ReturnType<typeof vi.fn>;
+  const mockFetch = vi.fn();
 
   // Mock geolocation
   const mockGeolocation = {
@@ -37,6 +30,9 @@ describe('useSearchNavigation', () => {
       writable: true,
       value: mockGeolocation,
     });
+
+    // Setup fetch mock
+    global.fetch = mockFetch;
 
     // Setup localStorage mock
     const localStorageMock = {
@@ -79,7 +75,11 @@ describe('useSearchNavigation', () => {
         success(mockPosition);
       });
 
-      mockGetCountryCode.mockResolvedValue('US');
+      // Mock successful API response
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({ countryCode: 'US' }),
+      });
 
       const { result } = renderHook(() => useSearchNavigation());
 
@@ -99,7 +99,13 @@ describe('useSearchNavigation', () => {
         );
       });
 
-      expect(mockGetCountryCode).toHaveBeenCalledWith(40.7128, -74.006);
+      expect(mockFetch).toHaveBeenCalledWith('/api/geocode', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ latitude: 40.7128, longitude: -74.006 }),
+      });
       expect(localStorage.setItem).toHaveBeenCalledWith('userCountry', 'US');
       expect(mockPush).toHaveBeenCalledWith('/search?country=US');
     });
@@ -117,14 +123,24 @@ describe('useSearchNavigation', () => {
         success(mockPosition);
       });
 
-      mockGetCountryCode.mockResolvedValue('GB');
+      // Mock API returning GB country code
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({ countryCode: 'GB' }),
+      });
 
       const { result } = renderHook(() => useSearchNavigation());
 
       await result.current.navigateToSearch();
 
       await waitFor(() => {
-        expect(mockGetCountryCode).toHaveBeenCalledWith(51.5074, -0.1278);
+        expect(mockFetch).toHaveBeenCalledWith('/api/geocode', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ latitude: 51.5074, longitude: -0.1278 }),
+        });
       });
 
       expect(localStorage.setItem).toHaveBeenCalledWith('userCountry', 'GB');
@@ -154,7 +170,7 @@ describe('useSearchNavigation', () => {
         );
       });
 
-      expect(mockGetCountryCode).not.toHaveBeenCalled();
+      expect(mockFetch).not.toHaveBeenCalled();
       expect(localStorage.setItem).toHaveBeenCalledWith('userCountry', 'US');
       expect(mockPush).toHaveBeenCalledWith('/search?country=US');
     });
@@ -207,8 +223,8 @@ describe('useSearchNavigation', () => {
       expect(mockPush).toHaveBeenCalledWith('/search?country=US');
     });
 
-    it('should handle error in getCountryCodeFromCoordinates and use default US', async () => {
-      // Mock successful geolocation but failed country code lookup
+    it('should handle API error with non-ok response and use default US', async () => {
+      // Mock successful geolocation but failed API response
       const mockPosition = {
         coords: {
           latitude: 0,
@@ -220,14 +236,59 @@ describe('useSearchNavigation', () => {
         success(mockPosition);
       });
 
-      mockGetCountryCode.mockRejectedValue(new Error('API error'));
+      // Mock API returning error response
+      mockFetch.mockResolvedValue({
+        ok: false,
+        status: 500,
+        json: async () => ({ error: 'Internal server error' }),
+      });
 
       const { result } = renderHook(() => useSearchNavigation());
 
       await result.current.navigateToSearch();
 
       await waitFor(() => {
-        expect(mockGetCountryCode).toHaveBeenCalledWith(0, 0);
+        expect(mockFetch).toHaveBeenCalledWith('/api/geocode', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ latitude: 0, longitude: 0 }),
+        });
+      });
+
+      await waitFor(() => {
+        expect(console.error).toHaveBeenCalledWith('Geocoding API error:', 500, {
+          error: 'Internal server error',
+        });
+      });
+
+      expect(localStorage.setItem).toHaveBeenCalledWith('userCountry', 'US');
+      expect(mockPush).toHaveBeenCalledWith('/search?country=US');
+    });
+
+    it('should handle fetch network error and use default US', async () => {
+      // Mock successful geolocation but failed fetch
+      const mockPosition = {
+        coords: {
+          latitude: 0,
+          longitude: 0,
+        },
+      };
+
+      mockGeolocation.getCurrentPosition.mockImplementation((success) => {
+        success(mockPosition);
+      });
+
+      // Mock fetch throwing network error
+      mockFetch.mockRejectedValue(new Error('Network error'));
+
+      const { result } = renderHook(() => useSearchNavigation());
+
+      await result.current.navigateToSearch();
+
+      await waitFor(() => {
+        expect(mockFetch).toHaveBeenCalled();
       });
 
       await waitFor(() => {
@@ -248,7 +309,10 @@ describe('useSearchNavigation', () => {
         });
       });
 
-      mockGetCountryCode.mockResolvedValue('US');
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({ countryCode: 'US' }),
+      });
 
       const { result } = renderHook(() => useSearchNavigation());
 
@@ -288,7 +352,10 @@ describe('useSearchNavigation', () => {
         });
       });
 
-      mockGetCountryCode.mockResolvedValue('FR');
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({ countryCode: 'FR' }),
+      });
 
       const { result } = renderHook(() => useSearchNavigation());
 
@@ -314,7 +381,10 @@ describe('useSearchNavigation', () => {
         });
       });
 
-      mockGetCountryCode.mockResolvedValue('JP');
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({ countryCode: 'JP' }),
+      });
 
       const { result } = renderHook(() => useSearchNavigation());
 
@@ -326,7 +396,10 @@ describe('useSearchNavigation', () => {
       });
 
       // Second call
-      mockGetCountryCode.mockResolvedValue('KR');
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({ countryCode: 'KR' }),
+      });
       await result.current.navigateToSearch();
 
       await waitFor(() => {
@@ -381,7 +454,10 @@ describe('useSearchNavigation', () => {
         });
       });
 
-      mockGetCountryCode.mockResolvedValue('');
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({ countryCode: '' }),
+      });
 
       const { result } = renderHook(() => useSearchNavigation());
 
@@ -391,6 +467,43 @@ describe('useSearchNavigation', () => {
         // Should navigate with empty string if that's what the API returns
         expect(mockPush).toHaveBeenCalledWith('/search?country=');
       });
+    });
+
+    it('should handle API response with invalid JSON and use default US', async () => {
+      mockGeolocation.getCurrentPosition.mockImplementation((success) => {
+        success({
+          coords: {
+            latitude: 0,
+            longitude: 0,
+          },
+        });
+      });
+
+      // Mock API returning response that can't be parsed as JSON
+      mockFetch.mockResolvedValue({
+        ok: false,
+        status: 400,
+        json: async () => {
+          throw new Error('Invalid JSON');
+        },
+      });
+
+      const { result } = renderHook(() => useSearchNavigation());
+
+      await result.current.navigateToSearch();
+
+      await waitFor(() => {
+        expect(mockFetch).toHaveBeenCalled();
+      });
+
+      await waitFor(() => {
+        expect(console.error).toHaveBeenCalledWith('Geocoding API error:', 400, {
+          error: 'Unknown error',
+        });
+      });
+
+      expect(localStorage.setItem).toHaveBeenCalledWith('userCountry', 'US');
+      expect(mockPush).toHaveBeenCalledWith('/search?country=US');
     });
   });
 });
