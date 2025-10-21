@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   } = post.metadata;
 
   return {
-    title: `${title} - Watch Next Tonight Blog`,
+    title,
     description: meta_description || summary,
     keywords: keywords || [],
     alternates: {
