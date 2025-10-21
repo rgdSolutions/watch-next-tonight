@@ -12,6 +12,12 @@ export async function generateStaticParams() {
   }));
 }
 
+/**
+ * Generate route metadata for a blog post identified by its slug.
+ *
+ * @param params - A promise resolving to route params containing `slug`
+ * @returns Metadata for the blog post (title, description, keywords, alternates, `openGraph`, and `twitter` objects); returns an empty object if no matching post is found.
+ */
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const posts = await getBlogPosts();
