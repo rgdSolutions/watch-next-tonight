@@ -4,7 +4,7 @@ import { Home, Search, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: '404 - Page Not Found | Watch Next Tonight',
+  title: 'Page Not Found',
   description:
     "The page you're looking for couldn't be found. Let's get you back to finding great content.",
   robots: {

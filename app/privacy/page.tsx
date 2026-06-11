@@ -5,7 +5,7 @@ import { Breadcrumb } from '@/components/breadcrumb';
 import { ScrollToTop } from '@/components/scroll-to-top';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy - Watch Next Tonight',
+  title: 'Privacy Policy',
   description:
     'Privacy policy for Watch Next Tonight - We respect your privacy and are committed to protecting your data.',
   alternates: {

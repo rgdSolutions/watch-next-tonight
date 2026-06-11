@@ -17,9 +17,12 @@ export const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://watchnextton
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
-  title: 'Watch Next Tonight - Find Your Perfect Movie or Show',
+  title: {
+    default: 'Watch Next Tonight - Find Your Perfect Movie or Show',
+    template: '%s | Watch Next Tonight',
+  },
   description:
-    'Discover your next binge-worthy movie or TV show instantly. Get personalized recommendations based on your mood, genre preferences, and available streaming platforms.',
+    'Find your next movie or TV show in under a minute. Free picks by genre, mood, and country, with trailers and where to watch. No account needed.',
   category: 'entertainment',
   keywords:
     'movie recommendations, TV show finder, streaming guide, Netflix, Prime Video, Disney+, Apple TV+, MAX, what to watch',
@@ -84,12 +87,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         price: '0',
         priceCurrency: 'USD',
       },
-      // TODO: Update this with actual rating and rating count
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: '4.8',
-        ratingCount: '1250',
-        bestRating: '5',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: "Ricardo D'Alessandro",
+      url: `${baseUrl}/about`,
+      jobTitle: 'Full-Stack Developer',
+      sameAs: ['https://github.com/rgdSolutions'],
+      worksFor: {
+        '@type': 'Organization',
+        name: 'Watch Next Tonight',
+        url: baseUrl,
       },
     },
     {
@@ -125,6 +134,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         <link rel="manifest" href="/manifest.json" />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="Watch Next Tonight Blog"
+          href="/rss.xml"
+        />
         <link rel="apple-touch-icon" href="/apple-icon" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />

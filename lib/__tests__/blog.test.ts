@@ -321,6 +321,68 @@ Content`);
 
       consoleErrorSpy.mockRestore();
     });
+
+    it('should skip a malformed post but still return the valid ones', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      vi.mocked(path.join).mockReturnValue('/test/path/content/blog');
+      vi.mocked(fs.existsSync).mockReturnValue(true);
+      vi.mocked(fs.readdirSync).mockReturnValue(['bad-post.mdx', 'good-post.mdx'] as any);
+      vi.mocked(path.extname).mockReturnValue('.mdx');
+
+      vi.mocked(fs.readFileSync).mockReturnValueOnce('# Just content without frontmatter')
+        .mockReturnValueOnce(`---
+title: Good Post
+publishedAt: 2025-10-01
+summary: Good summary
+author: Ricardo D'Alessandro
+image: /images/blog/good.png
+meta_description: Good meta description
+keywords: good
+---
+
+Content`);
+      // The malformed post throws during frontmatter parsing, before its slug
+      // is derived, so path.basename is only reached for the valid post.
+      vi.mocked(path.basename).mockReturnValue('good-post');
+
+      const result = await getBlogPosts(mockContentImporter);
+
+      expect(result).toHaveLength(1);
+      expect(result[0].slug).toBe('good-post');
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error reading blog post "bad-post.mdx":',
+        expect.any(Error)
+      );
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should parse the optional updatedAt frontmatter field', async () => {
+      vi.mocked(path.join).mockReturnValue('/test/path/content/blog');
+      vi.mocked(fs.existsSync).mockReturnValue(true);
+      vi.mocked(fs.readdirSync).mockReturnValue(['updated-post.mdx'] as any);
+      vi.mocked(path.extname).mockReturnValue('.mdx');
+
+      vi.mocked(fs.readFileSync).mockReturnValue(`---
+title: Updated Post
+publishedAt: 2025-10-01
+updatedAt: 2026-06-11
+summary: Updated summary
+author: Ricardo D'Alessandro
+image: /images/blog/updated.png
+meta_description: Updated meta description
+keywords: updated
+---
+
+Content`);
+      vi.mocked(path.basename).mockReturnValue('updated-post');
+
+      const result = await getBlogPosts(mockContentImporter);
+
+      expect(result).toHaveLength(1);
+      expect(result[0].metadata.updatedAt).toBe('2026-06-11');
+    });
   });
 
   describe('Edge cases', () => {

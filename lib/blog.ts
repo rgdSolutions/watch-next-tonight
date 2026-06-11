@@ -5,6 +5,7 @@ export interface BlogPost {
   metadata: {
     title: string;
     publishedAt: string;
+    updatedAt?: string;
     summary: string;
     author: string;
     image: string;
@@ -97,24 +98,33 @@ async function getMDXData(
 ): Promise<BlogPost[]> {
   const mdxFiles = getMDXFiles(dir);
 
-  return Promise.all(
-    mdxFiles.map(async (file) => {
-      const { metadata } = readMDXFile(path.join(dir, file));
-      let slug = path.basename(file, path.extname(file));
+  // Parse each file independently so a single malformed post is skipped
+  // instead of taking down the entire blog listing and sitemap.
+  const posts = await Promise.all(
+    mdxFiles.map(async (file): Promise<BlogPost | null> => {
+      try {
+        const { metadata } = readMDXFile(path.join(dir, file));
+        let slug = path.basename(file, path.extname(file));
 
-      // Remove the number prefix (e.g., "001-" or "042-") from the slug
-      slug = slug.replace(/^\d{3}-/, '');
+        // Remove the number prefix (e.g., "001-" or "042-") from the slug
+        slug = slug.replace(/^\d{3}-/, '');
 
-      // Dynamically import the MDX file using the provided importer
-      const content = await contentImporter(file);
+        // Dynamically import the MDX file using the provided importer
+        const content = await contentImporter(file);
 
-      return {
-        metadata,
-        slug,
-        content,
-      };
+        return {
+          metadata,
+          slug,
+          content,
+        };
+      } catch (error) {
+        console.error(`Error reading blog post "${file}":`, error);
+        return null;
+      }
     })
   );
+
+  return posts.filter((post): post is BlogPost => post !== null);
 }
 
 export async function getBlogPosts(

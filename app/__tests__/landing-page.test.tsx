@@ -52,7 +52,7 @@ describe('LandingPage', () => {
     render(<LandingPage />);
 
     expect(screen.getByText('Personalized Recommendations')).toBeInTheDocument();
-    expect(screen.getByText('All Streaming Platforms')).toBeInTheDocument();
+    expect(screen.getByText('20+ Streaming Platforms')).toBeInTheDocument();
     expect(screen.getByText('Quick & Easy')).toBeInTheDocument();
   });
 

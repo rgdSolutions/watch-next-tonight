@@ -3,13 +3,25 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { baseUrl } from '@/app/layout';
+import { Breadcrumb } from '@/components/breadcrumb';
 import { type BlogPost, getBlogPosts } from '@/lib/blog';
 
 export const metadata: Metadata = {
-  title: 'Blog - Watch Next Tonight',
+  title: 'Blog',
   description: 'Read our latest articles about movies, TV shows, and streaming recommendations',
   alternates: {
     canonical: `${baseUrl}/blog`,
+  },
+  openGraph: {
+    title: 'Blog | Watch Next Tonight',
+    description: 'Read our latest articles about movies, TV shows, and streaming recommendations',
+    type: 'website',
+    url: `${baseUrl}/blog`,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Blog | Watch Next Tonight',
+    description: 'Read our latest articles about movies, TV shows, and streaming recommendations',
   },
 };
 
@@ -21,6 +33,7 @@ export default async function BlogPage() {
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
+      <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Blog' }]} />
       <h1 className="text-4xl font-bold tracking-tight mb-2">Blog</h1>
       <p className="text-muted-foreground mb-8">
         Discover insights, recommendations, and behind-the-scenes stories

@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import { baseUrl } from '@/app/layout';
 
 export const metadata: Metadata = {
-  title: 'Trending Movies & TV Shows Today | Watch Next Tonight',
+  title: 'Trending Movies & TV Shows Today',
   description:
     "Instantly discover what's HOT globally. Real-time trending movies and shows that everyone is watching and talking about right now.",
   keywords:

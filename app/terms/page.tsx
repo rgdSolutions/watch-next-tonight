@@ -7,7 +7,7 @@ import { Breadcrumb } from '@/components/breadcrumb';
 import { ScrollToTop } from '@/components/scroll-to-top';
 
 export const metadata: Metadata = {
-  title: 'Terms and Conditions - Watch Next Tonight',
+  title: 'Terms and Conditions',
   description:
     'Terms and Conditions for Watch Next Tonight - Read our terms of service and usage guidelines.',
   alternates: {
