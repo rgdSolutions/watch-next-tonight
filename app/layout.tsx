@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: '%s | Watch Next Tonight',
   },
   description:
-    'Discover your next binge-worthy movie or TV show instantly. Get personalized recommendations based on your mood, genre preferences, and available streaming platforms.',
+    'Find your next movie or TV show in under a minute. Free picks by genre, mood, and country, with trailers and where to watch. No account needed.',
   category: 'entertainment',
   keywords:
     'movie recommendations, TV show finder, streaming guide, Netflix, Prime Video, Disney+, Apple TV+, MAX, what to watch',

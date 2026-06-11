@@ -11,7 +11,7 @@ import { ScrollToTop } from '@/components/scroll-to-top';
 export const metadata: Metadata = {
   title: 'About',
   description:
-    'Learn about Watch Next Tonight, the AI-powered streaming recommendation platform helping millions find their perfect movie or TV show across all major platforms.',
+    'Watch Next Tonight is a free movie and TV recommendation tool: real TMDB data, no account, no tracking. Learn how it works and who built it.',
   alternates: {
     canonical: `${baseUrl}/about`,
   },
@@ -57,7 +57,7 @@ export default function AboutPage() {
     { number: '50K+', label: 'Movies & Shows' },
     { number: '8+', label: 'Streaming Platforms' },
     { number: '100+', label: 'Countries Supported' },
-    { number: '4.8★', label: 'User Rating' },
+    { number: '100%', label: 'Free, No Account' },
   ];
 
   return (
@@ -68,8 +68,8 @@ export default function AboutPage() {
       <div className="text-center mb-16">
         <h1 className="text-4xl md:text-5xl font-bold mb-6">About Watch Next Tonight</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Your AI-powered companion for discovering the perfect movie or TV show across all your
-          streaming platforms.
+          A free, no-account-needed way to find your next movie or TV show across your streaming
+          platforms.
         </p>
       </div>
 
@@ -84,8 +84,8 @@ export default function AboutPage() {
           </p>
           <p className="mb-4">
             We believe that everyone deserves personalized entertainment recommendations without
-            compromising their privacy or dealing with complicated algorithms. Our platform combines
-            cutting-edge technology with a simple, intuitive interface to deliver instant, relevant
+            compromising their privacy or dealing with opaque algorithms. The tool pairs live data
+            from The Movie Database with a simple, intuitive interface to deliver instant, relevant
             suggestions tailored to your mood and preferences.
           </p>
           <p>
@@ -166,8 +166,8 @@ export default function AboutPage() {
             <div>
               <h3 className="font-semibold mb-2">Get Instant Recommendations</h3>
               <p className="text-muted-foreground">
-                Receive curated suggestions with ratings, descriptions, and direct links to watch on
-                your streaming platforms.
+                Receive curated suggestions with ratings, trailers, and the streaming services that
+                carry each title in your region.
               </p>
             </div>
           </div>
@@ -194,8 +194,7 @@ export default function AboutPage() {
         <h2 className="text-3xl font-bold mb-8">Our Technology</h2>
         <div className="prose prose-lg text-muted-foreground max-w-none">
           <p className="mb-4">
-            Watch Next Tonight is built with cutting-edge web technologies to ensure fast, reliable,
-            and accurate recommendations:
+            Watch Next Tonight is built with modern web technologies to keep it fast and reliable:
           </p>
           <ul className="space-y-2">
             <li>
@@ -221,8 +220,7 @@ export default function AboutPage() {
       <section className="text-center py-12 border-t">
         <h2 className="text-2xl font-bold mb-4">Ready to Find Your Next Watch?</h2>
         <p className="text-muted-foreground mb-8">
-          Join thousands of users who&apos;ve discovered their new favorite shows with Watch Next
-          Tonight.
+          Your first set of picks takes about a minute, and you don&apos;t need an account.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
