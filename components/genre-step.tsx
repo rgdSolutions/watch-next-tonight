@@ -148,10 +148,11 @@ export function GenreStep({ onComplete }: GenreStepProps) {
                         : 'border-keyline bg-secondary/50 text-muted-foreground hover:text-foreground'
                     )}
                   >
+                    {/* Selection is shown via border/glow/text color only, so the chip's
+                        size never changes between states (a check icon made long labels wrap) */}
                     <div className="flex items-center justify-center gap-2">
                       <div className="text-lg leading-none">{genre.emoji}</div>
                       <div className="text-xs sm:text-sm font-medium">{genre.name}</div>
-                      {isSelected && !isAnyGenre && <Check className="w-4 h-4 flex-shrink-0" />}
                     </div>
                   </button>
                 );
