@@ -139,74 +139,68 @@ The app uses The Movie Database (TMDB) API for real content data:
 
 ## Blog System
 
-The app includes an MDX-powered blog:
+The app includes an MDX-powered blog (11 consolidated articles after the June 2026 content cleanup):
 
 - Blog posts are stored as `.mdx` files in `/content/blog/`
-- Posts require frontmatter with ALL properties mandatory:
-  - `title`: The blog post title
-  - `publishedAt`: Date in YYYY-MM-DD format (use the date the article is generated)
+- Posts require frontmatter with these properties (each on a single `key: value` line):
+  - `title`: Quoted, MAX 50 characters, keyword-first (a `| Watch Next Tonight` suffix is appended automatically by the root layout title template)
+  - `publishedAt`: Date in YYYY-MM-DD format
+  - `updatedAt`: (optional) YYYY-MM-DD; set whenever an article is substantially revised — feeds sitemap lastModified, OG modifiedTime, and BlogPosting dateModified
   - `summary`: A brief description of the post (always required)
-  - `meta_description`: SEO meta description for the post
-  - `keywords`: Comma-separated keywords for SEO
+  - `meta_description`: SEO meta description, MAX 150 characters, containing the target keyword
+  - `keywords`: Comma-separated REAL search phrases (no invented head terms)
   - `author`: Always set to "Ricardo D'Alessandro"
-  - `image`: URL or path to cover image in the format ###-titles-first-four-words.png
+  - `image`: `/images/blog/###-[first-four-words].jpg` — a square cover; ALSO generate a 1200x630 crop at `/images/blog/og/<same-name>.jpg` (used for OG/Twitter cards via convention in `/app/blog/[slug]/page.tsx`)
 - Custom styled MDX components defined in `/mdx-components.tsx`
-- Blog utilities and parsers in `/lib/blog.ts`
-- Blog pages at `/app/blog/` (listing) and `/app/blog/[slug]/` (individual posts)
-- Only use markdown dividers (---) twice per blog; just before and just after the frontmatter properties
-- Do not mix markdown headings prefixed with hashtags (#) and markdown bold (\*\*) on the same line
-- Each blog article should be at least 2000 words (excluding the frontmatter data).
-- All blog articles end with an "## About the Author" heading followed by the `<Ricardo />` component (defined in `/components/ricardo.tsx)
-- Each article needs to internally link to at least 4 other articles
+- Blog utilities and parsers in `/lib/blog.ts` (a malformed post is skipped with a logged error; it does not take down the blog)
+- Blog pages at `/app/blog/` (listing) and `/app/blog/[slug]/` (individual posts); RSS feed at `/rss.xml`
+- If a post is ever merged/deleted, add a 301 redirect for its slug in `next.config.mjs` (see the `redirects()` map)
 
 **Mandatory Blog System Rules:**
 
-- All frontmatter fields required: title, publishedAt (YYYY-MM-DD), summary, meta_description, keywords, author ("Ricardo D'Alessandro"), image (###-titles-first-four-words.png format)
-- At least 2000 words per article (excluding frontmatter)
+- At least 1,800 words per article (aim for 2,000-3,000), excluding frontmatter
 - Use markdown dividers (---) only twice: before and after frontmatter
-- No mixing heading hashtags (#) and bold (\*\*) on same line
-- Import Ricardo component at top
+- No mixing heading hashtags (#) and bold (\*\*) on same line; body headings start at ##
+- Import Ricardo component at top: `import { Ricardo } from '@/components/ricardo';`
 - End with "## About the Author" heading + `<Ricardo />` component
-- Link to at least 4 other articles internally
-- Use paragraph-content slightly more than list-content, but do use list-content occasionally
+- A reader-questions section is OPTIONAL: when used, vary the question count (3-6) and the heading wording per post (e.g. "Common Questions", "Things Readers Ask Me") — never the same heading + exactly 4 questions across every post; list-style posts may skip it entirely
+- Link to at least 4 other articles internally using RELATIVE paths (`/blog/<slug>`) with descriptive anchor text; verify every linked slug exists
+- Include at least 2 EXTERNAL links to authoritative sources actually cited in the text (studies via DOI/Wikipedia, official tool/service sites, primary sources) — naming a source without linking it is not allowed
+- Link to the app AT MOST once per article as a one-clause contextual mention with varied phrasing, never in the opening paragraphs, using RELATIVE paths (`/`, `/search`, `/trending`) — never absolute `https://watchnexttonight.com` URLs (those render with target="\_blank"). The full product pitch lives ONLY in the product post (006); do not reuse its phrasing ("tell it your country... how recent you want the content to be") elsewhere
+- ONE article per topic/keyword — check existing posts before writing to avoid keyword cannibalization; if a topic is already covered, update that article (and set `updatedAt`) instead of writing a new one
+- No film/show recommended as an example in more than 2 posts across the blog; no two posts may share an opening scene or anecdote
 
-**Style Patterns Observed:**
+**Content Integrity Rules (AdSense/quality — non-negotiable):**
 
-- Warm, empathetic, conversational tone with "you" address
-- Opening hook with relatable scenario
-- Mix of practical advice (lists) and philosophical reflection (longer paragraphs)
-- Case studies/vignettes
-- FAQ section (4 questions)
-- Multiple clear section headings
-- Rich, textured language in reflective sections
-- Internal links to watchnexttonight.com and other blog articles
+- Name real, verifiable films/TV shows (10+ per article where the topic allows) with accurate years/platforms; never invent titles or details
+- NO fabricated statistics, NO invented user testimonials or metrics, NO "studies show" without a real named source (e.g., Barry Schwartz's The Paradox of Choice, the Iyengar & Lepper jam study, Zillmann's mood management theory, the Netflix Technology Blog)
+- Hypothetical examples must read as hypothetical ("imagine...") — never present invented personas as real users or case studies
+- Only describe app features that actually exist (no accounts, no taste-learning, no streaming-account linking — it's a stateless wizard over TMDB data)
+- Avoid claiming current streaming availability for specific titles (it changes); name the original network/distributor or hedge with "at the time of writing"
 
-**For Each Article:**
+**Style Rules (anti-template):**
 
-1. Create engaging opening hook (relatable scenario)
-2. Write 2000+ words with sections:
-   - Problem statement
-   - Practical strategies (mix lists and paragraphs, favor paragraphs)
-   - Case studies/vignettes
-   - Deeper philosophical reflections
-   - FAQ section (4 or more questions)
-   - Challenge/call-to-action
-3. Link to 4+ other articles from existing or new set
-4. Place CTA to Watch Next Tonight naturally in content
-5. End with "## About the Author" + Ricardo component
-6. Ensure proper frontmatter with today's date
-7. Image path: /images/blog/###-[first-four-words].png
+- Warm, conversational, first-person where natural (the author built the app and is a developer)
+- VARY the article structure — do not reuse the same skeleton across posts (no recurring "Your Challenge This Week/Month" sections); some posts should be list-led, some essay-led, some table/numbers-led
+- Avoid AI-writing tells: no "isn't just X — it's Y", no negative parallelism ("not X; it's Y"), no stacked three-item poetic lists, no empty aphorisms, don't end every section on a polished aphorism
+- Do NOT end the article on a balanced aphorism or an app plug — most posts should close on a plain, concrete final sentence; at most 2-3 posts blog-wide may end on an aphorism
+- Vary internal-link transitions: never use the "I've written before/more about X in [link]" stem — prefer inline anchors mid-sentence; no transition phrasing should repeat across posts
+- The "I built Watch Next Tonight" credential may appear verbatim in at most 2-3 posts; elsewhere vary or omit it (many posts need no credential at all)
+- Don't reuse distinctive phrases across posts ("remains the gold standard", "stateless by design", specific clock times like "10:30 p.m.", "plus practical ways"); before publishing, grep 2-3 of a draft's distinctive phrases against `/content/blog/` and reword collisions
+- Vary frontmatter summaries' opening words across posts (no shared "A practical..." openers)
+- Don't band the metrics: internal links, word counts, and FAQ question counts should vary naturally between posts rather than hugging the minimums
+- Em-dashes and bullet lists: use sparingly and NATURALLY — a few per article is fine; uniform absence across all posts is itself a machine fingerprint
+- Never write meta-reassurances like "every pick is real" — demonstrate accuracy, don't declare it
+- Demonstrate experience instead of claiming it: prefer a real screenshot (app screenshots live in `/images/blog/screenshots/`, embedded as `<img src="..." alt="..." width={1280} height={800} />` since MDX img maps to next/image), a real list, or a concrete dated detail over "in my experience" assertions
+- Concrete over abstract: named titles, named tools, specific mechanics; match the format searchers want (a "save money" query needs numbers, a "best shows" query needs an actual list)
 
 **Quality Checks:**
 
-- Word count verification (2000+ words)
-- Internal link count (4+ links)
-- Endure all links are valid and there are no broken links
-- Frontmatter completeness
-- Ricardo component placement
-- Markdown divider usage (exactly 2)
-- No mixed heading/bold on same line
-- Paragraph/list balance (favor paragraphs)
+- Word count 2000+; title ≤50 chars; meta_description ≤150 chars
+- Internal link count (4+ relative links, all targets exist)
+- Frontmatter completeness; exactly 2 dividers; Ricardo component placement
+- Cover image exists at the frontmatter path AND its `/images/blog/og/` 1200x630 variant exists
+- No fabricated facts, stats, testimonials, or nonexistent app features
 
 ## Testing
 

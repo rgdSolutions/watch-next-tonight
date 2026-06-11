@@ -9,7 +9,7 @@ import { ContactForm } from '@/components/contact-form';
 import { ScrollToTop } from '@/components/scroll-to-top';
 
 export const metadata: Metadata = {
-  title: 'Contact Us - Watch Next Tonight Support',
+  title: 'Contact Us',
   description:
     "Get in touch with Watch Next Tonight. We're here to help with questions, feedback, or partnership inquiries.",
   alternates: {

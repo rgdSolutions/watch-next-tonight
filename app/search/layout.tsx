@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import { baseUrl } from '@/app/layout';
 
 export const metadata: Metadata = {
-  title: 'Personalized Movie & TV Recommendations | Watch Next Tonight',
+  title: 'Personalized Movie & TV Recommendations',
   description:
     'Get custom movie and TV suggestions tailored to YOUR taste. Select genres, location, and content recency for perfectly matched streaming recommendations.',
   keywords:

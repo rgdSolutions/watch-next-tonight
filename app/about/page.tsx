@@ -9,7 +9,7 @@ import { Ricardo } from '@/components/ricardo';
 import { ScrollToTop } from '@/components/scroll-to-top';
 
 export const metadata: Metadata = {
-  title: 'About Watch Next Tonight - Your Personalized Streaming Guide',
+  title: 'About',
   description:
     'Learn about Watch Next Tonight, the AI-powered streaming recommendation platform helping millions find their perfect movie or TV show across all major platforms.',
   alternates: {
