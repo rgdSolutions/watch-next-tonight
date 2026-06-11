@@ -4,15 +4,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a "Watch Next Tonight" application - a movie/TV show recommendation app built with Next.js 13+ using the App Router pattern. The app guides users through a multi-step process to recommend content from various streaming platforms.
+This is a "Watch Next Tonight" application - a movie/TV show recommendation app built with Next.js 15 using the App Router pattern. The app guides users through a multi-step process to recommend content from various streaming platforms, using real data from the TMDB API. It also includes an MDX-powered blog (40+ articles) for SEO/content marketing.
 
 ## Tech Stack
 
-- **Framework**: Next.js 13.5.1 (App Router, static export mode)
-- **Language**: TypeScript with strict mode
-- **UI**: React 18 with Shadcn/ui component library
-- **Styling**: Tailwind CSS with custom theme configuration
-- **State**: React hooks (useState)
+- **Framework**: Next.js 15.5 (App Router, server-side rendering, Turbopack in dev)
+- **Language**: TypeScript 5.8 with strict mode
+- **UI**: React 19 with Shadcn/ui component library (Radix UI primitives)
+- **Styling**: Tailwind CSS with custom theme configuration, next-themes for dark/light mode
+- **State**: React hooks, TanStack React Query for server state, localStorage for user preferences
+- **Content**: MDX via @next/mdx with remark-frontmatter
+- **Forms**: react-hook-form + zod validation
+- **Analytics**: Vercel Analytics and Speed Insights
 
 ## Development Commands
 
@@ -20,41 +23,69 @@ This is a "Watch Next Tonight" application - a movie/TV show recommendation app 
 # Install dependencies
 npm install
 
-# Run development server
+# Run development server (Turbopack)
 npm run dev
 
-# Build static site
+# Build for production
 npm run build
-
-# Lint code
-npm run lint
 
 # Start production server (after build)
 npm run start
+
+# Lint code (or lint:fix to auto-fix)
+npm run lint
+
+# Format with Prettier
+npm run format
+
+# Type-check without emitting
+npm run type-check
+
+# Run tests (watch mode) / with coverage
+npm run test
+npm run test:coverage
+
+# Full CI suite: type-check + format + lint:fix + test coverage
+npm run checks
+
+# Kill stray dev servers on ports 3000-3002
+npm run killall
 ```
 
 ## Architecture
 
 ### Key Directories
 
-- `app/`: Next.js App Router pages and layouts
-- `components/`: React components including UI library from Shadcn/ui
-- `lib/`: Utilities and mock data
+- `app/`: Next.js App Router pages, layouts, and API routes
+- `components/`: Feature components; Shadcn/ui primitives live in `components/ui/`
+- `hooks/`: Custom React hooks (TMDB queries, genre lookups, search navigation, mobile detection)
+- `lib/`: Utilities (TMDB client, blog parsing, genres, streaming providers, country codes)
+- `providers/`: React context providers (React Query provider)
+- `types/`: TypeScript type definitions (`types/tmdb.ts`)
 - `content/`: MDX content files (blog posts)
 - `docs/`: **Important** - Contains additional context, implementation guides, and project documentation. Always check this folder for relevant information before making changes.
 
+### Pages
+
+- `/` - Landing page with hero and CTA into the search wizard
+- `/search` - Multi-step recommendation wizard
+- `/trending` - Trending content feed
+- `/blog` and `/blog/[slug]` - Blog listing and individual posts
+- `/about`, `/faq`, `/contact`, `/privacy`, `/terms` - Static/info pages
+
 ### Application Flow
 
-1. **Location Step** (`components/location-step.tsx`): User selects viewing location
+1. **Location Step** (`components/location-step.tsx`): User selects viewing location (geolocation supported; country preference saved to localStorage)
 2. **Genre Step** (`components/genre-step.tsx`): User selects preferred genres
 3. **Recency Step** (`components/recency-step.tsx`): User chooses content recency preference
-4. **Results** (`components/content-display.tsx`): Displays recommended content from mock data
+4. **Results** (`components/content-display-with-query.tsx`): Displays recommended content from TMDB via React Query, with content cards (`components/content-card.tsx`), streaming provider availability (`components/watch-providers.tsx`), and trailers (`components/trailer-modal.tsx`)
 
 ### Data Handling
 
-- Currently uses mock data from `lib/mock-data.ts`
-- Content includes properties: title, year, rating, duration, genres, platforms, images, trailer URL
+- Real content data from the TMDB API (no mock data)
+- TMDB responses are transformed into a unified `MediaItem` format (see `types/tmdb.ts`); adult content is filtered out
 - Supports filtering by genre and recency preferences
+- Genre normalization across movies/TV in `lib/unified-genres.ts`; streaming provider IDs/names in `lib/streaming-providers.ts`
 
 ### Styling Approach
 
@@ -66,13 +97,21 @@ npm run start
 
 ### Server-Side Features
 
-The app now supports full Next.js server-side capabilities:
+The app supports full Next.js server-side capabilities:
 
-- API Routes can be added in `app/api/`
+- API Routes in `app/api/`
 - Server Components with async data fetching
-- Dynamic rendering and middleware support
-- Image optimization enabled
-- Requires Node.js hosting (Vercel, AWS, etc.)
+- Image optimization enabled (remote patterns for image.tmdb.org and images.unsplash.com)
+- Security headers configured in `next.config.mjs`
+- Requires Node.js hosting (deployed on Vercel)
+
+### Environment Variables
+
+- `TMDB_READ_ACCESS_TOKEN` (required): TMDB API Bearer token, used server-side only
+- `NEXT_PUBLIC_BASE_URL`: Base URL for canonical URLs and OpenGraph metadata
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_ADSENSE_CLIENT_ID` (optional): Google Analytics / AdSense
+
+See `.env.example` for the template.
 
 ### TypeScript
 
@@ -84,10 +123,19 @@ Strict mode is enabled. Path aliases configured:
 
 The app uses The Movie Database (TMDB) API for real content data:
 
-- API proxy route at `/app/api/tmdb/[...path]/route.ts`
+- API proxy route at `/app/api/tmdb/[...path]/route.ts` - keeps the API token server-side and transforms responses into the unified `MediaItem` format
+- Geocoding route at `/app/api/geocode/route.ts` - privacy-preserving reverse geocoding (takes lat/lng, returns only a country code)
 - Client library at `/lib/tmdb-client.ts`
-- React Query for caching and data fetching
+- React Query for caching and data fetching (cache times range from 5 minutes for search to 24 hours for genre lists)
 - Custom hooks in `/hooks/use-tmdb.ts`
+
+## SEO
+
+- Dynamic sitemap (`app/sitemap.ts`) covering static pages and all blog posts
+- `app/robots.ts`, PWA manifest, and generated icons
+- JSON-LD structured data (WebApplication + Person schemas) in the root layout
+- Generated OpenGraph and Twitter card images (`app/opengraph-image.tsx`, `app/twitter-image.tsx`)
+- SEO strategy documented in `docs/seo-implementation.md`
 
 ## Blog System
 
@@ -162,13 +210,13 @@ The app includes an MDX-powered blog:
 
 ## Testing
 
-- Unit tests with Vitest and React Testing Library
-- Run tests: `npm run test`
-- Test coverage: `npm run test:coverage`
-- Tests include API routes, components, and React Query hooks
+- Unit tests with Vitest (jsdom) and React Testing Library
+- Run tests: `npm run test` (watch mode) or `npm run test:coverage`
+- Tests live in `__tests__/` folders alongside the code (app, components, hooks, lib, providers)
+- Coverage thresholds enforced in `vitest.config.ts`: 95% statements/lines, 90% branches/functions
+- Husky + lint-staged run checks on commit
 
 ## Current Limitations
 
 - No authentication system
-- No user profiles or saved preferences
-- Watch provider data not yet integrated
+- No user profiles (only localStorage-based preferences like country)
