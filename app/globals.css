@@ -13,6 +13,16 @@ nextjs-portal,
    * "After Hours" design system — premium midnight lounge.
    * Dark is the brand default; light is a daylight variant of the same family.
    * Accent is a single aurora gradient (mint -> ice cyan). No purple.
+   *
+   * Static contexts (public/manifest.json, the theme-color meta in app/layout.tsx,
+   * and the ImageResponse routes: app/icon*.tsx, app/apple-icon.tsx,
+   * app/*opengraph-image.tsx, app/twitter-image.tsx) cannot read CSS variables,
+   * so they hardcode the source palette these tokens were derived from:
+   *   ink base    #06141b  (~ --background dark, 201 64% 6%)
+   *   ink raised  #0b222e / #0e2a38  (~ --card / --secondary dark)
+   *   mint        #7df9c2  (--primary dark)
+   *   cyan        #3ad0ff  (--accent dark)
+   * If this palette ever changes, update those files together.
    */
   :root {
     --background: 180 25% 96%;
