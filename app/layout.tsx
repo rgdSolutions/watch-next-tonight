@@ -151,7 +151,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Watch Next" />
         <meta name="format-detection" content="telephone=no" />
-        <meta name="theme-color" content="#7c3aed" />
+        <meta name="theme-color" content="#06141b" />
 
         {/* Google AdSense */}
         {process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID && (

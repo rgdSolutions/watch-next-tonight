@@ -4,8 +4,8 @@
   "description": "Discover your perfect movie or TV show from all your streaming platforms",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#dddddd",
-  "theme_color": "#475569",
+  "background_color": "#06141b",
+  "theme_color": "#06141b",
   "orientation": "portrait-primary",
   "icons": [
     {

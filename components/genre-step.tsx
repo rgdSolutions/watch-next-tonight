@@ -128,7 +128,7 @@ export function GenreStep({ onComplete }: GenreStepProps) {
           </div>
 
           {/* Genre Grid */}
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3">
             {genres
               .filter((genre) => genre.id !== 'actionadventure') // Hide "Action & Adventure" since we show Action and Adventure separately
               .map((genre) => {
@@ -138,21 +138,19 @@ export function GenreStep({ onComplete }: GenreStepProps) {
                     key={genre.id}
                     onClick={() => toggleGenre(genre.id)}
                     className={cn(
-                      'inline-flex items-center gap-2 min-h-[48px] rounded-full border backdrop-blur-sm text-left',
+                      'flex w-full items-center justify-center gap-2 min-h-[48px] rounded-full border backdrop-blur-sm',
                       'transition-all duration-300',
                       'hover:-translate-y-0.5 hover:shadow-md hover:border-keyline-bright hover:bg-secondary/70',
                       'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background',
-                      isMobile ? 'px-3 py-1.5' : 'px-4 py-2',
+                      isMobile ? 'px-2 py-1.5' : 'px-3 py-2',
                       isSelected
                         ? 'border-primary bg-primary/10 text-primary glow-ring shadow-lg'
                         : 'border-keyline bg-secondary/50 text-muted-foreground hover:text-foreground'
                     )}
                   >
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <div className="text-lg leading-none">{genre.emoji}</div>
-                        <div className="text-sm font-medium">{genre.name}</div>
-                      </div>
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="text-lg leading-none">{genre.emoji}</div>
+                      <div className="text-xs sm:text-sm font-medium">{genre.name}</div>
                       {isSelected && !isAnyGenre && <Check className="w-4 h-4 flex-shrink-0" />}
                     </div>
                   </button>

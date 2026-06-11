@@ -1,8 +1,4 @@
-import { useIsMobileScreenWidth } from '@/hooks/use-is-mobile-screen-width';
-
 export const Header = () => {
-  const isMobile = useIsMobileScreenWidth();
-
   return (
     <div className="text-center mb-4">
       <h1
@@ -12,14 +8,13 @@ export const Header = () => {
       >
         Watch <span className="aurora-text">Next</span> Tonight
       </h1>
-      {!isMobile && (
-        <p
-          className="text-muted-foreground text-lg
-                 md:text-xl"
-        >
-          Find your perfect movie or show in just a few clicks
-        </p>
-      )}
+      {/* Hidden on mobile via CSS (not JS) so server and client render identically */}
+      <p
+        className="text-muted-foreground text-lg hidden sm:block
+               md:text-xl"
+      >
+        Find your perfect movie or show in just a few clicks
+      </p>
     </div>
   );
 };
