@@ -71,16 +71,20 @@ describe('LandingPage', () => {
   it('should apply theme-aware colors', () => {
     const { container } = render(<LandingPage />);
 
-    // Check for theme-aware background
-    const mainContainer = container.firstChild;
-    expect(mainContainer).toHaveClass('from-background', 'to-background');
+    // Hero title uses the display face and token-driven foreground color
+    const title = screen.getByText('Watch Next Tonight');
+    expect(title).toHaveClass('font-display', 'text-foreground');
 
-    // Check for dark mode specific classes
-    expect(mainContainer).toHaveClass(
-      'dark:from-slate-900',
-      'dark:via-slate-800/30',
-      'dark:to-slate-900'
-    );
+    // Trending card is a token-driven glass panel
+    const trendingButton = screen.getByRole('link', { name: /Trending Now/i });
+    expect(trendingButton.querySelector('.glass-panel')).toBeInTheDocument();
+
+    // Poster-wall tiles render behind the hero, theme-aware via dark: opacity
+    const tiles = container.querySelectorAll('.lp-tile');
+    expect(tiles.length).toBeGreaterThanOrEqual(6);
+    tiles.forEach((tile) => {
+      expect(tile).toHaveClass('opacity-25', 'dark:opacity-50');
+    });
   });
 
   it('should have equal button dimensions', () => {

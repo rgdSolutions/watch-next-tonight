@@ -66,7 +66,9 @@ export default function AboutPage() {
 
       {/* Hero Section */}
       <div className="text-center mb-16">
-        <h1 className="text-4xl md:text-5xl font-bold mb-6">About Watch Next Tonight</h1>
+        <h1 className="font-display text-4xl md:text-5xl font-bold mb-6">
+          About Watch Next Tonight
+        </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           A free, no-account-needed way to find your next movie or TV show across your streaming
           platforms.
@@ -75,7 +77,7 @@ export default function AboutPage() {
 
       {/* Mission Section */}
       <section className="mb-16">
-        <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
+        <h2 className="font-display text-3xl font-bold mb-6">Our Mission</h2>
         <div className="prose prose-lg text-muted-foreground max-w-none">
           <p className="mb-4">
             In a world with endless streaming options, finding something to watch shouldn&apos;t be
@@ -98,10 +100,12 @@ export default function AboutPage() {
 
       {/* Stats Section */}
       <section className="mb-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 text-center">
           {stats.map((stat, index) => (
-            <div key={index} className="space-y-2">
-              <div className="text-3xl md:text-4xl font-bold text-primary">{stat.number}</div>
+            <div key={index} className="glass-panel p-6 space-y-2">
+              <div className="font-display text-3xl md:text-4xl font-bold aurora-text">
+                {stat.number}
+              </div>
               <div className="text-sm text-muted-foreground">{stat.label}</div>
             </div>
           ))}
@@ -110,12 +114,12 @@ export default function AboutPage() {
 
       {/* Features Section */}
       <section className="mb-16">
-        <h2 className="text-3xl font-bold mb-8">Why Choose Watch Next Tonight?</h2>
-        <div className="grid md:grid-cols-2 gap-8">
+        <h2 className="font-display text-3xl font-bold mb-8">Why Choose Watch Next Tonight?</h2>
+        <div className="grid md:grid-cols-2 gap-6">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <div key={index} className="flex gap-4">
+              <div key={index} className="glass-panel flex gap-4 p-6">
                 <div className="flex-shrink-0">
                   <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Icon className="w-6 h-6 text-primary" />
@@ -133,10 +137,10 @@ export default function AboutPage() {
 
       {/* How It Works Section */}
       <section className="mb-16">
-        <h2 className="text-3xl font-bold mb-8">How It Works</h2>
+        <h2 className="font-display text-3xl font-bold mb-8">How It Works</h2>
         <div className="space-y-6">
           <div className="flex gap-4">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
+            <div className="flex-shrink-0 w-8 h-8 rounded-full aurora-bg flex items-center justify-center font-semibold">
               1
             </div>
             <div>
@@ -148,7 +152,7 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="flex gap-4">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
+            <div className="flex-shrink-0 w-8 h-8 rounded-full aurora-bg flex items-center justify-center font-semibold">
               2
             </div>
             <div>
@@ -160,7 +164,7 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="flex gap-4">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
+            <div className="flex-shrink-0 w-8 h-8 rounded-full aurora-bg flex items-center justify-center font-semibold">
               3
             </div>
             <div>
@@ -176,8 +180,8 @@ export default function AboutPage() {
 
       {/* Author Section */}
       <section className="mb-16">
-        <h2 className="text-3xl font-bold mb-8">About the Creator</h2>
-        <div className="bg-muted/50 rounded-lg p-8">
+        <h2 className="font-display text-3xl font-bold mb-8">About the Creator</h2>
+        <div className="glass-panel p-8">
           <div className="flex flex-col md:flex-row gap-8 items-start">
             <div className="flex-shrink-0">
               <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
@@ -191,7 +195,7 @@ export default function AboutPage() {
 
       {/* Technology Section */}
       <section className="mb-16">
-        <h2 className="text-3xl font-bold mb-8">Our Technology</h2>
+        <h2 className="font-display text-3xl font-bold mb-8">Our Technology</h2>
         <div className="prose prose-lg text-muted-foreground max-w-none">
           <p className="mb-4">
             Watch Next Tonight is built with modern web technologies to keep it fast and reliable:
@@ -217,22 +221,22 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="text-center py-12 border-t">
-        <h2 className="text-2xl font-bold mb-4">Ready to Find Your Next Watch?</h2>
+      <section className="text-center py-12 border-t border-keyline">
+        <h2 className="font-display text-2xl font-bold mb-4">Ready to Find Your Next Watch?</h2>
         <p className="text-muted-foreground mb-8">
           Your first set of picks takes about a minute, and you don&apos;t need an account.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/search"
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex items-center justify-center gap-2 rounded-full aurora-bg px-6 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
           >
             <Film className="h-4 w-4" />
             Start Personalized Search
           </Link>
           <Link
             href="/trending"
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-6 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-keyline-bright bg-secondary/40 px-6 py-3 text-sm font-medium transition-colors hover:bg-primary/10"
           >
             <TrendingUp className="h-4 w-4" />
             See What&apos;s Trending

@@ -250,8 +250,9 @@ describe('ContactForm', () => {
         'px-4',
         'py-2',
         'border',
+        'border-keyline',
         'rounded-lg',
-        'bg-background'
+        'bg-secondary/50'
       );
     });
 
@@ -298,12 +299,7 @@ describe('ContactForm', () => {
       render(<ContactForm />);
 
       const button = screen.getByRole('button', { name: /send message/i });
-      expect(button).toHaveClass(
-        'bg-primary',
-        'text-primary-foreground',
-        'rounded-lg',
-        'hover:bg-primary/90'
-      );
+      expect(button).toHaveClass('aurora-bg', 'rounded-full', 'hover:opacity-90');
     });
   });
 

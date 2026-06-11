@@ -18,10 +18,10 @@ export default function NotFound() {
     <main className="flex flex-1 flex-col items-center justify-center px-4">
       <div className="mx-auto max-w-2xl text-center">
         {/* 404 Error Code */}
-        <h1 className="mb-4 text-8xl font-bold text-primary">404</h1>
+        <h1 className="mb-4 font-display text-8xl font-bold aurora-text">404</h1>
 
         {/* Main Error Message */}
-        <h2 className="mb-4 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+        <h2 className="mb-4 font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
           Page Not Found
         </h2>
 
@@ -35,7 +35,7 @@ export default function NotFound() {
         <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
           <Link
             href="/"
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex items-center justify-center gap-2 rounded-full aurora-bg px-6 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
           >
             <Home className="h-4 w-4" />
             Go Home
@@ -43,7 +43,7 @@ export default function NotFound() {
 
           <Link
             href="/search"
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-6 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-keyline-bright bg-secondary/40 px-6 py-3 text-sm font-medium transition-colors hover:bg-primary/10"
           >
             <Search className="h-4 w-4" />
             Find Something to Watch
@@ -51,7 +51,7 @@ export default function NotFound() {
 
           <Link
             href="/trending"
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-6 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-keyline-bright bg-secondary/40 px-6 py-3 text-sm font-medium transition-colors hover:bg-primary/10"
           >
             <TrendingUp className="h-4 w-4" />
             See What&apos;s Trending

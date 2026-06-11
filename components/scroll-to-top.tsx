@@ -45,7 +45,7 @@ export const ScrollToTop = () => {
     <button
       onClick={handleScrollToTop}
       className={cn(
-        'fixed z-50 rounded-md border border-input bg-background p-2 hover:bg-accent hover:text-accent-foreground transition-all duration-200 shadow-md hover:shadow-lg',
+        'fixed z-50 glass-panel rounded-full p-2 text-primary hover:border-keyline-bright transition-all duration-200',
         isMobile && 'bottom-14 right-2',
         !isMobile && 'bottom-4 right-4',
         // Visibility transitions

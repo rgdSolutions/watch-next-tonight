@@ -6,11 +6,11 @@ export const Header = () => {
   return (
     <div className="text-center mb-4">
       <h1
-        className="text-4xl font-bold tracking-tight mb-2
+        className="font-display text-4xl font-bold tracking-tight mb-2
                   md:text-5xl
                   lg:text-6xl"
       >
-        Watch Next Tonight
+        Watch <span className="aurora-text">Next</span> Tonight
       </h1>
       {!isMobile && (
         <p

@@ -246,19 +246,23 @@ export function ContentDisplayWithQuery({
   return (
     <div data-testid="content-display" className="space-y-6">
       {/* Header with Back Button */}
-      <div className="flex items-center justify-between flex-wrap">
+      <div className="glass-panel flex items-center justify-between flex-wrap gap-2 px-4 py-2">
         <div className="flex items-center gap-4 flex-wrap">
           <Button
             variant="outline"
             onClick={isSearchPage ? onBackToPreferences : handleGoToLandingPage}
-            className="gap-2"
+            className="gap-2 rounded-full border-keyline-bright bg-primary/5 hover:bg-primary/10 hover:text-foreground"
           >
             <ArrowLeft className="w-4 h-4" />
             Start Over
           </Button>
           {isSearchPage && (
             <div className="flex items-center gap-2 py-4">
-              <span className={tab === 'search' ? 'font-semibold' : 'text-muted-foreground'}>
+              <span
+                className={
+                  tab === 'search' ? 'font-semibold text-primary' : 'text-muted-foreground'
+                }
+              >
                 🔍 Search
               </span>
               <Switch
@@ -266,7 +270,11 @@ export function ContentDisplayWithQuery({
                 onCheckedChange={(checked) => setTab(checked ? 'trending' : 'search')}
                 aria-label="Toggle between search and trending results"
               />
-              <span className={tab === 'trending' ? 'font-semibold' : 'text-muted-foreground'}>
+              <span
+                className={
+                  tab === 'trending' ? 'font-semibold text-primary' : 'text-muted-foreground'
+                }
+              >
                 Trending 🔥
               </span>
             </div>
@@ -275,7 +283,7 @@ export function ContentDisplayWithQuery({
 
         <div className="flex items-center gap-4">
           <Select value={contentType} onValueChange={(value: any) => setContentType(value)}>
-            <SelectTrigger className="w-[156px]">
+            <SelectTrigger className="w-[156px] rounded-full border-keyline bg-card/60">
               <SelectValue placeholder="Content type" />
             </SelectTrigger>
             <SelectContent>
@@ -291,7 +299,10 @@ export function ContentDisplayWithQuery({
               onValueChange={setSelectedPlatform}
               disabled={tab === 'trending'}
             >
-              <SelectTrigger className="w-[160px]" disabled={tab === 'trending'}>
+              <SelectTrigger
+                className="w-[160px] rounded-full border-keyline bg-card/60"
+                disabled={tab === 'trending'}
+              >
                 <Filter className="w-4 h-4 mr-2" />
                 <SelectValue placeholder="Filter by platform" />
               </SelectTrigger>
@@ -310,21 +321,21 @@ export function ContentDisplayWithQuery({
       {/* Results Summary */}
       <Card
         className={cn(
-          'transition-all duration-300',
+          'transition-all duration-300 glass-panel',
           tab === 'trending' && [
             'border-2',
-            'border-orange-500/50 dark:border-orange-400/50',
-            'bg-gradient-to-br from-orange-50/50 to-amber-50/30 dark:from-orange-950/20 dark:to-amber-950/10',
-            'shadow-lg shadow-orange-200/30 dark:shadow-orange-900/20',
+            'border-primary/50',
+            'bg-gradient-to-br from-primary/10 to-accent/5',
+            'shadow-lg shadow-primary/20',
           ]
         )}
       >
         <CardHeader>
           <CardTitle
             className={cn(
-              'text-2xl',
+              'text-2xl font-display',
               tab === 'trending' &&
-                'bg-gradient-to-r from-orange-600 to-amber-600 dark:from-orange-400 dark:to-amber-400 bg-clip-text text-transparent'
+                'bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent'
             )}
           >
             {tab === 'trending' ? '🔥 Globally Trending Results' : '🔍 Your Search Results'}
@@ -364,7 +375,7 @@ export function ContentDisplayWithQuery({
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {hiddenItems.length > 0 && (
           <Card
-            className="flex justify-center items-center cursor-pointer select-none transition-all duration-300 hover:shadow-lg hover:scale-[1.02]"
+            className="glass-panel flex justify-center items-center cursor-pointer select-none transition-all duration-300 hover:border-keyline-bright hover:-translate-y-1 hover:shadow-[0_0_24px_var(--glow)]"
             onClick={() => setHiddenItems([])}
           >
             {`Show ${hiddenItems.length} hidden item${hiddenItems.length === 1 ? '' : 's'}`}

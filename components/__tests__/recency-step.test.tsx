@@ -84,7 +84,7 @@ describe('RecencyStep', () => {
     fireEvent.click(veryRecentButton!);
 
     // Check that the button has selected styles
-    expect(veryRecentButton).toHaveClass('border-primary', 'bg-primary', 'text-primary-foreground');
+    expect(veryRecentButton).toHaveClass('border-primary', 'bg-primary/10', 'glow-ring');
   });
 
   it('handles all recency options correctly', async () => {

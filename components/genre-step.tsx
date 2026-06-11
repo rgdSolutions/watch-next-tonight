@@ -49,7 +49,7 @@ export function GenreStep({ onComplete }: GenreStepProps) {
   if (isLoading) {
     return (
       <div className="max-w-4xl mx-auto">
-        <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
+        <Card className="glass-panel rounded-2xl border-keyline shadow-xl bg-card/50 backdrop-blur-sm">
           <CardContent className="flex flex-col items-center justify-center py-16">
             <Loader2 className="w-8 h-8 animate-spin text-primary mb-4" />
             <p className="text-muted-foreground">Loading genres...</p>
@@ -62,10 +62,14 @@ export function GenreStep({ onComplete }: GenreStepProps) {
   if (error || genres.length === 0) {
     return (
       <div className="max-w-4xl mx-auto">
-        <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
+        <Card className="glass-panel rounded-2xl border-keyline shadow-xl bg-card/50 backdrop-blur-sm">
           <CardContent className="text-center py-16">
             <p className="text-destructive mb-4">Failed to load genres.</p>
-            <Button onClick={() => window.location.reload()} variant="outline">
+            <Button
+              onClick={() => window.location.reload()}
+              variant="outline"
+              className="rounded-full border-keyline-bright bg-secondary/30 hover:bg-secondary/60"
+            >
               Try again
             </Button>
           </CardContent>
@@ -76,16 +80,18 @@ export function GenreStep({ onComplete }: GenreStepProps) {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
+      <Card className="glass-panel rounded-2xl border-keyline shadow-xl bg-card/50 backdrop-blur-sm">
         <CardHeader className="text-center">
           {!isMobile && (
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 glow-ring flex items-center justify-center">
               <Sparkles className="w-8 h-8 text-primary" />
             </div>
           )}
-          <CardTitle className="text-2xl mb-2">What genres are you in the mood for?</CardTitle>
+          <CardTitle className="text-2xl mb-2 font-display tracking-tight">
+            What genres are you in the mood for?
+          </CardTitle>
           {!isMobile && (
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground font-light">
               Select one or more genres, or choose &quot;Any Genre&quot; for surprise
               recommendations
             </p>
@@ -99,8 +105,10 @@ export function GenreStep({ onComplete }: GenreStepProps) {
               variant={isAnyGenre ? 'default' : 'outline'}
               onClick={selectAnyGenre}
               className={cn(
-                'h-12 px-8 text-lg font-medium transition-all duration-200',
-                isAnyGenre && 'shadow-lg scale-105'
+                'h-12 px-8 text-lg font-medium rounded-full transition-all duration-300',
+                isAnyGenre
+                  ? 'aurora-bg border-0 glow-ring shadow-lg scale-105 font-semibold'
+                  : 'border-keyline-bright bg-secondary/30 hover:-translate-y-0.5 hover:border-primary/60 hover:bg-secondary/60 hover:text-primary'
               )}
             >
               {isAnyGenre && <Check className="w-5 h-5 mr-2" />}
@@ -110,21 +118,17 @@ export function GenreStep({ onComplete }: GenreStepProps) {
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
+              <span className="w-full border-t border-keyline-bright" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
+              <span className="rounded-full bg-secondary/70 backdrop-blur px-3 py-0.5 tracking-widest text-muted-foreground">
                 Or select specific genres
               </span>
             </div>
           </div>
 
           {/* Genre Grid */}
-          <div
-            className="grid grid-cols-3 gap-3
-                         md:grid-cols-4
-                         lg:grid-cols-5"
-          >
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
             {genres
               .filter((genre) => genre.id !== 'actionadventure') // Hide "Action & Adventure" since we show Action and Adventure separately
               .map((genre) => {
@@ -134,18 +138,19 @@ export function GenreStep({ onComplete }: GenreStepProps) {
                     key={genre.id}
                     onClick={() => toggleGenre(genre.id)}
                     className={cn(
-                      'p-3 rounded-lg border-2 transition-all duration-200 text-left',
-                      'hover:scale-105 hover:shadow-md',
-                      'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
-                      isMobile && 'p-1',
+                      'inline-flex items-center gap-2 min-h-[48px] rounded-full border backdrop-blur-sm text-left',
+                      'transition-all duration-300',
+                      'hover:-translate-y-0.5 hover:shadow-md hover:border-keyline-bright hover:bg-secondary/70',
+                      'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background',
+                      isMobile ? 'px-3 py-1.5' : 'px-4 py-2',
                       isSelected
-                        ? 'border-primary bg-primary text-primary-foreground shadow-lg scale-105'
-                        : 'border-border bg-background hover:border-primary/50'
+                        ? 'border-primary bg-primary/10 text-primary glow-ring shadow-lg'
+                        : 'border-keyline bg-secondary/50 text-muted-foreground hover:text-foreground'
                     )}
                   >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-lg mb-1">{genre.emoji}</div>
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <div className="text-lg leading-none">{genre.emoji}</div>
                         <div className="text-sm font-medium">{genre.name}</div>
                       </div>
                       {isSelected && !isAnyGenre && <Check className="w-4 h-4 flex-shrink-0" />}
@@ -161,7 +166,11 @@ export function GenreStep({ onComplete }: GenreStepProps) {
               onClick={handleContinue}
               disabled={!canContinue}
               size="lg"
-              className="px-8 h-12 text-lg"
+              className={cn(
+                'px-8 h-12 text-lg rounded-full transition-all duration-300',
+                canContinue &&
+                  'aurora-bg border-0 font-semibold shadow-lg hover:-translate-y-0.5 hover:shadow-xl'
+              )}
             >
               Continue
               {canContinue && (

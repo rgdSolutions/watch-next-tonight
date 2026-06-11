@@ -11,7 +11,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     // Allows customizing built-in components, e.g. to add styling.
     h1: ({ children }) => (
-      <h1 className="text-4xl font-bold tracking-tight text-foreground mb-6 mt-8">{children}</h1>
+      <h1 className="font-display text-4xl font-bold tracking-tight text-foreground mb-6 mt-8">
+        {children}
+      </h1>
     ),
     h2: ({ children }) => (
       <h2 className="text-3xl font-semibold tracking-tight text-foreground mb-4 mt-8">
@@ -39,7 +41,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     a: ({ href, children }) => (
       <a
         href={href}
-        className="text-primary hover:underline font-medium"
+        className="text-primary font-medium underline decoration-primary/40 underline-offset-4 transition-colors hover:decoration-primary"
         target={href?.startsWith('http') ? '_blank' : undefined}
         rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
       >
@@ -47,17 +49,19 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </a>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 border-primary pl-4 italic my-4 text-muted-foreground">
+      <blockquote className="border-l-2 border-keyline-bright pl-4 italic my-4 text-muted-foreground">
         {children}
       </blockquote>
     ),
     code: ({ children }) => (
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono text-foreground">
+      <code className="bg-secondary px-1.5 py-0.5 rounded text-sm font-mono text-foreground">
         {children}
       </code>
     ),
     pre: ({ children }) => (
-      <pre className="bg-muted p-4 rounded-lg overflow-x-auto mb-4 text-sm">{children}</pre>
+      <pre className="bg-secondary border border-keyline p-4 rounded-lg overflow-x-auto mb-4 text-sm">
+        {children}
+      </pre>
     ),
     img: (props) => (
       <Image sizes="100vw" style={{ width: '100%', height: 'auto' }} {...(props as ImageProps)} />

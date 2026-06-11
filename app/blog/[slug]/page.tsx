@@ -129,8 +129,10 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         ]}
       />
       <header className="mb-8">
-        <h1 className="text-4xl font-bold tracking-tight mb-4">{post.metadata.title}</h1>
-        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
+        <h1 className="font-display text-4xl font-bold tracking-tight mb-4">
+          {post.metadata.title}
+        </h1>
+        <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground border-b border-keyline pb-4 mb-6">
           {post.metadata.publishedAt && (
             <time dateTime={post.metadata.publishedAt}>
               {formatDate(post.metadata.publishedAt)}

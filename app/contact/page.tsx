@@ -49,7 +49,7 @@ export default function ContactPage() {
 
       {/* Hero Section */}
       <div className="text-center mb-16">
-        <h1 className="text-4xl md:text-5xl font-bold mb-6">Get in Touch</h1>
+        <h1 className="font-display text-4xl md:text-5xl font-bold mb-6">Get in Touch</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Have questions, feedback, or suggestions? We&apos;d love to hear from you. Choose your
           preferred contact method below.
@@ -58,14 +58,14 @@ export default function ContactPage() {
 
       {/* Contact Methods */}
       <section className="mb-16">
-        <h2 className="text-2xl font-bold mb-8">Contact Methods</h2>
+        <h2 className="font-display text-2xl font-bold mb-8">Contact Methods</h2>
         <div className="grid md:grid-cols-2 gap-6">
           {contactMethods.map((method, index) => {
             const Icon = method.icon;
             return (
               <div
                 key={index}
-                className="border rounded-lg p-6 text-center hover:border-primary transition-colors"
+                className="glass-panel p-6 text-center hover:border-keyline-bright transition-colors"
               >
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-4">
                   <Icon className="w-6 h-6 text-primary" />
@@ -88,13 +88,13 @@ export default function ContactPage() {
 
       {/* Contact Form */}
       <section id="contact-form" className="mb-16">
-        <h2 className="text-2xl font-bold mb-8">Send Us a Message</h2>
+        <h2 className="font-display text-2xl font-bold mb-8">Send Us a Message</h2>
         <ContactForm />
       </section>
 
       {/* FAQ Preview */}
       <section className="mb-16">
-        <h2 className="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+        <h2 className="font-display text-2xl font-bold mb-6">Frequently Asked Questions</h2>
         <p className="text-muted-foreground mb-4">
           Before reaching out, you might find your answer in our FAQ section.
         </p>
@@ -105,7 +105,7 @@ export default function ContactPage() {
       </section>
 
       {/* Response Time */}
-      <section className="text-center py-8 border-t">
+      <section className="text-center py-8 border-t border-keyline">
         <h3 className="font-semibold mb-2">Expected Response Time</h3>
         <p className="text-muted-foreground">
           We typically respond to inquiries within 24-48 hours during business days. For urgent

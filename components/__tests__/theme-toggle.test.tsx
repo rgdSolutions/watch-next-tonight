@@ -167,7 +167,7 @@ describe('ThemeToggle', () => {
 
       await waitFor(() => {
         const button = screen.getByRole('button', { name: /toggle theme/i });
-        expect(button.className).toContain('top-4');
+        expect(button.className).toContain('top-20');
         expect(button.className).toContain('right-4');
       });
     });
@@ -194,7 +194,7 @@ describe('ThemeToggle', () => {
         const button = screen.getByRole('button', { name: /toggle theme/i });
         expect(button.className).toContain('fixed');
         expect(button.className).toContain('z-50');
-        expect(button.className).toContain('rounded-md');
+        expect(button.className).toContain('rounded-full');
         expect(button.className).toContain('border');
         expect(button.className).toContain('transition-all');
       });

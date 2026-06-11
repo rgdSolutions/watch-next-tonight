@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { Inter } from 'next/font/google';
+import { Hanken_Grotesk, Unbounded } from 'next/font/google';
 import Script from 'next/script';
 
 import { NavigationHeader } from '@/components/navigation-header';
@@ -12,7 +12,12 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { cn } from '@/lib/utils';
 import { QueryProvider } from '@/providers/query-provider';
 
-const inter = Inter({ subsets: ['latin'] });
+const hankenGrotesk = Hanken_Grotesk({ subsets: ['latin'], variable: '--font-sans' });
+const unbounded = Unbounded({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-display',
+});
 export const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://watchnexttonight.com';
 
 export const metadata: Metadata = {
@@ -189,8 +194,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           />
         )}
       </head>
-      <body className={cn(inter.className, 'flex flex-col min-h-screen')}>
-        <ThemeProvider defaultTheme="system" storageKey="watch-next-theme">
+      <body
+        className={cn(
+          hankenGrotesk.variable,
+          unbounded.variable,
+          'font-sans flex flex-col min-h-screen'
+        )}
+      >
+        <ThemeProvider defaultTheme="dark" storageKey="watch-next-theme">
           <NavigationHeader />
           <QueryProvider>{children}</QueryProvider>
           <ThemeToggle />

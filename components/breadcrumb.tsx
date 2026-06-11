@@ -83,7 +83,7 @@ export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
                   {item.label}
                 </Link>
               ) : (
-                <span className="text-foreground font-medium" aria-current="page">
+                <span className="text-primary font-medium" aria-current="page">
                   {item.label}
                 </span>
               )}

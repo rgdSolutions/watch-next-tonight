@@ -53,19 +53,26 @@ export function LocationStep({ onComplete }: LocationStepProps) {
 
   return (
     <div className="max-w-md mx-auto">
-      <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
+      <Card className="glass-panel rounded-2xl border-keyline shadow-xl bg-card/50 backdrop-blur-sm">
         <CardHeader className="text-center pb-4">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 glow-ring flex items-center justify-center">
             <MapPin className="w-8 h-8 text-primary" />
           </div>
-          <CardTitle className="text-2xl">Where are you watching from?</CardTitle>
-          <p className="text-muted-foreground">
+          <CardTitle className="text-2xl font-display tracking-tight">
+            Where are you watching from?
+          </CardTitle>
+          <p className="text-muted-foreground font-light">
             We need your location to show available content in your region
           </p>
         </CardHeader>
 
         <CardContent className="space-y-4">
-          <Button onClick={detectLocation} disabled={isDetecting} className="w-full h-12" size="lg">
+          <Button
+            onClick={detectLocation}
+            disabled={isDetecting}
+            className="w-full h-12 rounded-full aurora-bg border-0 font-semibold shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+            size="lg"
+          >
             {isDetecting ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -81,14 +88,21 @@ export function LocationStep({ onComplete }: LocationStepProps) {
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
+              <span className="w-full border-t border-keyline-bright" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">Or</span>
+              <span className="rounded-full bg-secondary/70 backdrop-blur px-3 py-0.5 tracking-widest text-muted-foreground">
+                Or
+              </span>
             </div>
           </div>
 
-          <Button variant="outline" onClick={useUSA} className="w-full h-12" size="lg">
+          <Button
+            variant="outline"
+            onClick={useUSA}
+            className="w-full h-12 rounded-full border-keyline-bright bg-secondary/30 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/60 hover:bg-secondary/60 hover:text-primary"
+            size="lg"
+          >
             <Globe className="w-4 h-4 mr-2" />
             Continue with USA
           </Button>

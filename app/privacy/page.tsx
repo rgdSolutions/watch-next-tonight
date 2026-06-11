@@ -27,9 +27,9 @@ export default function PrivacyPage() {
     <div className="container max-w-3xl mx-auto px-4 py-12">
       <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Privacy Policy' }]} />
 
-      <h1 className="text-3xl font-bold mb-8">Privacy Policy</h1>
+      <h1 className="font-display text-3xl font-bold mb-8">Privacy Policy</h1>
 
-      <div className="space-y-6 text-muted-foreground">
+      <div className="space-y-6 divide-y divide-keyline text-muted-foreground [&>section+section]:pt-6">
         <section>
           <h2 className="text-xl font-semibold text-foreground mb-3">GDPR Compliance</h2>
           <p>

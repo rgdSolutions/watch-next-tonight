@@ -558,7 +558,7 @@ describe('ContentDisplayWithQuery', () => {
       expect(cardElement).toBeInTheDocument();
 
       // Initially should not have accent classes
-      expect(cardElement?.className).not.toContain('border-orange');
+      expect(cardElement?.className).not.toContain('border-primary');
       expect(cardElement?.className).not.toContain('shadow-lg');
 
       // Switch to trending
@@ -569,7 +569,7 @@ describe('ContentDisplayWithQuery', () => {
 
       // Should have accent styling
       await waitFor(() => {
-        const accentedCard = container.querySelector('[class*="border-orange"]');
+        const accentedCard = container.querySelector('[class*="border-primary"]');
         expect(accentedCard).toBeInTheDocument();
         expect(accentedCard?.className).toContain('border-2');
         expect(accentedCard?.className).toContain('shadow-lg');

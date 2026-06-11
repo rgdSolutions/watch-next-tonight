@@ -51,13 +51,13 @@ export function ContactForm() {
   return (
     <>
       {submitStatus === 'success' && (
-        <div className="mb-6 p-4 bg-green-500/10 border border-green-500 rounded-lg text-green-600 dark:text-green-400">
+        <div className="mb-6 p-4 bg-primary/10 border border-keyline-bright rounded-lg text-primary">
           Thank you for your message! We&apos;ll get back to you as soon as possible.
         </div>
       )}
 
       {submitStatus === 'error' && (
-        <div className="mb-6 p-4 bg-red-500/10 border border-red-500 rounded-lg text-red-600 dark:text-red-400">
+        <div className="mb-6 p-4 bg-destructive/10 border border-destructive rounded-lg text-destructive">
           There was an error sending your message. Please try again later.
         </div>
       )}
@@ -75,7 +75,7 @@ export function ContactForm() {
               required
               value={formData.name}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-2 border border-keyline rounded-lg bg-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary"
               placeholder="John Doe"
             />
           </div>
@@ -91,7 +91,7 @@ export function ContactForm() {
               required
               value={formData.email}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-2 border border-keyline rounded-lg bg-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary"
               placeholder="john@example.com"
             />
           </div>
@@ -107,7 +107,7 @@ export function ContactForm() {
             required
             value={formData.subject}
             onChange={handleInputChange}
-            className="w-full px-4 py-2 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full px-4 py-2 border border-keyline rounded-lg bg-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="general">General Inquiry</option>
             <option value="feedback">Feedback & Suggestions</option>
@@ -129,7 +129,7 @@ export function ContactForm() {
             value={formData.message}
             onChange={handleInputChange}
             rows={6}
-            className="w-full px-4 py-2 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+            className="w-full px-4 py-2 border border-keyline rounded-lg bg-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary resize-none"
             placeholder="Tell us what's on your mind..."
           />
         </div>
@@ -139,7 +139,7 @@ export function ContactForm() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 px-6 py-3 aurora-bg font-semibold rounded-full hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? (
               <>
