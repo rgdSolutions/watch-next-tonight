@@ -73,12 +73,15 @@ export function NavigationHeader() {
   }, [isMobileMenuOpen]);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-keyline bg-background/95 backdrop-blur backdrop-saturate-150 supports-[backdrop-filter]:bg-background/70">
       <div className="container mx-auto px-4">
         <nav className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 font-bold text-lg md:text-xl">
-            <Film className="h-6 w-6 text-primary" />
+          <Link
+            href="/"
+            className="flex items-center space-x-2 font-display text-sm font-medium uppercase tracking-[0.14em] md:text-base"
+          >
+            <Film className="h-6 w-6 text-primary drop-shadow-[0_0_10px_var(--glow)]" />
             <span className="hidden sm:inline">Watch Next Tonight</span>
             <span className="sm:hidden">WNT</span>
           </Link>
@@ -97,10 +100,10 @@ export function NavigationHeader() {
                       onClick={navigateToSearch}
                       aria-current={active ? 'page' : undefined}
                       className={cn(
-                        'flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer',
+                        'relative flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer',
                         active
-                          ? 'bg-primary text-primary-foreground'
-                          : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                          ? 'text-primary after:absolute after:inset-x-4 after:bottom-1 after:h-px after:rounded-full after:bg-aurora'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-primary/10'
                       )}
                     >
                       <Icon className="h-4 w-4" />
@@ -111,10 +114,10 @@ export function NavigationHeader() {
                       href={item.href}
                       aria-current={active ? 'page' : undefined}
                       className={cn(
-                        'flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+                        'relative flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-colors',
                         active
-                          ? 'bg-primary text-primary-foreground'
-                          : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                          ? 'text-primary after:absolute after:inset-x-4 after:bottom-1 after:h-px after:rounded-full after:bg-aurora'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-primary/10'
                       )}
                     >
                       <Icon className="h-4 w-4" />
@@ -130,7 +133,7 @@ export function NavigationHeader() {
           <button
             ref={menuButtonRef}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-accent transition-colors"
+            className="md:hidden p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-colors"
             aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
@@ -144,7 +147,7 @@ export function NavigationHeader() {
           <div
             ref={mobileMenuRef}
             id="mobile-menu"
-            className="md:hidden border-t pb-4"
+            className="md:hidden border-t border-keyline pb-4"
             role="navigation"
             aria-label="Mobile navigation"
           >
@@ -166,8 +169,8 @@ export function NavigationHeader() {
                         className={cn(
                           'flex items-center space-x-3 px-4 py-3 rounded-lg text-base font-medium transition-colors cursor-pointer w-full',
                           active
-                            ? 'bg-primary text-primary-foreground'
-                            : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                            ? 'text-primary bg-primary/10 glow-ring'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-primary/10'
                         )}
                       >
                         <Icon className="h-5 w-5" />
@@ -181,8 +184,8 @@ export function NavigationHeader() {
                         className={cn(
                           'flex items-center space-x-3 px-4 py-3 rounded-lg text-base font-medium transition-colors',
                           active
-                            ? 'bg-primary text-primary-foreground'
-                            : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                            ? 'text-primary bg-primary/10 glow-ring'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-primary/10'
                         )}
                       >
                         <Icon className="h-5 w-5" />

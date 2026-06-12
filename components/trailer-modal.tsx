@@ -1,6 +1,6 @@
 'use client';
 
-import { Calendar, Clock, Star } from 'lucide-react';
+import { Calendar, Clock } from 'lucide-react';
 import Image from 'next/image';
 
 import { Badge } from '@/components/ui/badge';
@@ -59,9 +59,9 @@ export function TrailerModal({ item, isOpen, onClose, country = 'US' }: TrailerM
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto border border-keyline bg-background/80 backdrop-blur-xl shadow-[0_24px_60px_-24px_rgba(0,0,0,0.7)]">
         <DialogHeader>
-          <DialogTitle className="text-2xl">{item.title}</DialogTitle>
+          <DialogTitle className="text-2xl font-display">{item.title}</DialogTitle>
           <DialogDescription className="sr-only">
             Watch trailer and details for {item.title}
           </DialogDescription>
@@ -75,7 +75,7 @@ export function TrailerModal({ item, isOpen, onClose, country = 'US' }: TrailerM
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {/* Left Column - Cover and Basic Info */}
             <div className="space-y-4">
-              <div className="w-48 h-72 mx-auto rounded-lg overflow-hidden bg-muted relative">
+              <div className="w-48 h-72 mx-auto rounded-lg overflow-hidden bg-muted relative ring-1 ring-keyline">
                 <Image
                   src={getTMDBImageUrl(item.backdropPath || item.posterPath, 'original')}
                   alt={item.title}
@@ -89,8 +89,16 @@ export function TrailerModal({ item, isOpen, onClose, country = 'US' }: TrailerM
               <div className="text-center space-y-2">
                 {typeof item.rating === 'number' && (
                   <div className="flex items-center justify-center gap-2">
-                    <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                    <span className="font-bold text-lg">{item.rating.toFixed(1)}</span>
+                    <div
+                      className="grid h-12 w-12 flex-none place-items-center rounded-full shadow-[0_0_16px_-4px_var(--glow)]"
+                      style={{
+                        background: `conic-gradient(from -90deg, hsl(var(--primary)) 0%, hsl(var(--accent)) ${item.rating * 10}%, hsl(var(--muted)) ${item.rating * 10}% 100%)`,
+                      }}
+                    >
+                      <span className="grid h-[38px] w-[38px] place-items-center rounded-full bg-card text-sm font-bold text-card-foreground">
+                        {item.rating.toFixed(1)}
+                      </span>
+                    </div>
                     <span className="text-muted-foreground">/10</span>
                   </div>
                 )}

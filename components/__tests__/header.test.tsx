@@ -82,6 +82,6 @@ describe('Header', () => {
     });
   });
 
-  // Note: Mobile view testing is complex due to module mocking limitations
-  // The Header component correctly hides subtitle on mobile via useIsMobileScreenWidth hook
+  // Note: The subtitle is hidden on mobile via CSS (hidden sm:block) rather than JS,
+  // so server and client render identical HTML and hydration never mismatches.
 });

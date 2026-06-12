@@ -6,7 +6,6 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useMovieWatchProviders, useTVWatchProviders } from '@/hooks/use-tmdb';
 import { getTMDBImageUrl } from '@/lib/tmdb-utils';
-import { returnFirstWord } from '@/lib/utils';
 import { MediaType, TMDBProvider } from '@/types/tmdb';
 
 interface WatchProvidersProps {
@@ -14,34 +13,6 @@ interface WatchProvidersProps {
   mediaType: MediaType;
   country: string;
 }
-
-// Map of known streaming services to their brand colors
-const PROVIDER_COLORS: Record<string, string> = {
-  netflix: 'bg-red-600 hover:bg-red-700',
-  disney: 'bg-blue-600 hover:bg-blue-700',
-  apple: 'bg-gray-800 hover:bg-gray-900',
-  plex: 'bg-gray-800 hover:bg-gray-900',
-  amazon: 'bg-blue-500 hover:bg-blue-600',
-  spectrum: 'bg-blue-500 hover:bg-blue-600',
-  hulu: 'bg-green-500 hover:bg-green-600',
-  hbo: 'bg-purple-600 hover:bg-purple-700',
-  max: 'bg-purple-600 hover:bg-purple-700',
-  paramount: 'bg-blue-700 hover:bg-blue-800',
-  mgm: 'bg-yellow-600 hover:bg-yellow-700',
-  peacock: 'bg-yellow-600 hover:bg-yellow-700',
-  crunchyroll: 'bg-orange-500 hover:bg-orange-600',
-  showtime: 'bg-red-800 hover:bg-red-900',
-  starz: 'bg-gray-700 hover:bg-gray-800',
-  epix: 'bg-yellow-500 hover:bg-yellow-600',
-  youtube: 'bg-red-500 hover:bg-red-600',
-  fubotv: 'bg-orange-600 hover:bg-orange-700',
-  tubi: 'bg-orange-400 hover:bg-orange-500',
-  pluto: 'bg-cyan-600 hover:bg-cyan-700',
-  crackle: 'bg-black hover:bg-gray-900',
-  vudu: 'bg-blue-800 hover:bg-blue-900',
-  philo: 'bg-gray-800 hover:bg-gray-900',
-  nbc: 'bg-blue-700 hover:bg-blue-800',
-};
 
 export function WatchProviders({ mediaId, mediaType, country }: WatchProvidersProps) {
   // Fetch watch providers based on media type
@@ -113,15 +84,11 @@ export function WatchProviders({ mediaId, mediaType, country }: WatchProvidersPr
   return (
     <div className="flex flex-wrap gap-2">
       {uniqueProviders.map((provider) => {
-        const colorClass =
-          PROVIDER_COLORS[returnFirstWord(provider.provider_name)] ||
-          'bg-gray-800 hover:bg-gray-900';
-
         return (
           <Badge
             key={provider.provider_id}
             variant="secondary"
-            className={`${colorClass} text-white border-0 transition-colors`}
+            className="rounded-full border border-keyline bg-card/60 text-foreground transition-colors hover:border-keyline-bright hover:bg-primary/10"
           >
             {provider.logo_path && (
               <Image
@@ -137,7 +104,10 @@ export function WatchProviders({ mediaId, mediaType, country }: WatchProvidersPr
         );
       })}
       {countryProviders?.rent && countryProviders.rent.length > 0 && (
-        <Badge variant="outline" className="text-xs">
+        <Badge
+          variant="outline"
+          className="text-xs rounded-full border-keyline text-muted-foreground"
+        >
           + Rent/Buy available
         </Badge>
       )}

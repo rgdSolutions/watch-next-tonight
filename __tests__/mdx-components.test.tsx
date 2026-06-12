@@ -104,15 +104,15 @@ describe('useMDXComponents', () => {
         <Code>code</Code>
       </Pre>
     );
-    expect(screen.getByText('code')).toHaveClass('bg-muted', 'font-mono');
-    expect(screen.getByText('code').parentElement).toHaveClass('bg-muted', 'p-4', 'rounded-lg');
+    expect(screen.getByText('code')).toHaveClass('bg-secondary', 'font-mono');
+    expect(screen.getByText('code').parentElement).toHaveClass('bg-secondary', 'p-4', 'rounded-lg');
   });
 
   it('renders blockquote with border styling', () => {
     const c = useMDXComponents({});
     const Blockquote = c.blockquote as React.FC<{ children: React.ReactNode }>;
     render(<Blockquote>Quote</Blockquote>);
-    expect(screen.getByText('Quote')).toHaveClass('border-l-4', 'italic');
+    expect(screen.getByText('Quote')).toHaveClass('border-l-2', 'italic');
   });
 
   it('renders img component as Next.js Image', () => {

@@ -131,7 +131,9 @@ export default function FAQPage() {
 
       {/* Hero Section */}
       <div className="text-center mb-16">
-        <h1 className="text-4xl md:text-5xl font-bold mb-6">Frequently Asked Questions</h1>
+        <h1 className="font-display text-4xl md:text-5xl font-bold mb-6">
+          Frequently Asked Questions
+        </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Everything you need to know about finding your perfect movie or TV show with Watch Next
           Tonight.
@@ -144,28 +146,30 @@ export default function FAQPage() {
         {faqs.map((faq, index) => (
           <details
             key={index}
-            className="group border rounded-lg p-6 hover:border-primary transition-colors"
+            className="group glass-panel p-6 hover:border-keyline-bright transition-colors"
           >
             <summary className="flex items-start justify-between cursor-pointer list-none">
               <h3 className="font-semibold text-lg pr-4 flex-1">{faq.question}</h3>
-              <ChevronDown className="w-5 h-5 text-muted-foreground group-open:hidden flex-shrink-0 mt-1" />
-              <ChevronUp className="w-5 h-5 text-muted-foreground hidden group-open:block flex-shrink-0 mt-1" />
+              <ChevronDown className="w-5 h-5 text-primary group-open:hidden flex-shrink-0 mt-1" />
+              <ChevronUp className="w-5 h-5 text-primary hidden group-open:block flex-shrink-0 mt-1" />
             </summary>
-            <p className="mt-4 text-muted-foreground leading-relaxed">{faq.answer}</p>
+            <p className="mt-4 pt-4 border-t border-keyline text-muted-foreground leading-relaxed">
+              {faq.answer}
+            </p>
           </details>
         ))}
       </section>
 
       {/* Additional Help Section */}
-      <section className="border-t pt-12">
-        <h2 className="text-2xl font-bold mb-6 text-center">Still Have Questions?</h2>
+      <section className="border-t border-keyline pt-12">
+        <h2 className="font-display text-2xl font-bold mb-6 text-center">Still Have Questions?</h2>
         <p className="text-muted-foreground text-center mb-8">
           Can&apos;t find what you&apos;re looking for? We&apos;re here to help!
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex items-center justify-center gap-2 rounded-full aurora-bg px-6 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
           >
             Contact Support
           </Link>
@@ -173,7 +177,7 @@ export default function FAQPage() {
             href="https://github.com/rgdSolutions/watch-next-tonight/issues"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-6 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-keyline-bright bg-secondary/40 px-6 py-3 text-sm font-medium transition-colors hover:bg-primary/10"
           >
             Report an Issue
           </Link>
@@ -181,8 +185,8 @@ export default function FAQPage() {
       </section>
 
       {/* Quick Tips Section */}
-      <section className="mt-16 p-8 bg-muted/50 rounded-lg">
-        <h2 className="text-xl font-bold mb-4">Quick Tips for Best Results</h2>
+      <section className="mt-16 p-8 glass-panel">
+        <h2 className="font-display text-xl font-bold mb-4">Quick Tips for Best Results</h2>
         <ul className="space-y-3 text-muted-foreground">
           <li className="flex items-start gap-2">
             <span className="text-primary mt-1">•</span>

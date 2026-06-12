@@ -16,7 +16,7 @@ export default async function Image() {
       <div
         style={{
           fontSize: 128,
-          background: '#dddddd',
+          background: 'linear-gradient(135deg, #06141b 0%, #0e2a38 100%)',
           width: '100%',
           height: '100%',
           display: 'flex',
@@ -27,8 +27,30 @@ export default async function Image() {
         }}
       >
         <div style={{ fontSize: 180, marginBottom: 20 }}>📺</div>
-        <div style={{ fontSize: 60, fontWeight: 'bold', marginBottom: 10 }}>Watch Next Tonight</div>
-        <div style={{ fontSize: 28, opacity: 0.9 }}>Personalized Streaming Recommendations</div>
+        <div
+          style={{
+            width: 96,
+            height: 8,
+            borderRadius: 999,
+            background: 'linear-gradient(100deg, #7df9c2, #3ad0ff)',
+            marginBottom: 28,
+          }}
+        />
+        <div
+          style={{
+            display: 'flex',
+            gap: 18,
+            fontSize: 60,
+            fontWeight: 'bold',
+            marginBottom: 10,
+            color: '#eef4f2',
+          }}
+        >
+          <span>Watch</span>
+          <span style={{ color: '#7df9c2' }}>Next</span>
+          <span>Tonight</span>
+        </div>
+        <div style={{ fontSize: 28, color: '#a8bec4' }}>Personalized Streaming Recommendations</div>
       </div>
     ),
     {

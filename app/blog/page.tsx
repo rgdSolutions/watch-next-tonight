@@ -34,7 +34,7 @@ export default async function BlogPage() {
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
       <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Blog' }]} />
-      <h1 className="text-4xl font-bold tracking-tight mb-2">Blog</h1>
+      <h1 className="font-display text-4xl font-bold tracking-tight mb-2">Blog</h1>
       <p className="text-muted-foreground mb-8">
         Discover insights, recommendations, and behind-the-scenes stories
       </p>
@@ -44,7 +44,10 @@ export default async function BlogPage() {
           <p className="text-muted-foreground">No blog posts yet. Check back soon!</p>
         ) : (
           posts.map((post) => (
-            <article key={post.slug} className="border-b pb-8">
+            <article
+              key={post.slug}
+              className="glass-panel p-5 sm:p-6 border-keyline transition-all duration-300 hover:border-keyline-bright hover:shadow-[0_0_32px_-6px_var(--glow)]"
+            >
               <div className="grid md:grid-cols-[300px_1fr] gap-6">
                 {post.metadata.image && (
                   <Link href={`/blog/${post.slug}`} className="group">

@@ -9,9 +9,18 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'var(--font-sans)', 'sans-serif'],
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        aurora: 'var(--aurora)',
+      },
+      borderColor: {
+        keyline: 'var(--keyline)',
+        'keyline-bright': 'var(--keyline-bright)',
       },
       borderRadius: {
         lg: 'var(--radius)',

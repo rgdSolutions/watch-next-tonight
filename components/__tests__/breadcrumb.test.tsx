@@ -96,7 +96,7 @@ describe('Breadcrumb', () => {
 
       const currentPage = screen.getByText('Current Page');
       expect(currentPage.tagName).toBe('SPAN');
-      expect(currentPage).toHaveClass('text-foreground', 'font-medium');
+      expect(currentPage).toHaveClass('text-primary', 'font-medium');
     });
 
     it('should not mark intermediate items as current page', () => {

@@ -32,6 +32,8 @@ vi.mock('next/image', () => ({
 // Mock Next.js Font component
 vi.mock('next/font/google', () => ({
   Inter: () => ({ className: 'inter' }),
+  Hanken_Grotesk: () => ({ className: 'hanken-grotesk', variable: '--font-sans' }),
+  Unbounded: () => ({ className: 'unbounded', variable: '--font-display' }),
 }));
 
 // Mock window.matchMedia
